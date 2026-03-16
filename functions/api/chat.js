@@ -1,107 +1,475 @@
-export async function onRequestPost(context) {
-  try {
-    const { request, env } = context;
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ProAI8 | P8 AI</title>
+  <meta
+    name="description"
+    content="P8 AI command center for marketing, rentals, listings, forms, agreements, inspections, ROI, and business workflows."
+  />
 
-    if (request.method !== "POST") {
-      return json(
-        { reply: "Method not allowed." },
-        405
-      );
+  <style>
+    * { box-sizing: border-box; }
+
+    :root{
+      --bg:#0f172a;
+      --bg-accent:#1e293b;
+      --panel:#1e293b;
+      --panel-2:#111827;
+      --panel-3:#0b1220;
+
+      --text:#ffffff;
+      --muted:#dbe4ef;
+      --muted-2:#94a3b8;
+
+      --blue:#2563eb;
+      --blue-2:#1d4ed8;
+
+      --line:rgba(255,255,255,0.08);
+      --shadow:0 18px 48px rgba(0,0,0,0.25);
+      --radius:18px;
     }
 
-    const body = await request.json();
-    const message = (body?.message || "").trim();
-
-    if (!message) {
-      return json(
-        { reply: "Please enter a message." },
-        400
-      );
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, var(--bg-accent), var(--bg));
     }
 
-    if (!env.OPENAI_API_KEY) {
-      return json(
-        { reply: "Missing OPENAI_API_KEY in Cloudflare environment variables." },
-        500
-      );
+    body {
+      overflow: hidden;
     }
 
-    if (!env.OPENAI_MODEL) {
-      return json(
-        { reply: "Missing OPENAI_MODEL in Cloudflare environment variables." },
-        500
-      );
+    .app {
+      display: flex;
+      height: 100vh;
+      width: 100%;
     }
 
-    const systemPrompt = `
-You are P8 AI for ProAI8.
+    .left {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 28px;
+    }
 
-Role:
-- complete manager for business owners
-- strongest at marketing automation, rentals, listings, forms, agreements, inspections, ROI, and business workflows
-- helpful, practical, concise, and action-oriented
-- do not behave like an unlimited generic chatbot
+    .right {
+      width: 38%;
+      min-width: 320px;
+      border-left: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-Behavior:
-- answer clearly and briefly
-- prioritize business usefulness
-- when relevant, naturally guide users toward ProAI8 tools like listings, rentals, forms, agreements, inspection, and ROI
-`;
+    .header {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.05;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+    }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: env.OPENAI_MODEL,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: message }
-        ],
-        max_tokens: 250,
-        temperature: 0.6
-      })
+    .sub {
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.5;
+      margin-bottom: 22px;
+      max-width: 900px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .nav span {
+      display: inline-flex;
+      align-items: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav span:hover {
+      background: var(--blue-2);
+    }
+
+    .chat {
+      flex: 1;
+      min-height: 0;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      overflow-y: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .message {
+      margin-bottom: 16px;
+      display: flex;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 78%;
+      padding: 13px 16px;
+      border-radius: 18px;
+      line-height: 1.5;
+      font-size: 16px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: var(--shadow);
+    }
+
+    .message.ai .bubble {
+      background: #334155;
+      color: white;
+      border-top-left-radius: 8px;
+    }
+
+    .message.user .bubble {
+      background: var(--blue);
+      color: white;
+      border-top-right-radius: 8px;
+    }
+
+    .input {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      margin-top: 16px;
+    }
+
+    .input textarea {
+      flex: 1;
+      min-height: 52px;
+      max-height: 160px;
+      resize: none;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      background: var(--panel-3);
+      color: white;
+      font-size: 16px;
+      line-height: 1.45;
+      font-family: Arial, sans-serif;
+      outline: none;
+      overflow-y: auto;
+    }
+
+    .input textarea::placeholder {
+      color: var(--muted-2);
+    }
+
+    .input button {
+      background: var(--blue);
+      border: none;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15px;
+      height: 52px;
+      flex-shrink: 0;
+    }
+
+    .input button:hover {
+      background: var(--blue-2);
+    }
+
+    .actions {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .actions button {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .actions button:hover {
+      background: var(--blue-2);
+    }
+
+    .map-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .map-sub {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.4;
+      margin: 0 0 8px;
+    }
+
+    .map-box {
+      position: relative;
+      background:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
+        #0f172a;
+      background-size: 48px 48px, 48px 48px, auto;
+      min-height: 260px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .pin {
+      position: absolute;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .pin:hover {
+      background: var(--blue-2);
+    }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      padding: 16px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .card button {
+      background: var(--blue);
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .card button:hover {
+      background: var(--blue-2);
+    }
+
+    @media (max-width: 1080px) {
+      .app {
+        flex-direction: column;
+      }
+
+      .right {
+        width: 100%;
+        min-width: 0;
+        border-left: none;
+        border-top: 1px solid var(--line);
+      }
+
+      .left {
+        padding: 20px;
+      }
+
+      .right {
+        padding: 20px;
+      }
+
+      .header {
+        font-size: 36px;
+      }
+
+      .sub {
+        font-size: 17px;
+      }
+
+      .bubble {
+        max-width: 92%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <div class="left">
+      <h1 class="header">Operate your business with P8 AI</h1>
+
+      <div class="sub">
+        Marketing, rentals, listings, schedule, forms, agreements, inspections, ROI — all from one AI command center.
+      </div>
+
+      <div class="nav">
+        <span onclick="quick('Help me with marketing automation')">Marketing</span>
+        <span onclick="quick('Help me create a listing')">Listings</span>
+        <span onclick="quick('Help me manage rentals')">Rentals</span>
+        <span onclick="quick('Show me forms I might need')">Forms</span>
+        <span onclick="quick('Help me with inspection workflow')">Inspection</span>
+        <span onclick="quick('Help me calculate ROI')">ROI</span>
+      </div>
+
+      <div class="chat" id="chat">
+        <div class="message ai">
+          <div class="bubble">Hi, I’m P8 AI. I help manage your business, rentals, listings, marketing, and workflows.</div>
+        </div>
+      </div>
+
+      <div class="input">
+        <textarea
+          id="input"
+          placeholder="Ask P8 AI about marketing, rentals, listings, or your business..."
+          rows="1"
+        ></textarea>
+        <button type="button" onclick="sendMessage()">Send</button>
+      </div>
+
+      <div class="actions">
+        <button onclick="quick('Help me create a listing')">Listings</button>
+        <button onclick="quick('Help me manage rentals')">Rentals</button>
+        <button onclick="quick('Help me with agreements')">Agreements</button>
+        <button onclick="quick('Help me schedule an inspection')">Inspection</button>
+        <button onclick="quick('Help me calculate ROI')">ROI</button>
+      </div>
+    </div>
+
+    <div class="right">
+      <h2 class="map-title">Map View</h2>
+      <p class="map-sub">Property-platform feel with pins and listing entry points.</p>
+
+      <div class="map-box">
+        <button class="pin" style="top:18%; left:18%;">$1,250</button>
+        <button class="pin" style="top:32%; left:56%;">$1,850</button>
+        <button class="pin" style="top:61%; left:28%;">$2,100</button>
+        <button class="pin" style="top:66%; left:68%;">List Here</button>
+      </div>
+
+      <div class="card">
+        <strong>Owner Listing Assistant</strong>
+        <p>Create listings, prepare forms, and organize your property workflow.</p>
+        <button onclick="quick('Help me create a property listing')">Start Listing</button>
+      </div>
+
+      <div class="card">
+        <strong>Rental Matching</strong>
+        <p>Find rentals, guide tenants, and support landlord operations.</p>
+        <button onclick="quick('Help me manage rentals')">Browse Rentals</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const input = document.getElementById("input");
+    const chat = document.getElementById("chat");
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function autoResize() {
+      input.style.height = "auto";
+      input.style.height = Math.min(input.scrollHeight, 160) + "px";
+    }
+
+    function addMessage(text, type) {
+      const wrapper = document.createElement("div");
+      wrapper.className = `message ${type}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerHTML = escapeHtml(text).replace(/\n/g, "<br>");
+
+      wrapper.appendChild(bubble);
+      chat.appendChild(wrapper);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const message = input.value.trim();
+      if (!message) return;
+
+      addMessage(message, "user");
+      input.value = "";
+      autoResize();
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+        addMessage(data.reply || "No response.", "ai");
+      } catch (err) {
+        addMessage("Error connecting to AI.", "ai");
+      }
+    }
+
+    function quick(text) {
+      input.value = text;
+      autoResize();
+      sendMessage();
+    }
+
+    input.addEventListener("input", autoResize);
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      const apiMessage =
-        data?.error?.message ||
-        "OpenAI request failed.";
-
-      return json(
-        {
-          reply: `OpenAI error: ${apiMessage}`
-        },
-        response.status
-      );
-    }
-
-    const reply =
-      data?.choices?.[0]?.message?.content?.trim() ||
-      "No response returned.";
-
-    return json({ reply }, 200);
-
-  } catch (error) {
-    return json(
-      {
-        reply: `Server error: ${error?.message || "Unknown error"}`
-      },
-      500
-    );
-  }
-}
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-store"
-    }
-  });
-}
+    autoResize();
+  </script>
+</body>
+</html>
