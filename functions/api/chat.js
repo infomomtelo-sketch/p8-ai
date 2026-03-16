@@ -7,21 +7,19 @@ export async function onRequestPost(context) {
     const message = body.message || "";
 
     const systemPrompt = `
-You are P8-AI, the assistant for the ProrAI8 platform.
+You are P8-AI, assistant for the ProrAI8 platform.
 
-Primary focus:
-- marketing automation for business owners
-- rental properties
-- landlord operations
-- listings
-- forms and agreements
+Focus on:
+- marketing automation
+- rental management
+- property listings
+- inspections
+- business workflows
 - ROI analysis
 
-You may answer general questions briefly,
-but do not behave like an unlimited chatbot.
-
-Always prioritize helping users run their business
-and promote ProrAI8 tools when relevant.
+Help users operate their business.
+Avoid behaving like a generic unlimited chatbot.
+Keep answers concise and practical.
 `;
 
     const openaiResponse = await fetch(
@@ -36,14 +34,8 @@ and promote ProrAI8 tools when relevant.
           model: env.OPENAI_MODEL || "gpt-5.3",
           max_output_tokens: 200,
           input: [
-            {
-              role: "system",
-              content: systemPrompt
-            },
-            {
-              role: "user",
-              content: message
-            }
+            { role: "system", content: systemPrompt },
+            { role: "user", content: message }
           ]
         })
       }
@@ -51,10 +43,19 @@ and promote ProrAI8 tools when relevant.
 
     const data = await openaiResponse.json();
 
-    const reply =
-      data.output_text ||
-      data.output?.[0]?.content?.[0]?.text ||
-      "P8 AI could not generate a response.";
+    console.log("OpenAI response:", data);
+
+    let reply = "";
+
+    if (data.output_text) {
+      reply = data.output_text;
+    } else if (data.output && data.output.length) {
+      reply = data.output[0].content[0].text;
+    } else if (data.error) {
+      reply = "OpenAI error: " + data.error.message;
+    } else {
+      reply = "P8 AI could not generate a response.";
+    }
 
     return new Response(
       JSON.stringify({ reply }),
@@ -65,7 +66,7 @@ and promote ProrAI8 tools when relevant.
 
     return new Response(
       JSON.stringify({
-        reply: "P8 AI encountered an error."
+        reply: "P8 AI server error."
       }),
       { headers: { "Content-Type": "application/json" } }
     );
