@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProrAI8 - Rentals</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1120;
+      color: white;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .topbar a {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #1f2937;
+      color: white;
+      text-decoration: none;
+      border: 1px solid #334155;
+      font-weight: 600;
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      font-size: 36px;
+    }
+
+    .subtitle {
+      color: #cbd5e1;
+      max-width: 760px;
+      margin-bottom: 28px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    .filters label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #e5e7eb;
+      font-size: 14px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: white;
+    }
+
+    .rentals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.28);
+    }
+
+    .card-image {
+      height: 180px;
+      background: linear-gradient(135deg, #1d4ed8, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #dbeafe;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      padding: 16px;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .price {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      color: #cbd5e1;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .status.available {
+      background: rgba(37, 99, 235, 0.18);
+      color: #93c5fd;
+      border: 1px solid rgba(147, 197, 253, 0.35);
+    }
+
+    .status.soon {
+      background: rgba(234, 179, 8, 0.18);
+      color: #fde68a;
+      border: 1px solid rgba(253, 230, 138, 0.35);
+    }
+
+    .desc {
+      color: #cbd5e1;
+      margin-bottom: 16px;
+      min-height: 54px;
+    }
+
+    .card-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .card-actions a,
+    .card-actions button {
+      width: 100%;
+      text-align: center;
+      padding: 11px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #1f2937;
+      color: white;
+      border: 1px solid #334155;
+    }
+
+    .footer-note {
+      margin-top: 26px;
+      color: #94a3b8;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a href="index.html">← Back to Home</a>
+      <a href="list-property.html">List Property</a>
+    </div>
+
+    <h1>Browse Rentals</h1>
+    <p class="subtitle">
+      Explore available properties, upcoming vacancies, and rental opportunities managed through the ProrAI8 system.
+    </p>
+
+    <div class="filters">
+      <div>
+        <label for="city">City</label>
+        <input id="city" type="text" placeholder="Fresno" />
+      </div>
+
+      <div>
+        <label for="type">Property Type</label>
+        <select id="type">
+          <option>All Types</option>
+          <option>Room</option>
+          <option>Studio</option>
+          <option>ADU</option>
+          <option>Apartment</option>
+          <option>House</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="price">Max Monthly Rent</label>
+        <input id="price" type="number" placeholder="1800" />
+      </div>
+
+      <div>
+        <label for="availability">Availability</label>
+        <select id="availability">
+          <option>All</option>
+          <option>Available Now</option>
+          <option>Available Soon</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="rentals-grid">
+      <div class="card">
+        <div class="card-image">Studio Near Fresno Hospital</div>
+        <div class="card-body">
+          <div class="price">$1,200/mo</div>
+          <div class="title">Furnished Studio</div>
+          <div class="meta">Fresno, CA • 1 bed • 1 bath</div>
+          <div class="status available">Available Now</div>
+          <div class="desc">
+            Private entrance, furnished setup, close to hospital and work routes.
+          </div>
+          <div class="card-actions">
+            <a class="btn-primary" href="#">View Details</a>
+            <button class="btn-secondary">Ask P8 AI About This Rental</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-image">2BR House - Upcoming Vacancy</div>
+        <div class="card-body">
+          <div class="price">$1,800/mo</div>
+          <div class="title">2 Bedroom House</div>
+          <div class="meta">Fresno, CA • 2 bed • 1 bath</div>
+          <div class="status soon">Available Soon</div>
+          <div class="desc">
+            Current tenant moving out soon. Good fit for longer stays and small families.
+          </div>
+          <div class="card-actions">
+            <a class="btn-primary" href="#">View Details</a>
+            <button class="btn-secondary">Request Availability Info</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-image">Private Room With Parking</div>
+        <div class="card-body">
+          <div class="price">$850/mo</div>
+          <div class="title">Private Room</div>
+          <div class="meta">Hanford, CA • Room • Shared bath</div>
+          <div class="status available">Available Now</div>
+          <div class="desc">
+            Good for travel professionals. Includes parking and quiet home environment.
+          </div>
+          <div class="card-actions">
+            <a class="btn-primary" href="#">View Details</a>
+            <button class="btn-secondary">Ask About This Room</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      These are prototype listings for the ProrAI8 rental marketplace. Later this page can connect to the same property records used by P8 AI and landlord tools.
+    </div>
+  </div>
+</body>
+</html>
