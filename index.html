@@ -1,660 +1,314 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ProrAI8 | P8 AI</title>
-  <meta
-    name="description"
-    content="P8 AI - your complete manager for business, marketing, rentals, listings, forms, agreements, and property workflows."
-  />
-  <style>
-    * { box-sizing: border-box; }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ProAI8 | P8 AI</title>
 
-    :root{
-      --bg:#0b1120;
-      --panel:#111827;
-      --panel2:#0f172a;
-      --line:rgba(255,255,255,0.08);
-      --text:#fff;
-      --muted:#cbd5e1;
-      --muted2:#94a3b8;
-      --blue:#2563eb;
-      --blue2:#1d4ed8;
-      --chip:#172033;
-      --overlay:rgba(0,0,0,0.45);
-      --radius:18px;
-      --shadow:0 18px 48px rgba(0,0,0,0.35);
-    }
+<style>
 
-    html, body {
-      margin: 0;
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Arial, sans-serif;
-    }
+/* ===== ROOT THEME ===== */
+:root{
+--bg:#0f172a;
+--panel:#1e293b;
+--panel2:#111827;
 
-    body {
-      overflow: hidden;
-    }
+--text:#ffffff;
+--muted:#cbd5e1;
+--muted2:#94a3b8;
 
-    .app {
-      height: 100vh;
-      display: flex;
-      position: relative;
-    }
+--blue:#2563eb;
+--blue2:#1d4ed8;
 
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: var(--overlay);
-      display: none;
-      z-index: 999;
-    }
+--radius:16px;
+}
 
-    .overlay.show {
-      display: block;
-    }
+/* ===== GLOBAL ===== */
+*{box-sizing:border-box;}
 
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -290px;
-      width: 290px;
-      height: 100vh;
-      background: var(--panel);
-      border-right: 1px solid var(--line);
-      padding: 18px 16px;
-      transition: left 0.25s ease;
-      z-index: 1000;
-      overflow-y: auto;
-    }
+html,body{
+margin:0;
+height:100%;
+background: radial-gradient(circle at top left, #1e293b, #0f172a);
+color:var(--text);
+font-family:Arial, sans-serif;
+}
 
-    .sidebar.open {
-      left: 0;
-    }
+/* ===== LAYOUT ===== */
+.app{
+display:flex;
+height:100vh;
+}
 
-    .sidebar-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
+/* LEFT SIDE (AI) */
+.left{
+flex:1;
+padding:30px;
+display:flex;
+flex-direction:column;
+}
 
-    .sidebar h2 {
-      margin: 0;
-      font-size: 22px;
-    }
+/* RIGHT SIDE (MAP / ACTIONS) */
+.right{
+width:40%;
+background:rgba(255,255,255,0.02);
+border-left:1px solid rgba(255,255,255,0.05);
+padding:30px;
+}
 
-    .close-btn {
-      border: none;
-      background: transparent;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-    }
+/* ===== HEADER ===== */
+.header{
+font-size:28px;
+font-weight:bold;
+margin-bottom:10px;
+}
 
-    .nav-title {
-      color: var(--muted2);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin: 18px 8px 10px;
-    }
+.sub{
+color:var(--muted);
+margin-bottom:20px;
+}
 
-    .nav-link {
-      display: block;
-      text-decoration: none;
-      color: var(--text);
-      background: #182131;
-      border-radius: 14px;
-      padding: 12px 14px;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
+/* ===== CATEGORY NAV ===== */
+.nav{
+display:flex;
+gap:15px;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
 
-    .nav-link:hover {
-      background: var(--blue);
-    }
+.nav span{
+background:var(--panel);
+padding:8px 14px;
+border-radius:999px;
+cursor:pointer;
+font-size:14px;
+}
 
-    .main {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
+/* ===== CHAT AREA ===== */
+.chat{
+flex:1;
+background:var(--panel);
+border-radius:var(--radius);
+padding:20px;
+overflow:auto;
+}
 
-    .topbar {
-      height: 64px;
-      background: var(--panel2);
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 16px;
-      flex-shrink: 0;
-    }
+/* MESSAGE */
+.message{
+margin-bottom:15px;
+}
 
-    .menu-btn {
-      border: none;
-      background: transparent;
-      color: white;
-      font-size: 26px;
-      cursor: pointer;
-      border-radius: 10px;
-      padding: 4px 8px;
-    }
+/* USER */
+.user{
+text-align:right;
+}
 
-    .menu-btn:hover {
-      background: rgba(255,255,255,0.06);
-    }
+.user span{
+background:var(--blue);
+padding:10px 14px;
+border-radius:20px;
+display:inline-block;
+}
 
-    .brand {
-      font-size: 22px;
-      font-weight: 800;
-    }
+/* AI */
+.ai span{
+background:#334155;
+padding:10px 14px;
+border-radius:20px;
+display:inline-block;
+}
 
-    .brand-sub {
-      margin-left: auto;
-      color: var(--muted2);
-      font-size: 13px;
-    }
+/* ===== INPUT ===== */
+.input{
+display:flex;
+margin-top:15px;
+gap:10px;
+}
 
-    .content {
-      flex: 1;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 1.25fr .95fr;
-      gap: 0;
-    }
+.input input{
+flex:1;
+padding:12px;
+border-radius:12px;
+border:none;
+background:#020617;
+color:white;
+}
 
-    .chat-column {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--line);
-    }
+.input button{
+background:var(--blue);
+border:none;
+color:white;
+padding:12px 18px;
+border-radius:12px;
+cursor:pointer;
+}
 
-    .hero {
-      padding: 26px 20px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      flex-shrink: 0;
-    }
+/* ===== QUICK ACTIONS ===== */
+.actions{
+margin-top:20px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
 
-    .hero h1 {
-      margin: 0 0 10px;
-      font-size: 34px;
-      line-height: 1.1;
-    }
+.actions button{
+background:var(--panel2);
+border:none;
+padding:10px 14px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+}
 
-    .hero p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.5;
-      max-width: 780px;
-    }
+/* ===== MAP SIDE ===== */
+.map-title{
+font-size:18px;
+margin-bottom:10px;
+}
 
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding: 16px 20px 8px;
-      flex-shrink: 0;
-    }
+.map-box{
+background:var(--panel);
+height:200px;
+border-radius:12px;
+margin-bottom:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:var(--muted2);
+}
 
-    .chip {
-      border: 1px solid var(--line);
-      background: var(--chip);
-      color: white;
-      padding: 10px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-    }
+.card{
+background:var(--panel);
+padding:15px;
+border-radius:12px;
+margin-bottom:10px;
+}
 
-    .chip:hover {
-      background: var(--blue2);
-    }
+.card button{
+margin-top:10px;
+background:var(--blue);
+border:none;
+padding:8px 12px;
+border-radius:8px;
+color:white;
+cursor:pointer;
+}
 
-    .messages {
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .msg-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .msg {
-      max-width: 760px;
-      padding: 14px 16px;
-      border-radius: 18px;
-      line-height: 1.55;
-      white-space: pre-wrap;
-      font-size: 15px;
-      box-shadow: var(--shadow);
-    }
-
-    .msg.bot {
-      background: var(--panel);
-      align-self: flex-start;
-    }
-
-    .msg.user {
-      background: var(--blue);
-      align-self: flex-end;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      max-width: 760px;
-    }
-
-    .action-link {
-      text-decoration: none;
-      color: white;
-      background: #182131;
-      border: 1px solid var(--line);
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .action-link:hover {
-      background: var(--blue2);
-    }
-
-    .composer-area {
-      padding: 14px 18px 18px;
-      border-top: 1px solid var(--line);
-      background: var(--panel2);
-      flex-shrink: 0;
-    }
-
-    .composer {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 10px;
-    }
-
-    .composer input {
-      flex: 1;
-      min-width: 0;
-      border: none;
-      background: transparent;
-      color: white;
-      font-size: 15px;
-      padding: 10px 12px;
-      outline: none;
-    }
-
-    .composer input::placeholder {
-      color: var(--muted2);
-    }
-
-    .send-btn {
-      border: none;
-      background: var(--blue);
-      color: white;
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-weight: 800;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-
-    .send-btn:hover {
-      background: var(--blue2);
-    }
-
-    .map-column {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      background: #09101c;
-    }
-
-    .map-header {
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--line);
-      background: var(--panel2);
-      flex-shrink: 0;
-    }
-
-    .map-header h3 {
-      margin: 0 0 6px;
-      font-size: 18px;
-    }
-
-    .map-header p {
-      margin: 0;
-      color: var(--muted2);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .map-frame {
-      flex: 1;
-      min-height: 280px;
-      position: relative;
-      overflow: hidden;
-      background:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
-        #0b1220;
-      background-size: 48px 48px, 48px 48px, auto;
-    }
-
-    .map-badge {
-      position: absolute;
-      background: var(--blue);
-      color: white;
-      padding: 8px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      box-shadow: var(--shadow);
-      cursor: pointer;
-    }
-
-    .map-badge:hover {
-      background: var(--blue2);
-    }
-
-    .listing-strip {
-      border-top: 1px solid var(--line);
-      padding: 14px;
-      display: grid;
-      gap: 10px;
-      background: var(--panel2);
-      max-height: 230px;
-      overflow-y: auto;
-    }
-
-    .listing-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px;
-    }
-
-    .listing-card h4 {
-      margin: 0 0 6px;
-      font-size: 15px;
-    }
-
-    .listing-card p {
-      margin: 0 0 10px;
-      color: var(--muted2);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .listing-card a {
-      color: white;
-      text-decoration: none;
-      background: #182131;
-      padding: 8px 10px;
-      border-radius: 10px;
-      display: inline-block;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .listing-card a:hover {
-      background: var(--blue2);
-    }
-
-    @media (max-width: 980px) {
-      .content {
-        grid-template-columns: 1fr;
-      }
-
-      .map-column {
-        display: none;
-      }
-
-      .brand-sub {
-        display: none;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="overlay" id="overlay"></div>
 
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-top">
-      <h2>P8 AI</h2>
-      <button class="close-btn" id="closeSidebar" type="button">×</button>
-    </div>
+<div class="app">
 
-    <div class="nav-title">Main</div>
-    <a class="nav-link" href="/">Dashboard</a>
-    <a class="nav-link" href="/rentals.html">Rentals</a>
-    <a class="nav-link" href="/owner/add-property.html">Listings</a>
-    <a class="nav-link" href="/schedule.html">Schedule</a>
+<!-- LEFT SIDE -->
+<div class="left">
 
-    <div class="nav-title">Documents</div>
-    <a class="nav-link" href="/forms.html">Forms</a>
-    <a class="nav-link" href="/agreements.html">Agreements</a>
+<div class="header">Operate your business with P8 AI</div>
+<div class="sub">
+Marketing, rentals, listings, schedule, forms, agreements, inspections, ROI — all from one AI command center.
+</div>
 
-    <div class="nav-title">Tools</div>
-    <a class="nav-link" href="/roi/">ROI Analyzer</a>
-    <a class="nav-link" href="/inspection.html">Home Inspection SaaS</a>
-    <a class="nav-link" href="/management.html">Rental Management Tool</a>
-    <a class="nav-link" href="/business-manager.html">P8 AI Business Manager</a>
-  </aside>
+<div class="nav">
+<span>Marketing</span>
+<span>Listings</span>
+<span>Rentals</span>
+<span>Forms</span>
+<span>Inspection</span>
+<span>ROI</span>
+</div>
 
-  <div class="app">
-    <main class="main">
-      <div class="topbar">
-        <button class="menu-btn" id="menuBtn" type="button">☰</button>
-        <div class="brand">ProrAI8</div>
-        <div class="brand-sub">P8 AI — your complete manager for your business</div>
-      </div>
+<div class="chat" id="chat">
 
-      <div class="content">
-        <section class="chat-column">
-          <div class="hero">
-            <h1>Operate your business with P8 AI</h1>
-            <p>
-              Marketing, rentals, listings, schedule, forms, agreements, inspections,
-              and business workflows — all from one AI command center.
-            </p>
-          </div>
+<div class="message ai">
+<span>Hi, I'm P8 AI. I help manage your business, rentals, listings, marketing, and workflows.</span>
+</div>
 
-          <div class="chips">
-            <button class="chip prompt-chip" data-prompt="Help me with marketing automation">Marketing</button>
-            <button class="chip prompt-chip" data-prompt="Help me create a listing">Listings</button>
-            <button class="chip prompt-chip" data-prompt="I need rental management help">Rentals</button>
-            <button class="chip prompt-chip" data-prompt="Show forms and agreements">Forms</button>
-            <button class="chip prompt-chip" data-prompt="Start a home inspection workflow">Inspection</button>
-            <button class="chip prompt-chip" data-prompt="Estimate rental ROI">ROI</button>
-          </div>
+</div>
 
-          <div class="messages" id="messages">
-            <div class="msg-wrap">
-              <div class="msg bot">Hi, I’m P8 AI.
+<div class="input">
+<input id="input" placeholder="Ask P8 AI about marketing, rentals, listings..." />
+<button onclick="sendMessage()">Send</button>
+</div>
 
-I can help with marketing automation, social content, rentals, listings, schedule, forms, agreements, inspections, ROI, and business tools.
+<div class="actions">
+<button onclick="quick('List a property')">Listings</button>
+<button onclick="quick('Browse rentals')">Rentals</button>
+<button onclick="quick('Create agreement')">Agreements</button>
+<button onclick="quick('Schedule inspection')">Inspection</button>
+<button onclick="quick('Run ROI analysis')">ROI</button>
+</div>
 
-You can ask me a question or use the quick actions below.</div>
-              <div class="actions">
-                <a class="action-link" href="/rentals.html">Rentals</a>
-                <a class="action-link" href="/owner/add-property.html">Listings</a>
-                <a class="action-link" href="/schedule.html">Schedule</a>
-                <a class="action-link" href="/forms.html">Forms</a>
-                <a class="action-link" href="/agreements.html">Agreements</a>
-              </div>
-            </div>
-          </div>
+</div>
 
-          <div class="composer-area">
-            <form class="composer" id="chatForm">
-              <input
-                id="chatInput"
-                type="text"
-                placeholder="Ask P8 AI about marketing, rentals, listings, or your business..."
-                autocomplete="off"
-              />
-              <button class="send-btn" type="submit">Send</button>
-            </form>
-          </div>
-        </section>
+<!-- RIGHT SIDE -->
+<div class="right">
 
-        <aside class="map-column">
-          <div class="map-header">
-            <h3>Map View</h3>
-            <p>Property-platform feel with map pins and quick listing access.</p>
-          </div>
+<div class="map-title">Map View</div>
+<div class="map-box">Map Coming Soon</div>
 
-          <div class="map-frame">
-            <button class="map-badge" style="top:18%; left:22%;" onclick="location.href='/rentals.html'">$1,250</button>
-            <button class="map-badge" style="top:34%; left:54%;" onclick="location.href='/rentals.html'">$1,850</button>
-            <button class="map-badge" style="top:58%; left:30%;" onclick="location.href='/rentals.html'">$2,100</button>
-            <button class="map-badge" style="top:65%; left:67%;" onclick="location.href='/owner/add-property.html'">List Here</button>
-          </div>
+<div class="card">
+<strong>Owner Listing Assistant</strong>
+<br>Create listings, upload photos, and prepare forms.
+<br>
+<button>Start Listing</button>
+</div>
 
-          <div class="listing-strip">
-            <div class="listing-card">
-              <h4>Near medical center</h4>
-              <p>Private room setup for travel professionals and flexible stays.</p>
-              <a href="/rentals.html">View Rentals</a>
-            </div>
+<div class="card">
+<strong>Rental Matching</strong>
+<br>Find tenants or properties instantly.
+<br>
+<button>Browse Rentals</button>
+</div>
 
-            <div class="listing-card">
-              <h4>Owner listing workflow</h4>
-              <p>Create a property listing, add photos, and prepare forms.</p>
-              <a href="/owner/add-property.html">Create Listing</a>
-            </div>
+</div>
 
-            <div class="listing-card">
-              <h4>Inspection-ready property</h4>
-              <p>Run a property checklist before publishing or onboarding.</p>
-              <a href="/inspection.html">Start Inspection</a>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </main>
-  </div>
+</div>
 
-  <script>
-    const menuBtn = document.getElementById("menuBtn");
-    const closeSidebar = document.getElementById("closeSidebar");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
-    const chatForm = document.getElementById("chatForm");
-    const chatInput = document.getElementById("chatInput");
-    const messages = document.getElementById("messages");
-    const chips = document.querySelectorAll(".prompt-chip");
+<script>
 
-    function openSidebar() {
-      sidebar.classList.add("open");
-      overlay.classList.add("show");
-    }
+async function sendMessage(){
+const input = document.getElementById("input");
+const chat = document.getElementById("chat");
 
-    function closeMenu() {
-      sidebar.classList.remove("open");
-      overlay.classList.remove("show");
-    }
+const message = input.value;
+if(!message) return;
 
-    menuBtn.addEventListener("click", openSidebar);
-    closeSidebar.addEventListener("click", closeMenu);
-    overlay.addEventListener("click", closeMenu);
+chat.innerHTML += `
+<div class="message user"><span>${message}</span></div>
+`;
 
-    chips.forEach(chip => {
-      chip.addEventListener("click", () => {
-        chatInput.value = chip.dataset.prompt;
-        chatInput.focus();
-      });
-    });
+input.value = "";
 
-    function escapeHtml(text) {
-      return text
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;");
-    }
+/* CALL API */
+try{
+const res = await fetch("/api/chat", {
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body: JSON.stringify({message})
+});
 
-    function addMessage(text, sender, actions = []) {
-      const wrap = document.createElement("div");
-      wrap.className = "msg-wrap";
+const data = await res.json();
 
-      const msg = document.createElement("div");
-      msg.className = `msg ${sender}`;
-      msg.textContent = text;
-      wrap.appendChild(msg);
+chat.innerHTML += `
+<div class="message ai"><span>${data.reply || "No response"}</span></div>
+`;
 
-      if (actions.length) {
-        const row = document.createElement("div");
-        row.className = "actions";
+}catch(err){
+chat.innerHTML += `
+<div class="message ai"><span>Error connecting to AI</span></div>
+`;
+}
 
-        actions.forEach(action => {
-          const a = document.createElement("a");
-          a.className = "action-link";
-          a.href = action.url;
-          a.textContent = action.label;
-          row.appendChild(a);
-        });
+chat.scrollTop = chat.scrollHeight;
+}
 
-        wrap.appendChild(row);
-      }
+function quick(text){
+document.getElementById("input").value = text;
+sendMessage();
+}
 
-      messages.appendChild(wrap);
-      messages.scrollTop = messages.scrollHeight;
-      return wrap;
-    }
+</script>
 
-    chatForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const text = chatInput.value.trim();
-      if (!text) return;
-
-      addMessage(text, "user");
-      chatInput.value = "";
-
-      const thinking = addMessage("Thinking...", "bot");
-
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
-        });
-
-        const data = await res.json();
-        thinking.remove();
-
-        addMessage(
-          data.reply || "No response returned.",
-          "bot",
-          Array.isArray(data.actions) ? data.actions : []
-        );
-      } catch (err) {
-        thinking.remove();
-        addMessage("P8 AI could not respond right now.", "bot");
-        console.error(err);
-      }
-    });
-  </script>
 </body>
 </html>
