@@ -1,720 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ProrAI8 - Inspection</title>
-  <style>
-    * { box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProrAI8 Dashboard</title>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b1120;
-      color: #ffffff;
-      padding: 30px 20px;
-      line-height: 1.5;
-    }
+<style>
 
-    .container {
-      max-width: 980px;
-      margin: 0 auto;
-    }
+body{
+margin:0;
+font-family:Arial;
+background:#0b1120;
+color:white;
+padding:30px 20px;
+}
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
+.container{
+max-width:1100px;
+margin:auto;
+}
 
-    .topbar a {
-      display: inline-block;
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: #1f2937;
-      color: white;
-      text-decoration: none;
-      border: 1px solid #334155;
-      font-weight: 600;
-    }
+.topnav{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
 
-    h1 {
-      margin: 8px 0 8px;
-      font-size: 36px;
-    }
+.topnav a{
+padding:10px 14px;
+border-radius:10px;
+background:#1f2937;
+color:white;
+text-decoration:none;
+border:1px solid #334155;
+}
 
-    .subtitle {
-      color: #cbd5e1;
-      max-width: 800px;
-      margin-bottom: 26px;
-    }
+h1{
+margin-top:0;
+}
 
-    .intro-box {
-      background: #111827;
-      border: 1px solid #1f2937;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 22px;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
-    }
+.dashboard-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-top:20px;
+}
 
-    .intro-box h2 {
-      margin-top: 0;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
+.card{
+background:#111827;
+border-radius:16px;
+padding:20px;
+border:1px solid #1f2937;
+}
 
-    .intro-box p {
-      margin: 0;
-      color: #cbd5e1;
-    }
+.card h3{
+margin-top:0;
+}
 
-    .form-wrap {
-      background: #111827;
-      border: 1px solid #1f2937;
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 14px 34px rgba(0,0,0,0.28);
-    }
+.property-table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
 
-    .section {
-      border: 1px solid #1e293b;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 18px;
-      background: #0f172a;
-    }
+.property-table th,
+.property-table td{
+padding:12px;
+border-bottom:1px solid #1f2937;
+text-align:left;
+}
 
-    .section h3 {
-      margin-top: 0;
-      margin-bottom: 14px;
-      font-size: 22px;
-    }
+.status{
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+}
 
-    .section-note {
-      color: #94a3b8;
-      font-size: 14px;
-      margin-bottom: 14px;
-    }
+.occupied{
+background:#1e3a8a;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
+.vacant{
+background:#065f46;
+}
 
-    .field {
-      display: flex;
-      flex-direction: column;
-    }
+.upcoming{
+background:#92400e;
+}
 
-    .field.full {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #e5e7eb;
-      font-size: 14px;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 11px 12px;
-      border-radius: 10px;
-      border: 1px solid #334155;
-      background: #020617;
-      color: white;
-      font-size: 14px;
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    .actions {
-      margin-top: 22px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    button,
-    .btn-link {
-      border: none;
-      border-radius: 10px;
-      padding: 12px 18px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 15px;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .btn-primary {
-      background: #2563eb;
-      color: white;
-    }
-
-    .btn-secondary {
-      background: #1f2937;
-      border: 1px solid #334155;
-      color: white;
-    }
-
-    .summary {
-      margin-top: 28px;
-      background: #111827;
-      border: 1px solid #1f2937;
-      border-radius: 18px;
-      padding: 22px;
-      display: none;
-    }
-
-    .summary h2 {
-      margin-top: 0;
-      font-size: 24px;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .summary-item {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 12px;
-      padding: 12px;
-    }
-
-    .summary-label {
-      font-size: 12px;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 6px;
-    }
-
-    .summary-value {
-      color: white;
-      font-weight: 600;
-      word-break: break-word;
-    }
-
-    .footer-note {
-      margin-top: 24px;
-      color: #94a3b8;
-      font-size: 13px;
-    }
-
-    @media (max-width: 700px) {
-      .grid,
-      .summary-grid {
-        grid-template-columns: 1fr;
-      }
-
-      h1 {
-        font-size: 30px;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="topbar">
-      <a href="index.html">← Back to Home</a>
-      <a href="dashboard.html">Open Landlord Tools</a>
-    </div>
 
-    <h1>Property Inspection</h1>
-    <p class="subtitle">
-      Document property condition using the same ProrAI8 inspection flow used for listing readiness, move-in records, and property operations.
-    </p>
+<div class="container">
 
-    <div class="intro-box">
-      <h2>P8 AI Inspection Logic</h2>
-      <p>
-        This inspection page follows the same step-by-step workflow P8 AI should guide later:
-        exterior, entrance, hallways, living room, kitchen, bathrooms, bedrooms, and key property condition checks.
-      </p>
-    </div>
+<div class="topnav">
+<a href="index.html">Home</a>
+<a href="list-property.html">Add Property</a>
+<a href="rentals.html">View Rentals</a>
+<a href="inspection.html">Run Inspection</a>
+</div>
 
-    <div class="form-wrap">
-      <form id="inspectionForm">
+<h1>Landlord Dashboard</h1>
 
-        <div class="section">
-          <h3>Inspection Details</h3>
-          <div class="grid">
-            <div class="field">
-              <label for="propertyAddress">Property Address</label>
-              <input type="text" id="propertyAddress" placeholder="123 Maple Ave, Fresno, CA" required />
-            </div>
+<p>Manage your properties, inspections, and listings using the ProrAI8 system.</p>
 
-            <div class="field">
-              <label for="inspectionType">Inspection Type</label>
-              <select id="inspectionType" required>
-                <option value="">Select inspection type</option>
-                <option>Pre-Listing</option>
-                <option>Pre-Move-In</option>
-                <option>Move-Out</option>
-                <option>Routine Check</option>
-              </select>
-            </div>
+<div class="dashboard-grid">
 
-            <div class="field">
-              <label for="inspectorName">Inspector / Manager Name</label>
-              <input type="text" id="inspectorName" placeholder="Your name" />
-            </div>
+<div class="card">
+<h3>Total Properties</h3>
+<p>3</p>
+</div>
 
-            <div class="field">
-              <label for="inspectionDate">Inspection Date</label>
-              <input type="date" id="inspectionDate" />
-            </div>
-          </div>
-        </div>
+<div class="card">
+<h3>Occupied Units</h3>
+<p>1</p>
+</div>
 
-        <div class="section">
-          <h3>Exterior</h3>
-          <div class="section-note">Capture front, driveway, sides, backyard, and visible exterior condition.</div>
-          <div class="grid">
-            <div class="field">
-              <label for="exteriorCondition">Exterior Condition</label>
-              <select id="exteriorCondition">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Needs Attention</option>
-              </select>
-            </div>
+<div class="card">
+<h3>Vacant Units</h3>
+<p>1</p>
+</div>
 
-            <div class="field">
-              <label for="exteriorPhotos">Exterior Photos Taken?</label>
-              <select id="exteriorPhotos">
-                <option>Yes</option>
-                <option>No</option>
-              </select>
-            </div>
+<div class="card">
+<h3>Upcoming Vacancies</h3>
+<p>1</p>
+</div>
 
-            <div class="field full">
-              <label for="exteriorNotes">Exterior Notes</label>
-              <textarea id="exteriorNotes" placeholder="Front, driveway, yard, walls, visible issues, etc."></textarea>
-            </div>
-          </div>
-        </div>
+</div>
 
-        <div class="section">
-          <h3>Entrance & Hallways</h3>
-          <div class="section-note">Check entry door, locks, hallway walls, flooring, and lighting.</div>
-          <div class="grid">
-            <div class="field">
-              <label for="entryCondition">Entrance Condition</label>
-              <select id="entryCondition">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Needs Attention</option>
-              </select>
-            </div>
+<h2 style="margin-top:40px;">Properties</h2>
 
-            <div class="field">
-              <label for="hallwayCondition">Hallway Condition</label>
-              <select id="hallwayCondition">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Needs Attention</option>
-              </select>
-            </div>
+<table class="property-table">
 
-            <div class="field full">
-              <label for="entryNotes">Entrance / Hallway Notes</label>
-              <textarea id="entryNotes" placeholder="Door, locks, hallway flooring, walls, ceilings, lights, etc."></textarea>
-            </div>
-          </div>
-        </div>
+<tr>
+<th>Address</th>
+<th>Type</th>
+<th>Status</th>
+<th>Rent</th>
+</tr>
 
-        <div class="section">
-          <h3>Living Room</h3>
-          <div class="section-note">Check flooring, walls, ceiling, windows, switches, and fixtures.</div>
-          <div class="grid">
-            <div class="field">
-              <label for="livingCondition">Living Room Condition</label>
-              <select id="livingCondition">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Needs Attention</option>
-              </select>
-            </div>
+<tr>
+<td>123 Maple Ave</td>
+<td>House</td>
+<td><span class="status occupied">Occupied</span></td>
+<td>$1800</td>
+</tr>
 
-            <div class="field">
-              <label for="livingLights">Lights Working?</label>
-              <select id="livingLights">
-                <option>Yes</option>
-                <option>No</option>
-              </select>
-            </div>
+<tr>
+<td>456 Oak St</td>
+<td>Studio</td>
+<td><span class="status vacant">Vacant</span></td>
+<td>$1200</td>
+</tr>
 
-            <div class="field full">
-              <label for="livingNotes">Living Room Notes</label>
-              <textarea id="livingNotes" placeholder="Flooring, walls, windows, ceiling stains, switches, fixtures, etc."></textarea>
-            </div>
-          </div>
-        </div>
+<tr>
+<td>789 Pine Rd</td>
+<td>Room</td>
+<td><span class="status upcoming">Upcoming Vacancy</span></td>
+<td>$850</td>
+</tr>
 
-        <div class="section">
-          <h3>Kitchen</h3>
-          <div class="section-note">Check cabinets, countertops, sink, appliances, flooring, and leaks.</div>
-          <div class="grid">
-            <div class="field">
-              <label for="kitchenCondition">Kitchen Condition</label>
-              <select id="kitchenCondition">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Needs Attention</option>
-              </select>
-            </div>
+</table>
 
-            <div class="field">
-              <label for="hotWater">Hot Water Working?</label>
-              <select id="hotWater">
-                <option>Yes</option>
-                <option>No</option>
-              </select>
-            </div>
+</div>
 
-            <div class="field">
-              <label for="leaksPresent">Leaks Present?</label>
-              <select id="leaksPresent">
-                <option>No</option>
-                <option>Yes</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="appliancesWorking">Appliances Working?</label>
-              <select id="appliancesWorking">
-                <option>Yes</option>
-                <option>No</option>
-                <option>Some Issues</option>
-              </select>
-            </div>
-
-            <div class="field full">
-              <label for="kitchenNotes">Kitchen Notes</label>
-              <textarea id="kitchenNotes" placeholder="Sink, cabinets, appliances, flooring, visible leaks, etc."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>Bathroom</h3>
-          <div class="section-note">Check toilet, sink, tub/shower, mirrors, ventilation, and water flow.</div>
-          <div class="grid">
-            <div class="field">
-              <label for="bathroomCondition">Bathroom Condition</label>
-              <select id="bathroomCondition">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Needs Attention</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="bathroomLeaks">Bathroom Leaks?</label>
-              <select id="bathroomLeaks">
-                <option>No</option>
-                <option>Yes</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="toiletWorking">Toilet Working?</label>
-              <select id="toiletWorking">
-                <option>Yes</option>
-                <option>No</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="fanWorking">Exhaust Fan Working?</label>
-              <select id="fanWorking">
-                <option>Yes</option>
-                <option>No</option>
-              </select>
-            </div>
-
-            <div class="field full">
-              <label for="bathroomNotes">Bathroom Notes</label>
-              <textarea id="bathroomNotes" placeholder="Fixtures, water pressure, leaks, walls, flooring, etc."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>Bedroom 1</h3>
-          <div class="grid">
-            <div class="field">
-              <label for="bed1Condition">Bedroom 1 Condition</label>
-              <select id="bed1Condition">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Needs Attention</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="bed1Window">Window Working?</label>
-              <select id="bed1Window">
-                <option>Yes</option>
-                <option>No</option>
-              </select>
-            </div>
-
-            <div class="field full">
-              <label for="bed1Notes">Bedroom 1 Notes</label>
-              <textarea id="bed1Notes" placeholder="Walls, flooring, window, closet, ceiling, fixtures, etc."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>Bedroom 2</h3>
-          <div class="grid">
-            <div class="field">
-              <label for="bed2Condition">Bedroom 2 Condition</label>
-              <select id="bed2Condition">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Needs Attention</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="bed2Window">Window Working?</label>
-              <select id="bed2Window">
-                <option>Yes</option>
-                <option>No</option>
-              </select>
-            </div>
-
-            <div class="field full">
-              <label for="bed2Notes">Bedroom 2 Notes</label>
-              <textarea id="bed2Notes" placeholder="Walls, flooring, window, closet, ceiling, fixtures, etc."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>Final Property Checks</h3>
-          <div class="section-note">Use these questions to match the structured ProrAI8 inspection record.</div>
-          <div class="grid">
-            <div class="field">
-              <label for="smokeDetectors">Smoke Detectors Working?</label>
-              <select id="smokeDetectors">
-                <option>Yes</option>
-                <option>No</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="electricalSwitches">Electrical Switches Working?</label>
-              <select id="electricalSwitches">
-                <option>Yes</option>
-                <option>No</option>
-                <option>Some Issues</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="hvacWorking">HVAC Working?</label>
-              <select id="hvacWorking">
-                <option>Yes</option>
-                <option>No</option>
-                <option>Unknown</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="overallCondition">Overall Condition</label>
-              <select id="overallCondition">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Needs Attention</option>
-              </select>
-            </div>
-
-            <div class="field full">
-              <label for="finalNotes">Final Notes</label>
-              <textarea id="finalNotes" placeholder="Overall summary, damages, follow-up needs, repair items, or listing readiness notes."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button type="submit" class="btn-primary">Generate Inspection Summary</button>
-          <button type="button" class="btn-secondary" onclick="fillInspectionSample()">Fill Sample Data</button>
-          <a class="btn-link btn-secondary" href="rentals.html">Go to Rentals</a>
-        </div>
-      </form>
-    </div>
-
-    <div class="summary" id="summaryBox">
-      <h2>Inspection Summary</h2>
-      <div class="summary-grid">
-        <div class="summary-item">
-          <div class="summary-label">Property Address</div>
-          <div class="summary-value" id="sumAddress">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Inspection Type</div>
-          <div class="summary-value" id="sumType">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Inspector</div>
-          <div class="summary-value" id="sumInspector">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Inspection Date</div>
-          <div class="summary-value" id="sumDate">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Exterior</div>
-          <div class="summary-value" id="sumExterior">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Entrance / Hallway</div>
-          <div class="summary-value" id="sumEntry">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Living Room</div>
-          <div class="summary-value" id="sumLiving">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Kitchen</div>
-          <div class="summary-value" id="sumKitchen">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Bathroom</div>
-          <div class="summary-value" id="sumBathroom">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Bedroom 1</div>
-          <div class="summary-value" id="sumBed1">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Bedroom 2</div>
-          <div class="summary-value" id="sumBed2">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Overall Condition</div>
-          <div class="summary-value" id="sumOverall">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Hot Water</div>
-          <div class="summary-value" id="sumHotWater">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Leaks</div>
-          <div class="summary-value" id="sumLeaks">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Smoke Detectors</div>
-          <div class="summary-value" id="sumSmoke">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">HVAC</div>
-          <div class="summary-value" id="sumHVAC">—</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Final Notes</div>
-          <div class="summary-value" id="sumFinalNotes">—</div>
-        </div>
-      </div>
-
-      <div class="footer-note">
-        This inspection summary represents the same structured inspection record that P8 AI should generate later from guided conversation.
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function fillInspectionSample() {
-      document.getElementById('propertyAddress').value = '123 Maple Ave, Fresno, CA';
-      document.getElementById('inspectionType').value = 'Pre-Listing';
-      document.getElementById('inspectorName').value = 'Eli';
-      document.getElementById('inspectionDate').value = '2026-03-15';
-
-      document.getElementById('exteriorCondition').value = 'Good';
-      document.getElementById('exteriorPhotos').value = 'Yes';
-      document.getElementById('exteriorNotes').value = 'Front exterior, driveway, and entry area photographed. No major visible damage.';
-
-      document.getElementById('entryCondition').value = 'Good';
-      document.getElementById('hallwayCondition').value = 'Good';
-      document.getElementById('entryNotes').value = 'Entry door and hallway in clean condition. Lights working.';
-
-      document.getElementById('livingCondition').value = 'Good';
-      document.getElementById('livingLights').value = 'Yes';
-      document.getElementById('livingNotes').value = 'Living room walls and flooring in good shape. No major ceiling stains.';
-
-      document.getElementById('kitchenCondition').value = 'Fair';
-      document.getElementById('hotWater').value = 'Yes';
-      document.getElementById('leaksPresent').value = 'No';
-      document.getElementById('appliancesWorking').value = 'Yes';
-      document.getElementById('kitchenNotes').value = 'Cabinets and appliances functional. Minor cabinet wear.';
-
-      document.getElementById('bathroomCondition').value = 'Good';
-      document.getElementById('bathroomLeaks').value = 'No';
-      document.getElementById('toiletWorking').value = 'Yes';
-      document.getElementById('fanWorking').value = 'Yes';
-      document.getElementById('bathroomNotes').value = 'Toilet flushes correctly, sink and shower appear functional.';
-
-      document.getElementById('bed1Condition').value = 'Good';
-      document.getElementById('bed1Window').value = 'Yes';
-      document.getElementById('bed1Notes').value = 'Bedroom 1 in clean condition.';
-
-      document.getElementById('bed2Condition').value = 'Fair';
-      document.getElementById('bed2Window').value = 'Yes';
-      document.getElementById('bed2Notes').value = 'Minor flooring wear in bedroom 2.';
-
-      document.getElementById('smokeDetectors').value = 'Yes';
-      document.getElementById('electricalSwitches').value = 'Yes';
-      document.getElementById('hvacWorking').value = 'Yes';
-      document.getElementById('overallCondition').value = 'Good';
-      document.getElementById('finalNotes').value = 'Property generally ready for listing. Minor cosmetic wear only.';
-    }
-
-    document.getElementById('inspectionForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      document.getElementById('sumAddress').textContent = document.getElementById('propertyAddress').value || '—';
-      document.getElementById('sumType').textContent = document.getElementById('inspectionType').value || '—';
-      document.getElementById('sumInspector').textContent = document.getElementById('inspectorName').value || '—';
-      document.getElementById('sumDate').textContent = document.getElementById('inspectionDate').value || '—';
-
-      document.getElementById('sumExterior').textContent = document.getElementById('exteriorCondition').value || '—';
-      document.getElementById('sumEntry').textContent = `${document.getElementById('entryCondition').value || '—'} / ${document.getElementById('hallwayCondition').value || '—'}`;
-      document.getElementById('sumLiving').textContent = document.getElementById('livingCondition').value || '—';
-      document.getElementById('sumKitchen').textContent = document.getElementById('kitchenCondition').value || '—';
-      document.getElementById('sumBathroom').textContent = document.getElementById('bathroomCondition').value || '—';
-      document.getElementById('sumBed1').textContent = document.getElementById('bed1Condition').value || '—';
-      document.getElementById('sumBed2').textContent = document.getElementById('bed2Condition').value || '—';
-
-      document.getElementById('sumOverall').textContent = document.getElementById('overallCondition').value || '—';
-      document.getElementById('sumHotWater').textContent = document.getElementById('hotWater').value || '—';
-      document.getElementById('sumLeaks').textContent = `${document.getElementById('leaksPresent').value || '—'} / Bathroom: ${document.getElementById('bathroomLeaks').value || '—'}`;
-      document.getElementById('sumSmoke').textContent = document.getElementById('smokeDetectors').value || '—';
-      document.getElementById('sumHVAC').textContent = document.getElementById('hvacWorking').value || '—';
-      document.getElementById('sumFinalNotes').textContent = document.getElementById('finalNotes').value || '—';
-
-      document.getElementById('summaryBox').style.display = 'block';
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    });
-  </script>
 </body>
 </html>
