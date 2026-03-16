@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProrAI8</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1120;
+      color: #ffffff;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      padding: 72px 24px 40px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto 24px;
+      color: #cbd5e1;
+      font-size: 18px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #1f2937;
+      color: #fff;
+      border: 1px solid #334155;
+    }
+
+    .section {
+      padding: 24px 24px 40px;
+    }
+
+    .section h2 {
+      font-size: 28px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .card p {
+      margin: 0;
+      color: #cbd5e1;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #94a3b8;
+      padding-bottom: 60px;
+      font-size: 14px;
+    }
+
+    #ai-toggle {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 20px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 1001;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+    }
+
+    #ai-chatbox {
+      position: fixed;
+      right: 20px;
+      bottom: 78px;
+      width: 340px;
+      max-width: calc(100vw - 24px);
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+      overflow: hidden;
+      display: none;
+      z-index: 1000;
+    }
+
+    .chat-header {
+      background: #1f2937;
+      padding: 14px 16px;
+      font-weight: 700;
+    }
+
+    .chat-body {
+      padding: 16px;
+    }
+
+    .chat-body p {
+      margin-top: 0;
+      color: #e5e7eb;
+    }
+
+    .chat-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .chat-actions button {
+      width: 100%;
+      padding: 11px 12px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .chat-actions button.secondary {
+      background: #1f2937;
+      border: 1px solid #334155;
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      #ai-chatbox {
+        right: 12px;
+        bottom: 74px;
+      }
+
+      #ai-toggle {
+        right: 12px;
+        bottom: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container hero">
+    <h1>ProrAI8</h1>
+    <p>
+      Ziprent-style rental operations guided by <strong>P8 AI</strong>.
+      List properties, browse rentals, complete inspections, and manage occupied or vacant units in one simple system.
+    </p>
+
+    <div class="hero-buttons">
+      <button class="btn btn-primary" onclick="openAI()">Talk to P8 AI</button>
+      <a class="btn btn-secondary" href="list-property.html">List Property</a>
+      <a class="btn btn-secondary" href="rentals.html">Browse Rentals</a>
+      <a class="btn btn-secondary" href="inspection.html">Start Inspection</a>
+      <a class="btn btn-secondary" href="dashboard.html">Landlord Tools</a>
+    </div>
+  </div>
+
+  <div class="container section">
+    <h2>How ProrAI8 Works</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>List Properties</h3>
+        <p>Add occupied properties, vacancies, and upcoming availability using the same ProrAI8 structure.</p>
+      </div>
+      <div class="card">
+        <h3>Guide With P8 AI</h3>
+        <p>P8 AI helps owners, landlords, renters, and inspectors move through each step with clickable actions.</p>
+      </div>
+      <div class="card">
+        <h3>Run Inspections</h3>
+        <p>Document exterior, rooms, fixtures, questions, notes, and photos using a guided workflow.</p>
+      </div>
+      <div class="card">
+        <h3>Manage Operations</h3>
+        <p>Track occupied units, vacancies, inspections, and listing readiness from one dashboard.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container footer-note">
+    P8 AI is the guide. ProrAI8 is the system.
+  </div>
+
+  <button id="ai-toggle" onclick="toggleAI()">P8 AI</button>
+
+  <div id="ai-chatbox">
+    <div class="chat-header">P8 AI Manager</div>
+    <div class="chat-body">
+      <p><strong>P8 AI:</strong> Hi, I’m P8 AI from ProrAI8. I can help you list a property, browse rentals, start an inspection, or open landlord tools.</p>
+
+      <div class="chat-actions">
+        <button onclick="goToPage('list-property.html')">List Your Property</button>
+        <button onclick="goToPage('rentals.html')">Browse Rentals</button>
+        <button onclick="goToPage('inspection.html')">Start Inspection</button>
+        <button onclick="goToPage('dashboard.html')">Open Landlord Tools</button>
+        <button class="secondary" onclick="closeAI()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleAI() {
+      const chatbox = document.getElementById('ai-chatbox');
+      chatbox.style.display = chatbox.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function openAI() {
+      document.getElementById('ai-chatbox').style.display = 'block';
+    }
+
+    function closeAI() {
+      document.getElementById('ai-chatbox').style.display = 'none';
+    }
+
+    function goToPage(page) {
+      window.location.href = page;
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('ai-chatbox').style.display = 'block';
+      }, 900);
+    });
+  </script>
+
+</body>
+</html>
