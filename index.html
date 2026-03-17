@@ -659,128 +659,170 @@
       </div>
     </section>
   </main>
+<script>
+  const menuBtn = document.getElementById("menuBtn");
+  const closeMenuBtn = document.getElementById("closeMenu");
+  const sideMenu = document.getElementById("sideMenu");
+  const overlay = document.getElementById("overlay");
+  const messages = document.getElementById("messages");
+  const chatInput = document.getElementById("chatInput");
+  const sendBtn = document.getElementById("sendBtn");
 
-  <script>
-    const menuBtn = document.getElementById("menuBtn");
-    const closeMenuBtn = document.getElementById("closeMenu");
-    const sideMenu = document.getElementById("sideMenu");
-    const overlay = document.getElementById("overlay");
-    const messages = document.getElementById("messages");
-    const chatInput = document.getElementById("chatInput");
-    const sendBtn = document.getElementById("sendBtn");
+  let currentFlow = null;
+  let currentFlowState = {};
 
-    function openMenu() {
-      sideMenu.classList.add("open");
-      overlay.classList.add("open");
-      sideMenu.setAttribute("aria-hidden", "false");
-    }
+  function openMenu() {
+    sideMenu.classList.add("open");
+    overlay.classList.add("open");
+    sideMenu.setAttribute("aria-hidden", "false");
+  }
 
-    function closeSideMenu() {
-      sideMenu.classList.remove("open");
-      overlay.classList.remove("open");
-      sideMenu.setAttribute("aria-hidden", "true");
-    }
+  function closeSideMenu() {
+    sideMenu.classList.remove("open");
+    overlay.classList.remove("open");
+    sideMenu.setAttribute("aria-hidden", "true");
+  }
 
-    menuBtn.addEventListener("click", openMenu);
-    closeMenuBtn.addEventListener("click", closeSideMenu);
-    overlay.addEventListener("click", closeSideMenu);
+  menuBtn.addEventListener("click", openMenu);
+  closeMenuBtn.addEventListener("click", closeSideMenu);
+  overlay.addEventListener("click", closeSideMenu);
 
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") closeSideMenu();
-    });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeSideMenu();
+  });
 
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-    }
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
 
-    function formatTextToHtml(text) {
-      let safe = escapeHtml(text);
+  function formatTextToHtml(text) {
+    let safe = escapeHtml(text);
 
-      safe = safe
-        .replace(/\[Start Listing\]/g, `<button class="ai-btn" onclick="go('/list-property.html')">Start Listing</button>`)
-        .replace(/\[Browse Rentals\]/g, `<button class="ai-btn" onclick="go('/rentals.html')">Browse Rentals</button>`)
-        .replace(/\[Estimate ROI\]/g, `<button class="ai-btn" onclick="go('/roi.html')">Estimate ROI</button>`)
-        .replace(/\[Analyze Listing\]/g, `<button class="ai-btn" onclick="quick('Analyze my listing')">Analyze Listing</button>`);
+    safe = safe
+      .replace(/\[Start Listing\]/g, `<button class="ai-btn" onclick="startListingFlow()">Start Listing</button>`)
+      .replace(/\[Browse Rentals\]/g, `<button class="ai-btn" onclick="quick('Browse rentals')">Browse Rentals</button>`)
+      .replace(/\[Estimate ROI\]/g, `<button class="ai-btn" onclick="quick('Analyze my property ROI')">Estimate ROI</button>`)
+      .replace(/\[Analyze Listing\]/g, `<button class="ai-btn" onclick="quick('Analyze my listing')">Analyze Listing</button>`)
+      .replace(/\[Private room\]/g, `<button class="ai-btn" onclick="flowAnswer('Private room')">Private room</button>`)
+      .replace(/\[Apartment\]/g, `<button class="ai-btn" onclick="flowAnswer('Apartment')">Apartment</button>`)
+      .replace(/\[House\]/g, `<button class="ai-btn" onclick="flowAnswer('House')">House</button>`)
+      .replace(/\[Studio \/ ADU\]/g, `<button class="ai-btn" onclick="flowAnswer('Studio / ADU')">Studio / ADU</button>`)
+      .replace(/\[Yes\]/g, `<button class="ai-btn" onclick="flowAnswer('Yes')">Yes</button>`)
+      .replace(/\[No\]/g, `<button class="ai-btn" onclick="flowAnswer('No')">No</button>`);
 
-      safe = safe.replace(/\n/g, "<br>");
-      return safe;
-    }
+    safe = safe
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\n/g, "<br>");
 
-    function addMessage(role, text) {
-      const msg = document.createElement("div");
-      msg.className = "message " + role;
+    return safe;
+  }
 
-      if (role === "user") {
-        msg.innerHTML = `
-          <div class="message-label">You</div>
-          <div class="message-body"><p>${escapeHtml(text)}</p></div>
-        `;
-      } else {
-        msg.innerHTML = `
-          <div class="message-label">P8 AI</div>
-          <div class="message-body">${formatTextToHtml(text)}</div>
-        `;
-      }
+  function addMessage(role, text) {
+    const msg = document.createElement("div");
+    msg.className = "message " + role;
 
-      messages.appendChild(msg);
-      messages.scrollTop = messages.scrollHeight;
-    }
-
-    function go(path) {
-      window.location.href = path;
-    }
-
-    async function sendMessage() {
-      const text = chatInput.value.trim();
-      if (!text) return;
-
-      addMessage("user", text);
-      chatInput.value = "";
-
-      const thinking = document.createElement("div");
-      thinking.className = "message ai";
-      thinking.innerHTML = `
-        <div class="message-label">P8 AI</div>
-        <div class="message-body"><p>Thinking...</p></div>
+    if (role === "user") {
+      msg.innerHTML = `
+        <div class="message-label">You</div>
+        <div class="message-body"><p>${escapeHtml(text)}</p></div>
       `;
-      messages.appendChild(thinking);
-      messages.scrollTop = messages.scrollHeight;
-
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: text })
-        });
-
-        const data = await res.json();
-        thinking.remove();
-        addMessage("ai", data.reply || "I could not generate a response.");
-      } catch (err) {
-        thinking.remove();
-        addMessage("ai", "There was an error reaching P8 AI. Please try again.");
-      }
+    } else {
+      msg.innerHTML = `
+        <div class="message-label">P8 AI</div>
+        <div class="message-body">${formatTextToHtml(text)}</div>
+      `;
     }
 
-    function quick(text) {
-      chatInput.value = text;
-      chatInput.focus();
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function showThinking() {
+    const thinking = document.createElement("div");
+    thinking.className = "message ai";
+    thinking.id = "thinking-message";
+    thinking.innerHTML = `
+      <div class="message-label">P8 AI</div>
+      <div class="message-body"><p>Thinking...</p></div>
+    `;
+    messages.appendChild(thinking);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeThinking() {
+    const thinking = document.getElementById("thinking-message");
+    if (thinking) thinking.remove();
+  }
+
+  async function sendToApi(text) {
+    addMessage("user", text);
+    showThinking();
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: text,
+          flow: currentFlow,
+          flowState: currentFlowState
+        })
+      });
+
+      const data = await res.json();
+      removeThinking();
+
+      if (data.flow !== undefined) {
+        currentFlow = data.flow;
+      }
+
+      if (data.flowState !== undefined) {
+        currentFlowState = data.flowState || {};
+      }
+
+      addMessage("ai", data.reply || "I could not generate a response.");
+    } catch (err) {
+      removeThinking();
+      addMessage("ai", "There was an error reaching P8 AI. Please try again.");
+    }
+  }
+
+  async function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = "";
+    await sendToApi(text);
+  }
+
+  function quick(text) {
+    chatInput.value = text;
+    chatInput.focus();
+    sendMessage();
+  }
+
+  function startListingFlow() {
+    currentFlow = "listing";
+    currentFlowState = { step: 1, answers: {} };
+    sendToApi("");
+  }
+
+  function flowAnswer(text) {
+    sendToApi(text);
+  }
+
+  sendBtn.addEventListener("click", sendMessage);
+
+  chatInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
       sendMessage();
     }
-
-    sendBtn.addEventListener("click", sendMessage);
-
-    chatInput.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-  </script>
+  });
+</script> 
 </body>
 </html>
