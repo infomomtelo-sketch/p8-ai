@@ -107,6 +107,10 @@
       box-shadow:0 10px 20px rgba(37,99,235,0.22);
     }
 
+    .header-action:hover{
+      background:var(--blue-dark);
+    }
+
     .wrap{
       max-width:980px;
       margin:0 auto;
@@ -306,6 +310,12 @@
 
     .send-btn:hover{
       background:var(--blue-dark);
+    }
+
+    .send-btn:disabled,
+    .ai-btn:disabled{
+      opacity:0.6;
+      cursor:not-allowed;
     }
 
     .helper-row{
@@ -581,8 +591,7 @@
       </div>
 
       <button class="header-action" onclick="startListingFlow()">
-  Start with AI
-</button>        Start with AI
+        Start with AI
       </button>
     </div>
   </header>
@@ -660,170 +669,210 @@
       </div>
     </section>
   </main>
-<script>
-  const menuBtn = document.getElementById("menuBtn");
-  const closeMenuBtn = document.getElementById("closeMenu");
-  const sideMenu = document.getElementById("sideMenu");
-  const overlay = document.getElementById("overlay");
-  const messages = document.getElementById("messages");
-  const chatInput = document.getElementById("chatInput");
-  const sendBtn = document.getElementById("sendBtn");
 
-  let currentFlow = null;
-  let currentFlowState = {};
+  <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const closeMenuBtn = document.getElementById("closeMenu");
+    const sideMenu = document.getElementById("sideMenu");
+    const overlay = document.getElementById("overlay");
+    const messages = document.getElementById("messages");
+    const chatInput = document.getElementById("chatInput");
+    const sendBtn = document.getElementById("sendBtn");
 
-  function openMenu() {
-    sideMenu.classList.add("open");
-    overlay.classList.add("open");
-    sideMenu.setAttribute("aria-hidden", "false");
-  }
+    let currentFlow = null;
+    let currentFlowState = {};
+    let isSending = false;
 
-  function closeSideMenu() {
-    sideMenu.classList.remove("open");
-    overlay.classList.remove("open");
-    sideMenu.setAttribute("aria-hidden", "true");
-  }
-
-  menuBtn.addEventListener("click", openMenu);
-  closeMenuBtn.addEventListener("click", closeSideMenu);
-  overlay.addEventListener("click", closeSideMenu);
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") closeSideMenu();
-  });
-
-  function escapeHtml(str) {
-    return str
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
-
-  function formatTextToHtml(text) {
-    let safe = escapeHtml(text);
-
-    safe = safe
-      .replace(/\[Start Listing\]/g, `<button class="ai-btn" onclick="startListingFlow()">Start Listing</button>`)
-      .replace(/\[Browse Rentals\]/g, `<button class="ai-btn" onclick="quick('Browse rentals')">Browse Rentals</button>`)
-      .replace(/\[Estimate ROI\]/g, `<button class="ai-btn" onclick="quick('Analyze my property ROI')">Estimate ROI</button>`)
-      .replace(/\[Analyze Listing\]/g, `<button class="ai-btn" onclick="quick('Analyze my listing')">Analyze Listing</button>`)
-      .replace(/\[Private room\]/g, `<button class="ai-btn" onclick="flowAnswer('Private room')">Private room</button>`)
-      .replace(/\[Apartment\]/g, `<button class="ai-btn" onclick="flowAnswer('Apartment')">Apartment</button>`)
-      .replace(/\[House\]/g, `<button class="ai-btn" onclick="flowAnswer('House')">House</button>`)
-      .replace(/\[Studio \/ ADU\]/g, `<button class="ai-btn" onclick="flowAnswer('Studio / ADU')">Studio / ADU</button>`)
-      .replace(/\[Yes\]/g, `<button class="ai-btn" onclick="flowAnswer('Yes')">Yes</button>`)
-      .replace(/\[No\]/g, `<button class="ai-btn" onclick="flowAnswer('No')">No</button>`);
-
-    safe = safe
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\n/g, "<br>");
-
-    return safe;
-  }
-
-  function addMessage(role, text) {
-    const msg = document.createElement("div");
-    msg.className = "message " + role;
-
-    if (role === "user") {
-      msg.innerHTML = `
-        <div class="message-label">You</div>
-        <div class="message-body"><p>${escapeHtml(text)}</p></div>
-      `;
-    } else {
-      msg.innerHTML = `
-        <div class="message-label">P8 AI</div>
-        <div class="message-body">${formatTextToHtml(text)}</div>
-      `;
+    function openMenu() {
+      sideMenu.classList.add("open");
+      overlay.classList.add("open");
+      sideMenu.setAttribute("aria-hidden", "false");
     }
 
-    messages.appendChild(msg);
-    messages.scrollTop = messages.scrollHeight;
-  }
+    function closeSideMenu() {
+      sideMenu.classList.remove("open");
+      overlay.classList.remove("open");
+      sideMenu.setAttribute("aria-hidden", "true");
+    }
 
-  function showThinking() {
-    const thinking = document.createElement("div");
-    thinking.className = "message ai";
-    thinking.id = "thinking-message";
-    thinking.innerHTML = `
-      <div class="message-label">P8 AI</div>
-      <div class="message-body"><p>Thinking...</p></div>
-    `;
-    messages.appendChild(thinking);
-    messages.scrollTop = messages.scrollHeight;
-  }
+    menuBtn.addEventListener("click", openMenu);
+    closeMenuBtn.addEventListener("click", closeSideMenu);
+    overlay.addEventListener("click", closeSideMenu);
 
-  function removeThinking() {
-    const thinking = document.getElementById("thinking-message");
-    if (thinking) thinking.remove();
-  }
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeSideMenu();
+    });
 
-  async function sendToApi(text) {
-    addMessage("user", text);
-    showThinking();
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
 
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: text,
-          flow: currentFlow,
-          flowState: currentFlowState
-        })
+    function formatTextToHtml(text) {
+      let safe = escapeHtml(text);
+
+      safe = safe
+        .replace(/\[Start Listing\]/g, `<button class="ai-btn" onclick="startListingFlow()">Start Listing</button>`)
+        .replace(/\[Browse Rentals\]/g, `<button class="ai-btn" onclick="quick('Browse rentals')">Browse Rentals</button>`)
+        .replace(/\[Estimate ROI\]/g, `<button class="ai-btn" onclick="quick('Analyze my property ROI')">Estimate ROI</button>`)
+        .replace(/\[Analyze Listing\]/g, `<button class="ai-btn" onclick="quick('Analyze my listing')">Analyze Listing</button>`)
+        .replace(/\[Publish listing\]/g, `<button class="ai-btn" onclick="quick('Help me publish this listing')">Publish listing</button>`)
+        .replace(/\[Private room\]/g, `<button class="ai-btn" onclick="flowAnswer('Private room')">Private room</button>`)
+        .replace(/\[Apartment\]/g, `<button class="ai-btn" onclick="flowAnswer('Apartment')">Apartment</button>`)
+        .replace(/\[House\]/g, `<button class="ai-btn" onclick="flowAnswer('House')">House</button>`)
+        .replace(/\[Studio \/ ADU\]/g, `<button class="ai-btn" onclick="flowAnswer('Studio / ADU')">Studio / ADU</button>`)
+        .replace(/\[Entire place\]/g, `<button class="ai-btn" onclick="flowAnswer('Entire place')">Entire place</button>`)
+        .replace(/\[Shared room\]/g, `<button class="ai-btn" onclick="flowAnswer('Shared room')">Shared room</button>`)
+        .replace(/\[Yes\]/g, `<button class="ai-btn" onclick="flowAnswer('Yes')">Yes</button>`)
+        .replace(/\[No\]/g, `<button class="ai-btn" onclick="flowAnswer('No')">No</button>`)
+        .replace(/\[Parking\]/g, `<button class="ai-btn" onclick="flowAnswer('Parking')">Parking</button>`)
+        .replace(/\[Laundry\]/g, `<button class="ai-btn" onclick="flowAnswer('Laundry')">Laundry</button>`)
+        .replace(/\[Wi-Fi\]/g, `<button class="ai-btn" onclick="flowAnswer('Wi-Fi')">Wi-Fi</button>`)
+        .replace(/\[Air conditioning\]/g, `<button class="ai-btn" onclick="flowAnswer('Air conditioning')">Air conditioning</button>`)
+        .replace(/\[Kitchen\]/g, `<button class="ai-btn" onclick="flowAnswer('Kitchen')">Kitchen</button>`)
+        .replace(/\[Done\]/g, `<button class="ai-btn" onclick="flowAnswer('Done')">Done</button>`)
+        .replace(/\[Keep current price\]/g, `<button class="ai-btn" onclick="flowAnswer('Keep current price')">Keep current price</button>`)
+        .replace(/\[Optimize price\]/g, `<button class="ai-btn" onclick="flowAnswer('Optimize price')">Optimize price</button>`);
+
+      safe = safe
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\n/g, "<br>");
+
+      return safe;
+    }
+
+    function addMessage(role, text) {
+      const msg = document.createElement("div");
+      msg.className = "message " + role;
+
+      if (role === "user") {
+        msg.innerHTML = `
+          <div class="message-label">You</div>
+          <div class="message-body"><p>${escapeHtml(text)}</p></div>
+        `;
+      } else {
+        msg.innerHTML = `
+          <div class="message-label">P8 AI</div>
+          <div class="message-body">${formatTextToHtml(text)}</div>
+        `;
+      }
+
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function showThinking() {
+      const thinking = document.createElement("div");
+      thinking.className = "message ai";
+      thinking.id = "thinking-message";
+      thinking.innerHTML = `
+        <div class="message-label">P8 AI</div>
+        <div class="message-body"><p>Thinking...</p></div>
+      `;
+      messages.appendChild(thinking);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function removeThinking() {
+      const thinking = document.getElementById("thinking-message");
+      if (thinking) thinking.remove();
+    }
+
+    async function sendToApi(text) {
+      if (isSending) return;
+      isSending = true;
+      sendBtn.disabled = true;
+
+      document.querySelectorAll(".ai-btn").forEach(btn => {
+        btn.disabled = true;
       });
 
-      const data = await res.json();
-      removeThinking();
-
-      if (data.flow !== undefined) {
-        currentFlow = data.flow;
+      if (text) {
+        addMessage("user", text);
       }
 
-      if (data.flowState !== undefined) {
-        currentFlowState = data.flowState || {};
+      showThinking();
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: text,
+            flow: currentFlow,
+            flowState: currentFlowState
+          })
+        });
+
+        let data = {};
+        try {
+          data = await res.json();
+        } catch {
+          data.reply = "Invalid server response.";
+        }
+
+        removeThinking();
+
+        if (data.flow !== undefined) currentFlow = data.flow;
+        if (data.flowState !== undefined) currentFlowState = data.flowState || {};
+
+        addMessage("ai", data.reply || "No response.");
+      } catch (err) {
+        removeThinking();
+        addMessage("ai", "Network error. Try again.");
       }
 
-      addMessage("ai", data.reply || "I could not generate a response.");
-    } catch (err) {
-      removeThinking();
-      addMessage("ai", "There was an error reaching P8 AI. Please try again.");
+      document.querySelectorAll(".ai-btn").forEach(btn => {
+        btn.disabled = false;
+      });
+
+      sendBtn.disabled = false;
+      isSending = false;
     }
-  }
 
-  async function sendMessage() {
-    const text = chatInput.value.trim();
-    if (!text) return;
-    chatInput.value = "";
-    await sendToApi(text);
-  }
+    async function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      chatInput.value = "";
+      await sendToApi(text);
+    }
 
-  function quick(text) {
-    chatInput.value = text;
-    chatInput.focus();
-    sendMessage();
-  }
-
-  function startListingFlow() {
-    currentFlow = "listing";
-    currentFlowState = { step: 1, answers: {} };
-    sendToApi("");
-  }
-
-  function flowAnswer(text) {
-    sendToApi(text);
-  }
-
-  sendBtn.addEventListener("click", sendMessage);
-
-  chatInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
+    function quick(text) {
+      chatInput.value = text;
+      chatInput.focus();
       sendMessage();
     }
-  });
-</script> 
+
+    function startListingFlow() {
+      currentFlow = "listing";
+      currentFlowState = { step: 1, answers: {} };
+      sendToApi("__start__");
+    }
+
+    function flowAnswer(text) {
+      if (!currentFlow) return;
+      if (isSending) return;
+      sendToApi(text);
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+
+    chatInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    chatInput.addEventListener("focus", () => {
+      setTimeout(() => {
+        chatInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 300);
+    });
+  </script>
 </body>
 </html>
