@@ -58,44 +58,47 @@ Rules:
 }
 
 async function handleListingFlow(message, state, env) {
-  const step = state.step || 1;
   const answers = state.answers || {};
+  let step = state.step || 1;
+
+  if (message === "__start__") {
+    step = 1;
+  }
 
   if (step === 1) {
     const propertyType = normalizePropertyType(message);
 
-    if (!propertyType) {
+    if (message !== "__start__" && propertyType) {
+      answers.propertyType = propertyType;
       return json({
         reply: `
+Got it — **${propertyType}**.
+
+Step 2 of 10: Where is it located?
+
+Type the city or full address.
+        `.trim(),
+        flow: "listing",
+        flowState: { step: 2, answers }
+      });
+    }
+
+    return json({
+      reply: `
 Step 1 of 10: What type of rental is this?
 
 [Private room]
 [Apartment]
 [House]
 [Studio / ADU]
-        `.trim(),
-        flow: "listing",
-        flowState: { step: 1, answers }
-      });
-    }
-
-    answers.propertyType = propertyType;
-
-    return json({
-      reply: `
-Got it — **${propertyType}**.
-
-Step 2 of 10: Where is it located?
-
-Type the city or full address.
       `.trim(),
       flow: "listing",
-      flowState: { step: 2, answers }
+      flowState: { step: 1, answers }
     });
   }
 
   if (step === 2) {
-    if (!message || message.length < 2) {
+    if (!message || message === "__start__") {
       return json({
         reply: "Please enter the city or full address.",
         flow: "listing",
