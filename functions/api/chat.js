@@ -9,7 +9,9 @@ export async function onRequestPost(context) {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ message })
+    body: JSON.stringify({
+      message: message
+    })
   });
 
   const data = await response.json();
