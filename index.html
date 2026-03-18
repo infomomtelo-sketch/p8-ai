@@ -459,6 +459,198 @@
       flex-wrap:wrap;
     }
 
+    /* AI chat */
+    .ai-fab{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:100;
+      border:none;
+      min-height:58px;
+      padding:0 20px;
+      border-radius:18px;
+      background:var(--blue);
+      color:#fff;
+      font-weight:700;
+      font-size:17px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.35);
+      cursor:pointer;
+    }
+
+    .ai-fab:hover{
+      background:var(--blue-dark);
+    }
+
+    .ai-panel{
+      position:fixed;
+      right:18px;
+      bottom:88px;
+      width:min(390px, calc(100vw - 24px));
+      height:560px;
+      z-index:120;
+      display:none;
+      flex-direction:column;
+      border-radius:24px;
+      overflow:hidden;
+      background:rgba(8,18,42,0.98);
+      border:1px solid rgba(255,255,255,0.1);
+      box-shadow:0 30px 80px rgba(0,0,0,0.45);
+    }
+
+    .ai-panel.open{
+      display:flex;
+    }
+
+    .ai-header{
+      padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background:rgba(255,255,255,0.03);
+    }
+
+    .ai-title{
+      font-weight:700;
+      font-size:18px;
+    }
+
+    .ai-sub{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:4px;
+    }
+
+    .ai-close{
+      border:none;
+      background:transparent;
+      color:#fff;
+      font-size:26px;
+      cursor:pointer;
+      line-height:1;
+    }
+
+    .ai-messages{
+      flex:1;
+      overflow-y:auto;
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .ai-msg{
+      display:flex;
+    }
+
+    .ai-msg.user{
+      justify-content:flex-end;
+    }
+
+    .ai-msg.bot{
+      justify-content:flex-start;
+    }
+
+    .ai-bubble{
+      max-width:85%;
+      padding:12px 14px;
+      border-radius:18px;
+      line-height:1.5;
+      font-size:15px;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .ai-msg.user .ai-bubble{
+      background:var(--blue);
+      color:#fff;
+      border-top-right-radius:6px;
+    }
+
+    .ai-msg.bot .ai-bubble{
+      background:rgba(255,255,255,0.07);
+      color:#fff;
+      border-top-left-radius:6px;
+      border:1px solid rgba(255,255,255,0.06);
+    }
+
+    .ai-suggestions{
+      padding:0 16px 10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .ai-chip{
+      border:none;
+      border-radius:999px;
+      padding:10px 12px;
+      background:rgba(255,255,255,0.06);
+      color:#dfe7fb;
+      font-size:13px;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .ai-chip:hover{
+      background:rgba(255,255,255,0.1);
+    }
+
+    .ai-form{
+      padding:14px;
+      border-top:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.03);
+    }
+
+    .ai-input-wrap{
+      display:flex;
+      gap:10px;
+      align-items:flex-end;
+    }
+
+    .ai-input{
+      flex:1;
+      min-height:54px;
+      max-height:140px;
+      resize:vertical;
+      border:none;
+      outline:none;
+      border-radius:16px;
+      padding:14px;
+      background:rgba(255,255,255,0.06);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.08);
+      font-size:15px;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    .ai-send{
+      border:none;
+      min-width:84px;
+      height:54px;
+      border-radius:16px;
+      background:var(--blue);
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .ai-send:hover{
+      background:var(--blue-dark);
+    }
+
+    .ai-send:disabled{
+      opacity:0.7;
+      cursor:not-allowed;
+    }
+
+    .typing{
+      opacity:0.8;
+      font-style:italic;
+      color:#dbe7ff;
+    }
+
     @media (max-width: 980px){
       .hero-grid{ grid-template-columns:1fr; }
       .grid{ grid-template-columns:1fr 1fr; }
@@ -486,6 +678,18 @@
       .owner-banner h3,
       .owner-form h3,
       .detail-panel h3{ font-size:28px; }
+      .ai-panel{
+        right:12px;
+        left:12px;
+        width:auto;
+        bottom:84px;
+        height:68vh;
+      }
+      .ai-fab{
+        right:12px;
+        left:12px;
+        width:auto;
+      }
     }
   </style>
 </head>
@@ -518,6 +722,7 @@
           <div class="hero-actions">
             <a class="btn btn-primary" href="#listings">Browse Rentals</a>
             <a class="btn btn-secondary" href="#owners">For Owners</a>
+            <button class="btn btn-secondary" type="button" onclick="toggleAiPanel(true)">Ask P8 AI</button>
           </div>
         </div>
 
@@ -569,7 +774,7 @@
             >
               View Details
             </button>
-            <a class="small-btn" href="#owners">Inquire</a>
+            <button class="small-btn" type="button" onclick="quickAsk('Write a short renter inquiry for the Private Room near Hospital listing.')">Ask AI</button>
           </div>
         </article>
 
@@ -593,7 +798,7 @@
             >
               View Details
             </button>
-            <a class="small-btn" href="#owners">Inquire</a>
+            <button class="small-btn" type="button" onclick="quickAsk('Write a listing description for a modern studio ADU with private entrance and quiet neighborhood.')">Ask AI</button>
           </div>
         </article>
 
@@ -617,7 +822,7 @@
             >
               View Details
             </button>
-            <a class="small-btn" href="#owners">Inquire</a>
+            <button class="small-btn" type="button" onclick="quickAsk('Suggest a fair monthly price range for a quiet home share in a clean neighborhood.')">Ask AI</button>
           </div>
         </article>
       </div>
@@ -693,8 +898,9 @@
             </div>
           </div>
 
-          <div style="margin-top:18px;">
+          <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
             <button class="btn btn-primary" type="submit">Submit Property</button>
+            <button class="btn btn-secondary" type="button" onclick="quickOwnerHelp()">Ask AI to improve my listing</button>
           </div>
 
           <div class="form-note">
@@ -716,7 +922,40 @@
     </footer>
   </main>
 
+  <button class="ai-fab" type="button" onclick="toggleAiPanel(true)">Ask P8 AI</button>
+
+  <aside id="aiPanel" class="ai-panel" aria-hidden="true">
+    <div class="ai-header">
+      <div>
+        <div class="ai-title">P8 AI</div>
+        <div class="ai-sub">Rental help for listings, pricing, replies, and owner questions</div>
+      </div>
+      <button class="ai-close" type="button" onclick="toggleAiPanel(false)">×</button>
+    </div>
+
+    <div id="aiMessages" class="ai-messages">
+      <div class="ai-msg bot">
+        <div class="ai-bubble">Hi — I’m P8 AI. Ask me about rental listings, pricing, renter messages, or owner workflow help.</div>
+      </div>
+    </div>
+
+    <div class="ai-suggestions">
+      <button class="ai-chip" type="button" onclick="quickAsk('Write a professional rental listing description for a private room near a hospital.')">Write listing</button>
+      <button class="ai-chip" type="button" onclick="quickAsk('Help me respond to a renter who asked if utilities are included.')">Reply to renter</button>
+      <button class="ai-chip" type="button" onclick="quickAsk('What details should I include in a room rental listing?')">Listing tips</button>
+    </div>
+
+    <form id="aiForm" class="ai-form">
+      <div class="ai-input-wrap">
+        <textarea id="aiInput" class="ai-input" placeholder="Ask P8 AI anything about rentals..." required></textarea>
+        <button id="aiSend" class="ai-send" type="submit">Send</button>
+      </div>
+    </form>
+  </aside>
+
   <script>
+    const WORKER_URL = "https://p8-ai.infomomtelo.workers.dev";
+
     function showDetails(title, text, tags) {
       const panel = document.getElementById("detailPanel");
       const titleEl = document.getElementById("detailTitle");
@@ -749,6 +988,98 @@
       success.scrollIntoView({ behavior: "smooth", block: "nearest" });
       this.reset();
     });
+
+    function toggleAiPanel(open) {
+      const panel = document.getElementById("aiPanel");
+      panel.classList.toggle("open", open);
+      panel.setAttribute("aria-hidden", open ? "false" : "true");
+      if (open) {
+        document.getElementById("aiInput").focus();
+      }
+    }
+
+    function addAiMessage(role, text) {
+      const messages = document.getElementById("aiMessages");
+      const row = document.createElement("div");
+      row.className = `ai-msg ${role}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = "ai-bubble";
+      bubble.textContent = text;
+
+      row.appendChild(bubble);
+      messages.appendChild(row);
+      messages.scrollTop = messages.scrollHeight;
+      return row;
+    }
+
+    function addTypingMessage() {
+      return addAiMessage("bot", "P8 AI is thinking...");
+    }
+
+    async function sendToAi(message) {
+      const response = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: message
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("AI request failed");
+      }
+
+      const data = await response.json();
+      return data.reply || "No response from AI.";
+    }
+
+    async function handleAiMessage(message) {
+      toggleAiPanel(true);
+      addAiMessage("user", message);
+
+      const typing = addTypingMessage();
+      const sendBtn = document.getElementById("aiSend");
+      sendBtn.disabled = true;
+
+      try {
+        const reply = await sendToAi(message);
+        typing.remove();
+        addAiMessage("bot", reply);
+      } catch (error) {
+        typing.remove();
+        addAiMessage("bot", "I couldn’t connect right now. Please try again.");
+        console.error(error);
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    document.getElementById("aiForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const input = document.getElementById("aiInput");
+      const message = input.value.trim();
+      if (!message) return;
+
+      input.value = "";
+      await handleAiMessage(message);
+    });
+
+    async function quickAsk(prompt) {
+      await handleAiMessage(prompt);
+    }
+
+    async function quickOwnerHelp() {
+      const type = document.getElementById("propertyType").value || "rental space";
+      const city = document.getElementById("city").value || "my area";
+      const notes = document.getElementById("notes").value.trim() || "No extra notes yet.";
+
+      const prompt = `Help me improve this property listing. Property type: ${type}. City: ${city}. Notes: ${notes}. Write a clean, professional listing description and suggest 3 highlights.`;
+
+      await handleAiMessage(prompt);
+    }
   </script>
 
 </body>
