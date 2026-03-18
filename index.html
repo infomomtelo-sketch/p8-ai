@@ -1,134 +1,755 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>P8 Rental | Find or List Quality Spaces</title>
+  <meta
+    name="description"
+    content="P8 Rental helps renters find quality spaces and helps owners list rooms, ADUs, and flexible stays."
+  />
+  <style>
+    *{ box-sizing:border-box; }
 
-<title>P8 Rental | Find or List Quality Spaces</title>
+    :root{
+      --bg:#07122b;
+      --panel:#0d1a3a;
+      --panel-2:#11224b;
+      --text:#ffffff;
+      --muted:#b8c2d9;
+      --line:rgba(255,255,255,0.08);
+      --blue:#2f6df6;
+      --blue-dark:#1f56cf;
+      --green:#16a34a;
+      --shadow:0 18px 50px rgba(0,0,0,0.28);
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --radius-md:16px;
+      --max:1200px;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#0b1120;
-  color:white;
-}
+    html{
+      scroll-behavior:smooth;
+    }
 
-.header{
-  padding:20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+    html,body{
+      margin:0;
+      padding:0;
+      background:
+        radial-gradient(circle at top left, rgba(47,109,246,0.15), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(47,109,246,0.10), transparent 24%),
+        var(--bg);
+      color:var(--text);
+      font-family:Arial, Helvetica, sans-serif;
+    }
 
-.logo{
-  font-size:20px;
-  font-weight:bold;
-}
+    a{ color:inherit; text-decoration:none; }
+    img{ display:block; width:100%; height:auto; }
 
-.btn{
-  background:#2563eb;
-  padding:10px 16px;
-  border-radius:8px;
-  text-decoration:none;
-  color:white;
-}
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 20px;
+    }
 
-.hero{
-  text-align:center;
-  padding:60px 20px;
-}
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter:blur(10px);
+      background:rgba(7,18,43,0.82);
+      border-bottom:1px solid var(--line);
+    }
 
-.hero h1{
-  font-size:36px;
-}
+    .topbar-inner{
+      min-height:84px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
 
-.hero p{
-  color:#9ca3af;
-  max-width:500px;
-  margin:auto;
-}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-weight:700;
+      font-size:30px;
+      letter-spacing:-0.02em;
+    }
 
-.cta{
-  margin-top:20px;
-}
+    .menu-btn{
+      width:64px;
+      height:64px;
+      border-radius:20px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.04);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:30px;
+      box-shadow:var(--shadow);
+    }
 
-.section{
-  padding:40px 20px;
-}
+    .header-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
 
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
-  gap:20px;
-}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:56px;
+      padding:0 22px;
+      border-radius:18px;
+      font-weight:700;
+      font-size:18px;
+      border:1px solid transparent;
+      transition:0.2s ease;
+      cursor:pointer;
+    }
 
-.card{
-  background:#111827;
-  padding:20px;
-  border-radius:12px;
-}
+    .btn-primary{
+      background:var(--blue);
+      color:#fff;
+      box-shadow:0 10px 30px rgba(47,109,246,0.34);
+    }
 
-.card img{
-  width:100%;
-  border-radius:10px;
-}
+    .btn-primary:hover{ background:var(--blue-dark); }
 
-.footer{
-  text-align:center;
-  padding:20px;
-  color:#9ca3af;
-}
-</style>
+    .btn-secondary{
+      background:transparent;
+      color:#fff;
+      border-color:var(--line);
+    }
+
+    .btn-secondary:hover{
+      background:rgba(255,255,255,0.05);
+    }
+
+    .hero{
+      padding:64px 0 34px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr 0.9fr;
+      gap:28px;
+      align-items:center;
+    }
+
+    .hero-copy h1{
+      margin:0 0 16px;
+      font-size:clamp(40px, 6vw, 76px);
+      line-height:0.95;
+      letter-spacing:-0.05em;
+    }
+
+    .hero-copy p{
+      margin:0 0 24px;
+      max-width:650px;
+      color:var(--muted);
+      font-size:22px;
+      line-height:1.5;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .hero-card,
+    .card,
+    .owner-banner,
+    .owner-form,
+    .detail-panel{
+      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card{
+      border-radius:28px;
+      padding:22px;
+    }
+
+    .hero-card img{
+      border-radius:22px;
+      aspect-ratio:4 / 3;
+      object-fit:cover;
+    }
+
+    .hero-card-meta{
+      padding-top:16px;
+    }
+
+    .hero-card-meta h3{
+      margin:0 0 10px;
+      font-size:28px;
+      line-height:1.1;
+    }
+
+    .hero-card-meta p{
+      margin:0;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.5;
+    }
+
+    .section{
+      padding:28px 0 12px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:20px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:48px;
+      line-height:1;
+      letter-spacing:-0.04em;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:18px;
+      max-width:540px;
+      line-height:1.5;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:24px;
+    }
+
+    .card{
+      border-radius:28px;
+      padding:20px;
+    }
+
+    .card img{
+      border-radius:20px;
+      aspect-ratio:16 / 11;
+      object-fit:cover;
+      margin-bottom:18px;
+    }
+
+    .card h3{
+      margin:0 0 10px;
+      font-size:26px;
+      line-height:1.15;
+      letter-spacing:-0.03em;
+    }
+
+    .card p{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.5;
+    }
+
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      min-height:38px;
+      padding:0 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid var(--line);
+      color:#dfe7fb;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .card-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .small-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
+      padding:0 16px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      font-weight:700;
+      font-size:15px;
+      cursor:pointer;
+      background:rgba(255,255,255,0.04);
+      color:#fff;
+    }
+
+    .small-btn.primary{
+      background:var(--blue);
+      border-color:transparent;
+    }
+
+    .small-btn:hover{
+      opacity:0.95;
+    }
+
+    .owner-banner{
+      margin-top:40px;
+      border-radius:32px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:20px;
+      align-items:center;
+    }
+
+    .owner-banner h3{
+      margin:0 0 8px;
+      font-size:36px;
+      line-height:1.05;
+      letter-spacing:-0.04em;
+    }
+
+    .owner-banner p{
+      margin:0;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.5;
+      max-width:760px;
+    }
+
+    .owner-form{
+      margin-top:24px;
+      border-radius:28px;
+      padding:24px;
+    }
+
+    .owner-form h3{
+      margin:0 0 10px;
+      font-size:32px;
+      letter-spacing:-0.03em;
+    }
+
+    .owner-form p{
+      margin:0 0 22px;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.5;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    label{
+      font-size:14px;
+      color:#d9e2f7;
+      font-weight:700;
+    }
+
+    input, select, textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:16px;
+      padding:16px;
+      background:rgba(255,255,255,0.06);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.08);
+      font-size:16px;
+    }
+
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .form-note{
+      margin-top:16px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .success-message{
+      display:none;
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:14px;
+      background:rgba(22,163,74,0.15);
+      border:1px solid rgba(22,163,74,0.45);
+      color:#d1fae5;
+      font-weight:700;
+    }
+
+    .detail-panel{
+      margin-top:28px;
+      border-radius:28px;
+      padding:24px;
+      display:none;
+    }
+
+    .detail-panel.active{
+      display:block;
+    }
+
+    .detail-top{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:start;
+      flex-wrap:wrap;
+    }
+
+    .detail-panel h3{
+      margin:0 0 10px;
+      font-size:32px;
+      letter-spacing:-0.03em;
+    }
+
+    .detail-panel p{
+      margin:0 0 14px;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:17px;
+    }
+
+    .footer{
+      padding:42px 0 60px;
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .footer-line{
+      border-top:1px solid var(--line);
+      padding-top:24px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    @media (max-width: 980px){
+      .hero-grid{ grid-template-columns:1fr; }
+      .grid{ grid-template-columns:1fr 1fr; }
+      .owner-banner{ grid-template-columns:1fr; }
+      .form-grid{ grid-template-columns:1fr; }
+    }
+
+    @media (max-width: 640px){
+      .wrap{ padding:0 16px; }
+      .topbar-inner{ min-height:76px; }
+      .menu-btn{
+        width:56px;
+        height:56px;
+        border-radius:18px;
+        font-size:28px;
+      }
+      .brand{ font-size:24px; }
+      .btn{ min-height:52px; width:100%; }
+      .header-actions{ width:100%; }
+      .hero{ padding:34px 0 16px; }
+      .hero-copy p{ font-size:18px; }
+      .section-head h2{ font-size:34px; }
+      .grid{ grid-template-columns:1fr; }
+      .card h3{ font-size:22px; }
+      .owner-banner h3,
+      .owner-form h3,
+      .detail-panel h3{ font-size:28px; }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-  <div class="logo">P8 Rental</div>
-  <a href="#" class="btn">List Property</a>
-</div>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <div class="menu-btn">☰</div>
+        <div>P8 Rental</div>
+      </div>
 
-<div class="hero">
-  <h1>Find or list quality spaces</h1>
-  <p>
-    Rooms, ADUs, and flexible stays for professionals and everyday renters.
-  </p>
-
-  <div class="cta">
-    <a href="#" class="btn">Browse Rentals</a>
-  </div>
-</div>
-
-<div class="section">
-  <h2>Available Rentals</h2>
-
-  <div class="cards">
-
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2" />
-      <h3>Private Room near Hospital</h3>
-      <p>Perfect for traveling nurses</p>
+      <div class="header-actions">
+        <a class="btn btn-secondary" href="#listings">Browse Rentals</a>
+        <a class="btn btn-primary" href="#owners">List Property</a>
+      </div>
     </div>
+  </header>
 
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688" />
-      <h3>Modern Studio ADU</h3>
-      <p>Private entrance and kitchen</p>
-    </div>
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1>Find or list quality spaces</h1>
+          <p>
+            Rooms, ADUs, and flexible stays for professionals, travel workers,
+            and everyday renters who want a cleaner, simpler rental experience.
+          </p>
 
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb" />
-      <h3>Quiet Home Share</h3>
-      <p>Clean and peaceful environment</p>
-    </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#listings">Browse Rentals</a>
+            <a class="btn btn-secondary" href="#owners">For Owners</a>
+          </div>
+        </div>
 
-  </div>
-</div>
+        <div class="hero-card">
+          <img
+            src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80"
+            alt="Bright modern rental interior"
+          />
+          <div class="hero-card-meta">
+            <h3>Built for flexible living</h3>
+            <p>
+              Clean spaces, clear listings, and a better experience for both
+              renters and owners.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div class="footer">
-  P8 Rental © 2026
-</div>
+    <section id="listings" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Available Rentals</h2>
+        </div>
+        <p>
+          Example listings for rooms, studios, and flexible stays designed to
+          show the direction of the marketplace.
+        </p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <img
+            src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80"
+            alt="Private room near hospital"
+          />
+          <h3>Private Room near Hospital</h3>
+          <p>Perfect for traveling nurses and healthcare professionals.</p>
+          <div class="pill-row">
+            <span class="pill">Private Room</span>
+            <span class="pill">Near Hospital</span>
+            <span class="pill">Flexible Stay</span>
+          </div>
+          <div class="card-actions">
+            <button
+              class="small-btn primary"
+              type="button"
+              onclick="showDetails('Private Room near Hospital', 'Perfect for traveling nurses and healthcare professionals who need a clean, quiet place near work. Includes flexible stay potential, convenient access, and a simple professional setup.', ['Private Room', 'Near Hospital', 'Flexible Stay'])"
+            >
+              View Details
+            </button>
+            <a class="small-btn" href="#owners">Inquire</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <img
+            src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80"
+            alt="Modern studio ADU"
+          />
+          <h3>Modern Studio ADU</h3>
+          <p>Private entrance, clean kitchen, and quiet neighborhood setup.</p>
+          <div class="pill-row">
+            <span class="pill">Studio</span>
+            <span class="pill">Private Entrance</span>
+            <span class="pill">ADU</span>
+          </div>
+          <div class="card-actions">
+            <button
+              class="small-btn primary"
+              type="button"
+              onclick="showDetails('Modern Studio ADU', 'A modern ADU with a private entrance, kitchen area, and more independent living feel. Good for mid-term renters and professionals who want more privacy.', ['Studio', 'Private Entrance', 'ADU'])"
+            >
+              View Details
+            </button>
+            <a class="small-btn" href="#owners">Inquire</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <img
+            src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80"
+            alt="Quiet home share"
+          />
+          <h3>Quiet Home Share</h3>
+          <p>Clean and peaceful environment for longer or mid-term stays.</p>
+          <div class="pill-row">
+            <span class="pill">Home Share</span>
+            <span class="pill">Quiet Area</span>
+            <span class="pill">Mid-Term</span>
+          </div>
+          <div class="card-actions">
+            <button
+              class="small-btn primary"
+              type="button"
+              onclick="showDetails('Quiet Home Share', 'A peaceful home-share setup for renters who value calm, cleanliness, and a stable environment. Designed for longer or mid-term comfortable stays.', ['Home Share', 'Quiet Area', 'Mid-Term'])"
+            >
+              View Details
+            </button>
+            <a class="small-btn" href="#owners">Inquire</a>
+          </div>
+        </article>
+      </div>
+
+      <div id="detailPanel" class="detail-panel">
+        <div class="detail-top">
+          <div>
+            <h3 id="detailTitle">Listing Details</h3>
+            <p id="detailText"></p>
+            <div id="detailTags" class="pill-row"></div>
+          </div>
+          <button class="small-btn" type="button" onclick="closeDetails()">Close</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="owners" class="section">
+      <div class="owner-banner">
+        <div>
+          <h3>Turn your extra space into income</h3>
+          <p>
+            P8 Rental helps owners showcase rooms, ADUs, and homes in a cleaner,
+            more professional way while preparing the foundation for better
+            rental operations and AI-assisted support.
+          </p>
+        </div>
+
+        <div>
+          <a class="btn btn-primary" href="#owner-form">Start Listing</a>
+        </div>
+      </div>
+
+      <div id="owner-form" class="owner-form">
+        <h3>List Your Property</h3>
+        <p>
+          This is a starter owner form. It does not send to a database yet, but
+          it is clickable and ready for the next phase.
+        </p>
+
+        <form id="propertyForm">
+          <div class="form-grid">
+            <div class="field">
+              <label for="ownerName">Your Name</label>
+              <input id="ownerName" name="ownerName" type="text" placeholder="Enter your name" required />
+            </div>
+
+            <div class="field">
+              <label for="ownerEmail">Email</label>
+              <input id="ownerEmail" name="ownerEmail" type="email" placeholder="Enter your email" required />
+            </div>
+
+            <div class="field">
+              <label for="propertyType">Property Type</label>
+              <select id="propertyType" name="propertyType" required>
+                <option value="">Choose one</option>
+                <option>Private Room</option>
+                <option>Studio</option>
+                <option>ADU</option>
+                <option>Apartment</option>
+                <option>Home Share</option>
+                <option>House</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="city">City</label>
+              <input id="city" name="city" type="text" placeholder="Enter city" required />
+            </div>
+
+            <div class="field full">
+              <label for="notes">Property Notes</label>
+              <textarea id="notes" name="notes" placeholder="Describe the space, neighborhood, and ideal renter"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;">
+            <button class="btn btn-primary" type="submit">Submit Property</button>
+          </div>
+
+          <div class="form-note">
+            Next phase: this form can send to email, Google Sheets, Airtable, or a database.
+          </div>
+
+          <div id="successMessage" class="success-message">
+            Property form submitted. This is a live placeholder action for Phase 1.
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-line">
+        <div>P8 Rental © 2026</div>
+        <div>Built to grow into a smarter rental platform.</div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    function showDetails(title, text, tags) {
+      const panel = document.getElementById("detailPanel");
+      const titleEl = document.getElementById("detailTitle");
+      const textEl = document.getElementById("detailText");
+      const tagsEl = document.getElementById("detailTags");
+
+      titleEl.textContent = title;
+      textEl.textContent = text;
+      tagsEl.innerHTML = "";
+
+      tags.forEach(tag => {
+        const span = document.createElement("span");
+        span.className = "pill";
+        span.textContent = tag;
+        tagsEl.appendChild(span);
+      });
+
+      panel.classList.add("active");
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function closeDetails() {
+      document.getElementById("detailPanel").classList.remove("active");
+    }
+
+    document.getElementById("propertyForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const success = document.getElementById("successMessage");
+      success.style.display = "block";
+      success.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      this.reset();
+    });
+  </script>
 
 </body>
 </html>
