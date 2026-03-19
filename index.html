@@ -6,243 +6,352 @@
 <title>P8 Rental</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial, sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
 
 body{
-background:#0b1120;
-color:white;
+  background:#0b1120;
+  color:white;
 }
 
 .nav{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:16px 24px;
-background:#020617;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 24px;
+  background:#020617;
+  position:sticky;
+  top:0;
+  z-index:1000;
 }
 
 .logo{
-font-weight:700;
-font-size:18px;
+  font-weight:700;
+  font-size:18px;
 }
 
 .nav-right{
-display:flex;
-gap:16px;
-align-items:center;
-flex-wrap:wrap;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
 }
 
 .btn{
-padding:10px 16px;
-border-radius:10px;
-border:none;
-cursor:pointer;
+  padding:10px 16px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.btn:hover{
+  opacity:.92;
 }
 
 .btn-primary{
-background:#2563eb;
-color:white;
+  background:#2563eb;
+  color:white;
 }
 
 .btn-outline{
-background:#1f2937;
-color:white;
+  background:#1f2937;
+  color:white;
 }
 
 .hero{
-display:flex;
-gap:40px;
-padding:40px 24px;
-flex-wrap:wrap;
-align-items:center;
+  display:flex;
+  gap:40px;
+  padding:40px 24px;
+  flex-wrap:wrap;
+  align-items:center;
 }
 
 .hero-left{
-flex:1;
-min-width:280px;
+  flex:1;
+  min-width:280px;
 }
 
 .hero-left h1{
-font-size:40px;
-margin-bottom:16px;
+  font-size:40px;
+  margin-bottom:16px;
 }
 
 .hero-left p{
-color:#cbd5e1;
-margin-bottom:20px;
-line-height:1.5;
+  color:#cbd5e1;
+  margin-bottom:20px;
+  line-height:1.6;
 }
 
 .hero-buttons{
-display:flex;
-gap:12px;
-flex-wrap:wrap;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
 .hero-right{
-flex:1;
-min-width:280px;
+  flex:1;
+  min-width:280px;
 }
 
 .hero-right img{
-width:100%;
-border-radius:16px;
+  width:100%;
+  border-radius:16px;
+  display:block;
 }
 
 .section{
-padding:30px 24px;
+  padding:30px 24px;
 }
 
 .section h2{
-margin-bottom:18px;
+  margin-bottom:18px;
 }
 
 .cards{
-display:flex;
-gap:16px;
-flex-wrap:wrap;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
 }
 
 .card{
-background:#111827;
-padding:16px;
-border-radius:16px;
-width:260px;
+  background:#111827;
+  padding:16px;
+  border-radius:16px;
+  width:260px;
+  border:1px solid rgba(255,255,255,0.05);
+  transition:.2s ease;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(37,99,235,.45);
+}
+
+.card.highlight{
+  outline:2px solid #2563eb;
+  box-shadow:0 0 0 4px rgba(37,99,235,.15);
 }
 
 .card img{
-width:100%;
-height:170px;
-object-fit:cover;
-border-radius:12px;
-margin-bottom:10px;
+  width:100%;
+  height:170px;
+  object-fit:cover;
+  border-radius:12px;
+  margin-bottom:10px;
 }
 
 .card h3{
-margin-bottom:6px;
-font-size:18px;
+  margin-bottom:6px;
+  font-size:18px;
 }
 
 .card p{
-color:#94a3b8;
-font-size:14px;
-margin-bottom:10px;
-line-height:1.5;
+  color:#94a3b8;
+  font-size:14px;
+  margin-bottom:10px;
+  line-height:1.5;
 }
 
 .card small{
-display:block;
-color:#cbd5e1;
-margin-bottom:10px;
+  display:block;
+  color:#cbd5e1;
+  margin-bottom:10px;
+  line-height:1.5;
 }
 
 .card-actions{
-display:flex;
-flex-direction:column;
-gap:8px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.tag{
+  display:inline-block;
+  font-size:12px;
+  color:#86efac;
+  margin-bottom:10px;
+}
+
+.tag.external{
+  color:#facc15;
 }
 
 /* Saved banner */
 #savedBanner{
-display:none;
-margin:24px;
-padding:18px;
-background:#111827;
-border:1px solid #1f2937;
-border-radius:14px;
+  display:none;
+  margin:24px;
+  padding:18px;
+  background:#111827;
+  border:1px solid #1f2937;
+  border-radius:14px;
 }
 
 #savedBanner h3{
-margin-bottom:8px;
+  margin-bottom:8px;
 }
 
 #savedBanner p{
-color:#cbd5e1;
-margin-bottom:12px;
-line-height:1.5;
+  color:#cbd5e1;
+  margin-bottom:12px;
+  line-height:1.5;
 }
 
 .saved-actions{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 /* Modals */
 #saveModal,
 #contactModal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-align-items:center;
-justify-content:center;
-z-index:9999;
-padding:16px;
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:16px;
 }
 
 .modal-box{
-background:#111827;
-padding:20px;
-border-radius:12px;
-width:90%;
-max-width:420px;
+  background:#111827;
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:420px;
+  border:1px solid rgba(255,255,255,0.08);
 }
 
 .modal-box h3{
-margin-bottom:10px;
+  margin-bottom:10px;
 }
 
 .modal-box p{
-color:#94a3b8;
-margin:10px 0 14px;
-line-height:1.5;
+  color:#94a3b8;
+  margin:10px 0 14px;
+  line-height:1.5;
 }
 
 .modal-box input,
 .modal-box textarea{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:none;
-margin-bottom:10px;
-background:#1f2937;
-color:white;
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  margin-bottom:10px;
+  background:#1f2937;
+  color:white;
 }
 
 .modal-actions{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 .note{
-color:#94a3b8;
-font-size:13px;
-margin-top:8px;
+  color:#94a3b8;
+  font-size:13px;
+  margin-top:8px;
+}
+
+/* P8 Host panel */
+#p8-host{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  width:320px;
+  max-width:calc(100vw - 24px);
+  background:#111827;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  overflow:hidden;
+  z-index:9000;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+
+#p8-host-header{
+  background:#2563eb;
+  padding:12px 14px;
+  font-weight:700;
+  font-size:14px;
+}
+
+#p8-host-body{
+  padding:14px;
+}
+
+#p8-host-message{
+  color:#e5e7eb;
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:12px;
+  white-space:pre-line;
+}
+
+#p8-host-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+/* Guide dot */
+#p8-dot{
+  position:fixed;
+  width:16px;
+  height:16px;
+  background:#2563eb;
+  border-radius:50%;
+  z-index:9500;
+  transition:all .6s ease;
+  box-shadow:0 0 12px rgba(37,99,235,.8);
+  display:none;
+}
+
+#p8-bubble{
+  position:fixed;
+  background:#111827;
+  color:white;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:13px;
+  z-index:9501;
+  display:none;
+  max-width:220px;
+  line-height:1.4;
+  border:1px solid rgba(255,255,255,0.08);
 }
 
 @media(max-width:700px){
-.hero-left h1{
-font-size:32px;
-}
-.cards{
-flex-direction:column;
-}
-.card{
-width:100%;
-}
+  .hero-left h1{
+    font-size:32px;
+  }
+
+  .cards{
+    flex-direction:column;
+  }
+
+  .card{
+    width:100%;
+  }
+
+  #p8-host{
+    right:12px;
+    left:12px;
+    width:auto;
+    bottom:12px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <div class="nav">
   <div class="logo">P8 Rental</div>
 
@@ -252,7 +361,6 @@ width:100%;
   </div>
 </div>
 
-<!-- SAVED BANNER -->
 <div id="savedBanner">
   <h3>Resume your saved property</h3>
   <p id="savedBannerText"></p>
@@ -263,7 +371,6 @@ width:100%;
   </div>
 </div>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-left">
     <h1>Find or list quality spaces</h1>
@@ -283,64 +390,68 @@ width:100%;
   </div>
 </div>
 
-<!-- RENTALS -->
 <div class="section" id="rentals">
   <h2>Available Rentals</h2>
 
   <div class="cards">
 
-    <div class="card">
+    <div class="card" data-title="Private Room Near Hospital" data-price="850" data-location="Fresno" data-type="room">
       <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80" alt="Private room">
+      <span class="tag">✔ Verified by P8</span>
       <h3>Private Room Near Hospital</h3>
       <p>$850/mo • Furnished • Fresno</p>
       <small>Best for travel nurses and professionals.</small>
 
       <div class="card-actions">
-        <button class="btn btn-primary" onclick="viewProperty('Private Room Near Hospital', 850, 'Fresno')">View</button>
+        <button class="btn btn-primary" onclick="viewProperty(this)">View</button>
         <button class="btn btn-outline" onclick="openSaveModal('Private Room Near Hospital', 850, 'Fresno')">Save & continue later</button>
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" data-title="Studio ADU" data-price="1200" data-location="Downtown Fresno" data-type="studio">
       <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80" alt="Studio ADU">
+      <span class="tag">✔ Verified by P8</span>
       <h3>Studio ADU</h3>
       <p>$1200/mo • Private • Downtown</p>
       <small>Private entrance and quiet setup.</small>
 
       <div class="card-actions">
-        <button class="btn btn-primary" onclick="viewProperty('Studio ADU', 1200, 'Downtown Fresno')">View</button>
+        <button class="btn btn-primary" onclick="viewProperty(this)">View</button>
         <button class="btn btn-outline" onclick="openSaveModal('Studio ADU', 1200, 'Downtown Fresno')">Save & continue later</button>
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" data-title="1 Bedroom Unit" data-price="1450" data-location="Fresno" data-type="unit">
       <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80" alt="One bedroom unit">
+      <span class="tag">✔ Verified by P8</span>
       <h3>1 Bedroom Unit</h3>
       <p>$1450/mo • Parking • Fresno</p>
       <small>Good for longer stays and working professionals.</small>
 
       <div class="card-actions">
-        <button class="btn btn-primary" onclick="viewProperty('1 Bedroom Unit', 1450, 'Fresno')">View</button>
+        <button class="btn btn-primary" onclick="viewProperty(this)">View</button>
         <button class="btn btn-outline" onclick="openSaveModal('1 Bedroom Unit', 1450, 'Fresno')">Save & continue later</button>
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" data-title="Quiet Home Share" data-price="800" data-location="Fresno" data-type="room">
       <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" alt="Quiet home share">
+      <span class="tag">✔ Verified by P8</span>
       <h3>Quiet Home Share</h3>
       <p>$800/mo • Utilities Included • Fresno</p>
       <small>Calm environment for mid-term renters.</small>
 
       <div class="card-actions">
-        <button class="btn btn-primary" onclick="viewProperty('Quiet Home Share', 800, 'Fresno')">View</button>
+        <button class="btn btn-primary" onclick="viewProperty(this)">View</button>
         <button class="btn btn-outline" onclick="openSaveModal('Quiet Home Share', 800, 'Fresno')">Save & continue later</button>
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" data-title="Private Room – Fresno" data-price="900" data-location="Fresno" data-type="room">
       <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80" alt="External listing">
+      <span class="tag external">External Listing</span>
       <h3>Private Room – Fresno</h3>
-      <p>$900/mo • External Listing</p>
+      <p>$900/mo • Availability Pending</p>
       <small>P8 can contact the owner and confirm availability for you.</small>
 
       <div class="card-actions">
@@ -352,7 +463,6 @@ width:100%;
   </div>
 </div>
 
-<!-- SAVE MODAL -->
 <div id="saveModal">
   <div class="modal-box">
     <h3>Save this property</h3>
@@ -367,7 +477,6 @@ width:100%;
   </div>
 </div>
 
-<!-- CONTACT OWNER MODAL -->
 <div id="contactModal">
   <div class="modal-box">
     <h3>Contact Owner</h3>
@@ -387,6 +496,20 @@ width:100%;
   </div>
 </div>
 
+<div id="p8-host">
+  <div id="p8-host-header">P8 AI Host</div>
+  <div id="p8-host-body">
+    <div id="p8-host-message">Welcome — I’ll help you move through this page without confusion.</div>
+    <div id="p8-host-actions">
+      <button class="btn btn-primary" onclick="scrollToSection()">Find rental</button>
+      <button class="btn btn-outline" onclick="goOwner()">List property</button>
+    </div>
+  </div>
+</div>
+
+<div id="p8-dot"></div>
+<div id="p8-bubble"></div>
+
 <script>
 function scrollToSection(){
   document.getElementById("rentals").scrollIntoView({behavior:"smooth"});
@@ -396,11 +519,7 @@ function goOwner(){
   window.location.href = "/list-property.html";
 }
 
-function viewProperty(title, price, location){
-  alert("Viewing: " + title + " • $" + price + "/mo • " + location);
-}
-
-/* Save property flow */
+/* Saved property flow */
 let currentProperty = null;
 
 function openSaveModal(title, price, location){
@@ -416,7 +535,7 @@ function saveWithEmail(){
   const email = document.getElementById("saveEmail").value;
 
   if(!email){
-    alert("Enter your email");
+    showToast("Enter your email first.");
     return;
   }
 
@@ -430,8 +549,20 @@ function saveWithEmail(){
 
   closeSaveModal();
   showSavedBanner();
+  showToast("Saved. You can continue anytime.");
 
-  alert("Saved! You can come back anytime.");
+  const banner = document.getElementById("savedBanner");
+  if(banner){
+    moveP8To(banner, "Saved. You can come back anytime.");
+  }
+
+  setP8Message(
+    "Saved.\n\nYou can continue browsing now, or resume this property later from the banner.",
+    [
+      { label: "Browse more", action: "scrollToSection()" },
+      { label: "Resume saved", action: "resumeSavedProperty()" }
+    ]
+  );
 }
 
 function showSavedBanner(){
@@ -455,19 +586,24 @@ function resumeSavedProperty(){
 
   const saved = JSON.parse(raw);
 
-  alert(
-    "Resuming: " + saved.title +
-    " • $" + saved.price + "/mo • " + saved.location +
-    " • Email: " + saved.email
+  setP8Message(
+    "Resuming your saved property:\n\n" +
+    saved.title + " • $" + saved.price + "/mo • " + saved.location +
+    "\n\nI can help you save it again, continue browsing, or contact the owner if available.",
+    [
+      { label: "Browse rentals", action: "scrollToSection()" },
+      { label: "Clear saved", action: "clearSavedProperty()" }
+    ]
   );
 
   document.getElementById("rentals").scrollIntoView({behavior:"smooth"});
+  showToast("Resumed saved property.");
 }
 
 function clearSavedProperty(){
   localStorage.removeItem("p8_saved_property");
   document.getElementById("savedBanner").style.display = "none";
-  alert("Saved property cleared.");
+  showToast("Saved property cleared.");
 }
 
 /* Contact owner flow */
@@ -489,7 +625,7 @@ function submitOwnerContact(){
   const note = document.getElementById("renterNote").value.trim();
 
   if(!name || !contact){
-    alert("Please enter your name and contact.");
+    showToast("Please enter your name and contact.");
     return;
   }
 
@@ -511,10 +647,156 @@ function submitOwnerContact(){
   document.getElementById("moveInDate").value = "";
   document.getElementById("renterNote").value = "";
 
-  alert("P8 saved your request and can contact the owner for you.");
+  showToast("P8 saved your request.");
+
+  setP8Message(
+    "I saved your contact request.\n\nNext step:\n• I can help you stay organized while availability is being checked.",
+    [
+      { label: "Continue browsing", action: "scrollToSection()" },
+      { label: "Save another property", action: "scrollToSection()" }
+    ]
+  );
 }
 
-showSavedBanner();
+/* P8 host / guide */
+function setP8Message(message, actions = []){
+  const msg = document.getElementById("p8-host-message");
+  const actionsWrap = document.getElementById("p8-host-actions");
+
+  msg.textContent = message;
+  actionsWrap.innerHTML = "";
+
+  actions.forEach(item => {
+    const btn = document.createElement("button");
+    btn.className = item.primary ? "btn btn-primary" : "btn btn-outline";
+    btn.textContent = item.label;
+    btn.setAttribute("onclick", item.action);
+    actionsWrap.appendChild(btn);
+  });
+}
+
+function moveP8To(element, message){
+  const rect = element.getBoundingClientRect();
+  const dot = document.getElementById("p8-dot");
+  const bubble = document.getElementById("p8-bubble");
+
+  dot.style.display = "block";
+  dot.style.top = (rect.top + window.scrollY + 10) + "px";
+  dot.style.left = (rect.left + rect.width - 10) + "px";
+
+  bubble.innerText = message;
+  bubble.style.top = (rect.top + window.scrollY - 5) + "px";
+  bubble.style.left = (rect.left + rect.width + 18) + "px";
+  bubble.style.display = "block";
+
+  setTimeout(() => {
+    bubble.style.display = "none";
+  }, 3500);
+}
+
+function clearHighlights(){
+  document.querySelectorAll(".card").forEach(card => card.classList.remove("highlight"));
+}
+
+function viewProperty(btn){
+  const card = btn.closest(".card");
+  clearHighlights();
+  card.classList.add("highlight");
+
+  const title = card.dataset.title;
+  const price = card.dataset.price;
+  const location = card.dataset.location;
+  const type = card.dataset.type;
+  const external = card.querySelector(".tag.external");
+
+  let message =
+    "You’re viewing: " + title + "\n\n" +
+    "This is a " + type + " in " + location + ".\n" +
+    "• Around $" + price + "/month\n" +
+    "• I can help you save it or continue safely";
+
+  let actions = [
+    { label: "Save this property", action: `openSaveModal('${title}', ${price}, '${location}')`, primary: true },
+    { label: "Browse more", action: "scrollToSection()" }
+  ];
+
+  if(external){
+    message =
+      "This is an external listing.\n\n" +
+      "P8 can help you:\n" +
+      "• contact the owner\n" +
+      "• save this property\n" +
+      "• continue safely";
+    actions = [
+      { label: "Contact owner", action: `contactOwner('${title}', ${price}, '${location}')`, primary: true },
+      { label: "Save for later", action: `openSaveModal('${title}', ${price}, '${location}')` }
+    ];
+  }
+
+  setP8Message(message, actions);
+  moveP8To(card, "I can help you with this one");
+  recommendSimilar(type, card);
+  showToast("Viewing " + title);
+}
+
+function recommendSimilar(type, currentCard){
+  const cards = document.querySelectorAll(".card");
+  const suggestions = [];
+
+  cards.forEach(card => {
+    if(card !== currentCard && card.dataset.type === type){
+      suggestions.push(card.dataset.title + " – $" + card.dataset.price + "/mo");
+    }
+  });
+
+  if(suggestions.length){
+    const currentMessage = document.getElementById("p8-host-message").textContent;
+    document.getElementById("p8-host-message").textContent =
+      currentMessage +
+      "\n\nYou might also like:\n• " +
+      suggestions.slice(0,2).join("\n• ");
+  }
+}
+
+/* Toast */
+function showToast(message){
+  const toast = document.createElement("div");
+  toast.style.position = "fixed";
+  toast.style.bottom = "20px";
+  toast.style.left = "20px";
+  toast.style.background = "#2563eb";
+  toast.style.color = "white";
+  toast.style.padding = "12px 16px";
+  toast.style.borderRadius = "10px";
+  toast.style.zIndex = "10000";
+  toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
+  toast.innerText = message;
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 2600);
+}
+
+window.onload = () => {
+  showSavedBanner();
+
+  const browseBtn = document.querySelector(".btn.btn-primary");
+  if(browseBtn){
+    setTimeout(() => {
+      moveP8To(browseBtn, "Start here to explore rentals");
+    }, 1000);
+  }
+
+  setP8Message(
+    "Welcome — I’m P8.\n\nI’ll help you find or list a property without confusion.",
+    [
+      { label: "Find rental", action: "scrollToSection()", primary: true },
+      { label: "List property", action: "goOwner()" }
+    ]
+  );
+};
 </script>
 
 </body>
