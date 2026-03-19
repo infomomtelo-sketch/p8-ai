@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>P8 AI | Property Management Made Clear</title>
+  <title>RunP8 | Property Management Made Clear</title>
   <meta
     name="description"
-    content="P8 AI helps property owners simplify tenant placement, property management, pricing, and support with a clean, trust-first experience."
+    content="RunP8 helps property owners simplify tenant placement, home inspections, maintenance, accounting, renewals, and ongoing support through one clear service flow."
   />
   <style>
     *{box-sizing:border-box}
@@ -14,25 +14,27 @@
     body{
       margin:0;
       font-family:Inter,Arial,sans-serif;
-      background:#f6f7fb;
+      background:#f5f7fb;
       color:#0f172a;
       line-height:1.5;
     }
 
     :root{
-      --bg:#f6f7fb;
+      --bg:#f5f7fb;
       --surface:#ffffff;
-      --surface-2:#eef2ff;
+      --surface-2:#eef4ff;
       --text:#0f172a;
       --muted:#5b6474;
       --line:#e5e7eb;
-      --blue:#315efb;
-      --blue-dark:#2547c7;
+      --blue:#2f5ef7;
+      --blue-dark:#2348c0;
+      --dark:#0f172a;
       --soft:#f8fafc;
       --shadow:0 12px 30px rgba(15,23,42,.08);
-      --radius:24px;
+      --radius:26px;
       --radius-sm:16px;
       --max:1180px;
+      --success:#0f766e;
     }
 
     .wrap{
@@ -44,7 +46,7 @@
       position:sticky;
       top:0;
       z-index:30;
-      background:rgba(246,247,251,.92);
+      background:rgba(245,247,251,.92);
       backdrop-filter:blur(10px);
       border-bottom:1px solid rgba(15,23,42,.05);
     }
@@ -73,7 +75,7 @@
       background:linear-gradient(145deg,#dbeafe,#eff6ff);
       display:grid;
       place-items:center;
-      box-shadow:inset 0 0 0 1px rgba(49,94,251,.08);
+      box-shadow:inset 0 0 0 1px rgba(47,94,247,.08);
       flex:0 0 auto;
     }
 
@@ -82,10 +84,6 @@
       font-size:18px;
       color:var(--blue);
       letter-spacing:.5px;
-    }
-
-    .brand-copy{
-      min-width:0;
     }
 
     .brand-copy strong{
@@ -99,10 +97,10 @@
       color:var(--muted);
       font-size:12px;
       margin-top:2px;
+      max-width:220px;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
-      max-width:190px;
     }
 
     .top-actions{
@@ -113,7 +111,7 @@
 
     .menu-btn{
       border:none;
-      background:var(--surface);
+      background:#fff;
       color:var(--text);
       width:48px;
       height:48px;
@@ -145,7 +143,7 @@
     .cta-btn{
       background:var(--blue);
       color:#fff;
-      box-shadow:0 12px 28px rgba(49,94,251,.24);
+      box-shadow:0 12px 28px rgba(47,94,247,.24);
     }
 
     .cta-btn:hover{background:var(--blue-dark)}
@@ -166,12 +164,8 @@
       border-top:1px solid var(--line);
       box-shadow:var(--shadow);
     }
-
     .mobile-menu.open{display:block}
-
-    .mobile-menu .wrap{
-      padding:18px 0 22px;
-    }
+    .mobile-menu .wrap{padding:18px 0 22px}
 
     .mobile-grid{
       display:grid;
@@ -186,7 +180,7 @@
       background:#f8fafc;
       border:1px solid var(--line);
       border-radius:16px;
-      padding:14px 14px;
+      padding:14px;
       font-weight:600;
     }
 
@@ -196,23 +190,23 @@
 
     .hero-shell{
       background:
-        radial-gradient(circle at top right, rgba(49,94,251,.11), transparent 32%),
-        linear-gradient(180deg,#ffffff 0%,#f8faff 100%);
+        radial-gradient(circle at top right, rgba(47,94,247,.12), transparent 34%),
+        linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
       border:1px solid rgba(15,23,42,.06);
-      border-radius:32px;
+      border-radius:34px;
       overflow:hidden;
       box-shadow:var(--shadow);
     }
 
     .hero-grid{
       display:grid;
-      grid-template-columns:1.05fr .95fr;
+      grid-template-columns:1.02fr .98fr;
       gap:0;
       align-items:stretch;
     }
 
     .hero-copy{
-      padding:34px 24px 34px;
+      padding:36px 24px;
     }
 
     .eyebrow{
@@ -230,7 +224,7 @@
 
     h1{
       margin:0 0 16px;
-      font-size:clamp(38px,6vw,64px);
+      font-size:clamp(40px,6vw,66px);
       line-height:1.02;
       letter-spacing:-1.8px;
     }
@@ -260,7 +254,7 @@
       background:#fff;
       border:1px solid var(--line);
       border-radius:18px;
-      padding:14px 14px;
+      padding:14px;
       font-size:14px;
       color:var(--text);
       font-weight:600;
@@ -302,23 +296,87 @@
       font-weight:700;
     }
 
-    .visual-panel{
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
+    .slider-shell{
+      position:relative;
+      overflow:hidden;
       border-radius:22px;
-      padding:18px;
+      min-height:360px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
     }
 
-    .visual-panel strong{
+    .slider-track{
+      position:relative;
+      width:100%;
+      height:100%;
+      min-height:360px;
+    }
+
+    .slide{
+      position:absolute;
+      inset:0;
+      opacity:0;
+      transition:opacity .8s ease;
+      pointer-events:none;
+    }
+
+    .slide.active{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .slide img{
+      width:100%;
+      height:100%;
+      min-height:360px;
+      object-fit:cover;
       display:block;
-      font-size:18px;
-      margin-bottom:6px;
     }
 
-    .visual-panel p{
-      margin:0;
+    .slide-overlay{
+      position:absolute;
+      left:16px;
+      right:16px;
+      bottom:16px;
+      background:rgba(15,23,42,.74);
+      backdrop-filter:blur(8px);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .slide-overlay strong{
+      display:block;
+      font-size:17px;
+      margin-bottom:4px;
+    }
+
+    .slide-overlay span{
+      display:block;
       color:#cbd5e1;
-      font-size:14px;
+      font-size:13px;
+      line-height:1.4;
+    }
+
+    .slider-dots{
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      margin-top:14px;
+    }
+
+    .slider-dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.28);
+      border:none;
+      cursor:pointer;
+      padding:0;
+    }
+
+    .slider-dot.active{
+      background:#fff;
     }
 
     .visual-stats{
@@ -347,9 +405,7 @@
       font-weight:700;
     }
 
-    section{
-      padding:22px 0;
-    }
+    section{padding:22px 0}
 
     .section-head{
       text-align:center;
@@ -478,7 +534,7 @@
 
     .service-grid{
       display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
+      grid-template-columns:repeat(3,minmax(0,1fr));
       gap:16px;
     }
 
@@ -598,7 +654,7 @@
 
     input:focus,select:focus,textarea:focus{
       border-color:var(--blue);
-      box-shadow:0 0 0 4px rgba(49,94,251,.12);
+      box-shadow:0 0 0 4px rgba(47,94,247,.12);
     }
 
     .radio-box{
@@ -634,6 +690,17 @@
     .form-note{
       font-size:13px;
       color:var(--muted);
+    }
+
+    .form-success{
+      display:none;
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:16px;
+      background:#ecfdf5;
+      border:1px solid #a7f3d0;
+      color:var(--success);
+      font-weight:700;
     }
 
     .review-grid{
@@ -862,6 +929,12 @@
       .top-actions .cta-btn{
         width:auto;
       }
+
+      .slider-shell,
+      .slider-track,
+      .slide img{
+        min-height:300px;
+      }
     }
   </style>
 </head>
@@ -872,7 +945,7 @@
       <a href="#top" class="brand">
         <div class="brand-mark"><span>P8</span></div>
         <div class="brand-copy">
-          <strong>P8 AI</strong>
+          <strong>RunP8</strong>
           <small>Property management made clear</small>
         </div>
       </a>
@@ -906,8 +979,8 @@
             <div class="eyebrow">Clear process • Strong support • Owner-first</div>
             <h1>Property management without the confusion.</h1>
             <p>
-              P8 AI helps owners simplify tenant placement, pricing, coordination,
-              maintenance, inspections, and support through one clear service flow.
+              RunP8 helps owners simplify tenant placement, pricing, coordination,
+              home inspections, maintenance, accounting, renewals, and support through one clear operating flow.
             </p>
 
             <div class="hero-actions">
@@ -929,12 +1002,38 @@
                 <div class="visual-badge">Service-first flow</div>
               </div>
 
-              <div class="visual-panel">
-                <strong>One clean path from intake to support</strong>
-                <p>
-                  Submit your property, choose the level of service you need,
-                  and move through a guided process built for clarity.
-                </p>
+              <div class="slider-shell">
+                <div class="slider-track" id="sliderTrack">
+                  <div class="slide active">
+                    <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1200&q=80" alt="Property exterior" />
+                    <div class="slide-overlay">
+                      <strong>Clear onboarding from the start</strong>
+                      <span>Start with a professional intake built for owners who want structure and clarity.</span>
+                    </div>
+                  </div>
+
+                  <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80" alt="Living room interior" />
+                    <div class="slide-overlay">
+                      <strong>Present the property the right way</strong>
+                      <span>Better preparation and stronger presentation create a cleaner path to placement.</span>
+                    </div>
+                  </div>
+
+                  <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80" alt="Support and operations" />
+                    <div class="slide-overlay">
+                      <strong>Support continues after placement</strong>
+                      <span>Keep inspections, maintenance, renewals, and accounting inside one easier flow.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="slider-dots" id="sliderDots">
+                  <button class="slider-dot active" aria-label="Slide 1"></button>
+                  <button class="slider-dot" aria-label="Slide 2"></button>
+                  <button class="slider-dot" aria-label="Slide 3"></button>
+                </div>
               </div>
 
               <div class="visual-stats">
@@ -960,11 +1059,11 @@
     <section id="how">
       <div class="wrap">
         <div class="section-head">
-          <span class="mini">Keeping it simple</span>
-          <h2>How our property management works</h2>
+          <span class="mini">How it works</span>
+          <h2>A cleaner operating system for your property</h2>
           <p>
-            A clean service structure helps owners understand what happens next,
-            why it matters, and how support continues after onboarding.
+            RunP8 follows a service structure that helps owners understand what happens next,
+            why it matters, and how support continues after tenant placement.
           </p>
         </div>
 
@@ -972,14 +1071,14 @@
           <article class="step-card">
             <div class="step-inner">
               <div class="step-media">
-                <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80" alt="Home and management planning" />
+                <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80" alt="Property planning" />
               </div>
               <div class="step-copy">
                 <span class="step-num">Step 1</span>
                 <h3>Start with the right information</h3>
                 <p>
-                  Owners begin with a simple intake so the property, service needs,
-                  location, and goals are clear from the start.
+                  Owners begin with a simple intake so the property, goals, address,
+                  and service needs are clear from the beginning.
                 </p>
 
                 <div class="step-list">
@@ -1006,31 +1105,31 @@
             <div class="step-inner">
               <div class="step-copy">
                 <span class="step-num">Step 2</span>
-                <h3>Your property concierge team</h3>
+                <h3>Prepare the property professionally</h3>
                 <p>
-                  Once submitted, your property moves into a guided support process
-                  so owners know what is being handled and where they are in the flow.
+                  Once submitted, the property moves into a guided preparation flow with
+                  pricing support, photography, showings, and home inspection coordination.
                 </p>
 
                 <div class="step-list">
                   <div class="step-item">
                     <div class="step-icon">03</div>
                     <div>
-                      <strong>Service coordination</strong>
-                      <span>A structured path for onboarding, communication, and preparation.</span>
+                      <strong>Presentation and pricing</strong>
+                      <span>Professional presentation and clearer pricing decisions from the start.</span>
                     </div>
                   </div>
                   <div class="step-item">
                     <div class="step-icon">04</div>
                     <div>
-                      <strong>Owner clarity</strong>
-                      <span>Less guessing, fewer dead ends, and a more confident start.</span>
+                      <strong>Home inspection readiness</strong>
+                      <span>Support with inspection, maintenance visibility, and property condition flow.</span>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="step-media">
-                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80" alt="Property concierge team" />
+                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80" alt="Property team" />
               </div>
             </div>
           </article>
@@ -1044,23 +1143,23 @@
                 <span class="step-num">Step 3</span>
                 <h3>Find the right tenant</h3>
                 <p>
-                  Tenant placement should feel organized, not chaotic. The process
-                  is built to make preparation, presentation, and screening easier to follow.
+                  Tenant placement should feel organized, not chaotic. The process is built
+                  to make preparation, presentation, screening, and lease flow easier to follow.
                 </p>
 
                 <div class="step-list">
                   <div class="step-item">
-                    <div class="step-icon">📷</div>
+                    <div class="step-icon">📸</div>
                     <div>
-                      <strong>Professional presentation</strong>
-                      <span>Better photos, better showings, and clearer first impressions.</span>
+                      <strong>Showings and presentation</strong>
+                      <span>Better photography, better visibility, and a more professional listing process.</span>
                     </div>
                   </div>
                   <div class="step-item">
                     <div class="step-icon">✓</div>
                     <div>
-                      <strong>Screening and lease flow</strong>
-                      <span>A smoother path from interest to approved tenant and lease generation.</span>
+                      <strong>Screening and lease generation</strong>
+                      <span>A smoother path from renter interest to approved tenant and signed lease.</span>
                     </div>
                   </div>
                 </div>
@@ -1072,26 +1171,25 @@
             <div class="step-inner">
               <div class="step-copy">
                 <span class="step-num">Step 4</span>
-                <h3>We take care of the rest</h3>
+                <h3>Operate the property with ongoing support</h3>
                 <p>
-                  After placement, owners should still feel supported. The service
-                  structure continues through coordination, accounting, maintenance,
-                  inspections, and renewals.
+                  After placement, owners should still feel supported. RunP8 continues through
+                  rent coordination, maintenance, accounting, inspections, and renewals.
                 </p>
 
                 <div class="step-list">
                   <div class="step-item">
                     <div class="step-icon">💸</div>
                     <div>
-                      <strong>Rent coordination</strong>
-                      <span>Clear handling of ongoing operational steps.</span>
+                      <strong>Accounting and coordination</strong>
+                      <span>Clearer handling of operational steps with a stronger service structure.</span>
                     </div>
                   </div>
                   <div class="step-item">
                     <div class="step-icon">🛠</div>
                     <div>
-                      <strong>Maintenance and inspections</strong>
-                      <span>Requests, renewals, and annual touchpoints managed more clearly.</span>
+                      <strong>Maintenance, inspection, and renewal flow</strong>
+                      <span>Requests, support, inspections, and renewals managed through one cleaner system.</span>
                     </div>
                   </div>
                 </div>
@@ -1109,10 +1207,10 @@
       <div class="wrap">
         <div class="section-head">
           <span class="mini">Core services</span>
-          <h2>Everything owners need in one cleaner service flow</h2>
+          <h2>Everything owners need in one cleaner operating flow</h2>
           <p>
-            Structured service blocks make it easier for owners to understand
-            what is included and what support looks like in practice.
+            Structured service blocks make it easier for owners to understand what is included
+            and what support looks like in practice.
           </p>
         </div>
 
@@ -1124,13 +1222,13 @@
           </div>
           <div class="service-card">
             <div class="icon">🔁</div>
-            <h3>On-demand showings</h3>
-            <p>A more organized presentation process for qualified renter interest.</p>
+            <h3>Showings coordination</h3>
+            <p>A more organized presentation flow for qualified renter interest and follow-up.</p>
           </div>
           <div class="service-card">
             <div class="icon">🧾</div>
             <h3>Tenant screening</h3>
-            <p>Clearer screening steps to support stronger tenant placement decisions.</p>
+            <p>Clearer screening steps to support stronger placement decisions.</p>
           </div>
           <div class="service-card">
             <div class="icon">📄</div>
@@ -1138,9 +1236,9 @@
             <p>Move from approved tenant to lease stage with less friction and more structure.</p>
           </div>
           <div class="service-card">
-            <div class="icon">💰</div>
-            <h3>Financial accounting</h3>
-            <p>Service-oriented coordination for ongoing property management operations.</p>
+            <div class="icon">🏠</div>
+            <h3>Home inspections</h3>
+            <p>Keep inspection flow visible and structured before and during ongoing management.</p>
           </div>
           <div class="service-card">
             <div class="icon">🛠</div>
@@ -1148,9 +1246,14 @@
             <p>Handle requests and property issues with a process owners can follow more easily.</p>
           </div>
           <div class="service-card">
+            <div class="icon">💰</div>
+            <h3>Accounting support</h3>
+            <p>Service-oriented financial coordination for ongoing property operations.</p>
+          </div>
+          <div class="service-card">
             <div class="icon">🔎</div>
             <h3>Annual inspections</h3>
-            <p>Keep oversight structured and consistent through scheduled inspections.</p>
+            <p>Keep oversight structured and consistent through scheduled inspection touchpoints.</p>
           </div>
           <div class="service-card">
             <div class="icon">↻</div>
@@ -1178,7 +1281,7 @@
           </div>
         </div>
 
-        <form class="intake-form">
+        <form class="intake-form" id="ownerForm">
           <div class="form-grid">
             <div class="field">
               <label for="email">Email</label>
@@ -1245,8 +1348,12 @@
           </div>
 
           <div class="submit-row">
-            <button type="button" class="cta-btn">Start now</button>
+            <button type="submit" class="cta-btn">Start now</button>
             <span class="form-note">No extra complexity. Just a clear starting point.</span>
+          </div>
+
+          <div class="form-success" id="formSuccess">
+            Thank you. Your property information is ready for the next step.
           </div>
         </form>
       </div>
@@ -1350,7 +1457,7 @@
           <a href="#top" class="brand" style="text-decoration:none;">
             <div class="brand-mark"><span>P8</span></div>
             <div class="brand-copy">
-              <strong>P8 AI</strong>
+              <strong>RunP8</strong>
               <small>Property management made clear</small>
             </div>
           </a>
@@ -1390,7 +1497,7 @@
 
         <div class="footer-col">
           <h4>Connect</h4>
-          <span>start@p8ai.com</span>
+          <span>start@runp8.com</span>
           <span>(555) 610-5585</span>
           <span>Mon–Fri • 9AM–6PM</span>
           <span>Owner support and intake</span>
@@ -1398,7 +1505,7 @@
       </div>
 
       <div class="footer-bottom">
-        <span>© 2026 P8 AI. All rights reserved.</span>
+        <span>© 2026 RunP8. All rights reserved.</span>
         <span>Built for clarity, trust, and cleaner owner flow.</span>
       </div>
     </div>
@@ -1416,6 +1523,56 @@
       link.addEventListener("click", () => {
         mobileMenu.classList.remove("open");
       });
+    });
+
+    const slides = document.querySelectorAll(".slide");
+    const dots = document.querySelectorAll(".slider-dot");
+    let currentSlide = 0;
+    let sliderInterval = null;
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === index);
+      });
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+      });
+
+      currentSlide = index;
+    }
+
+    function nextSlide() {
+      const next = (currentSlide + 1) % slides.length;
+      showSlide(next);
+    }
+
+    function startSlider() {
+      sliderInterval = setInterval(nextSlide, 3800);
+    }
+
+    function resetSlider() {
+      clearInterval(sliderInterval);
+      startSlider();
+    }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        showSlide(index);
+        resetSlider();
+      });
+    });
+
+    startSlider();
+
+    const ownerForm = document.getElementById("ownerForm");
+    const formSuccess = document.getElementById("formSuccess");
+
+    ownerForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      formSuccess.style.display = "block";
+      formSuccess.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      ownerForm.reset();
     });
   </script>
 </body>
