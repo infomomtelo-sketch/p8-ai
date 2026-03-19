@@ -13,7 +13,6 @@ background:#0b1120;
 color:white;
 }
 
-/* NAV */
 .nav{
 display:flex;
 justify-content:space-between;
@@ -46,16 +45,14 @@ color:white;
 }
 
 .btn-outline{
-background:transparent;
+background:#1f2937;
 color:white;
 }
 
-/* HERO */
 .hero{
 display:flex;
 gap:40px;
 padding:40px 24px;
-align-items:center;
 flex-wrap:wrap;
 }
 
@@ -77,6 +74,7 @@ margin-bottom:20px;
 .hero-buttons{
 display:flex;
 gap:12px;
+flex-wrap:wrap;
 }
 
 .hero-right{
@@ -89,7 +87,6 @@ width:100%;
 border-radius:16px;
 }
 
-/* SECTION */
 .section{
 padding:30px 24px;
 }
@@ -120,6 +117,28 @@ margin-bottom:6px;
 .card p{
 color:#94a3b8;
 font-size:14px;
+margin-bottom:10px;
+}
+
+/* MODAL */
+#saveModal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+.modal-box{
+background:#111827;
+padding:20px;
+border-radius:12px;
+width:90%;
+max-width:400px;
 }
 </style>
 </head>
@@ -138,24 +157,19 @@ font-size:14px;
 
 <!-- HERO -->
 <div class="hero">
-
 <div class="hero-left">
 <h1>Find or list quality spaces</h1>
-<p>
-Rooms, ADUs, and flexible stays for professionals, travel workers, and everyday renters.
-</p>
+<p>Rooms, ADUs, and flexible stays for professionals.</p>
 
 <div class="hero-buttons">
 <button class="btn btn-primary" onclick="scrollToSection()">Browse Rentals</button>
 <button class="btn btn-outline" onclick="goOwner()">For Owners</button>
-<button class="btn btn-outline" onclick="alert('AI coming next phase')">Ask P8 AI</button>
 </div>
 </div>
 
 <div class="hero-right">
 <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae">
 </div>
-
 </div>
 
 <!-- RENTALS -->
@@ -166,20 +180,58 @@ Rooms, ADUs, and flexible stays for professionals, travel workers, and everyday 
 
 <div class="card">
 <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2">
-<h3>Private Room</h3>
-<p>Near hospital • $850/mo</p>
+<h3>Private Room Near Hospital</h3>
+<p>$850/mo • Furnished • Fresno</p>
+
+<button class="btn btn-primary">View</button>
+<button class="btn btn-outline"
+onclick="openSaveModal('Private Room Near Hospital', 850, 'Fresno')">
+Save & continue later
+</button>
 </div>
 
 <div class="card">
 <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688">
-<h3>Studio</h3>
-<p>Downtown • $1200/mo</p>
+<h3>Studio ADU</h3>
+<p>$1200/mo • Private • Downtown</p>
+
+<button class="btn btn-primary">View</button>
+<button class="btn btn-outline"
+onclick="openSaveModal('Studio ADU', 1200, 'Downtown')">
+Save & continue later
+</button>
 </div>
 
 <div class="card">
 <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb">
-<h3>ADU Unit</h3>
-<p>Private entrance • $1500/mo</p>
+<h3>1 Bedroom Unit</h3>
+<p>$1450/mo • Parking • Fresno</p>
+
+<button class="btn btn-primary">View</button>
+<button class="btn btn-outline"
+onclick="openSaveModal('1 Bedroom Unit', 1450, 'Fresno')">
+Save & continue later
+</button>
+</div>
+
+</div>
+</div>
+
+<!-- MODAL -->
+<div id="saveModal">
+<div class="modal-box">
+
+<h3>Save this property</h3>
+<p style="color:#94a3b8;margin:10px 0;">
+Enter your email to continue later.
+</p>
+
+<input id="saveEmail" type="email" placeholder="you@email.com"
+style="width:100%;padding:10px;border-radius:8px;border:none;margin-bottom:10px;" />
+
+<div style="display:flex;gap:10px;">
+<button class="btn btn-primary" onclick="saveWithEmail()">Save</button>
+<button class="btn btn-outline" onclick="closeSaveModal()">Cancel</button>
 </div>
 
 </div>
@@ -192,6 +244,38 @@ document.getElementById("rentals").scrollIntoView({behavior:"smooth"});
 
 function goOwner(){
 window.location.href = "/list-property.html";
+}
+
+let currentProperty = null;
+
+function openSaveModal(title, price, location){
+currentProperty = {title, price, location};
+document.getElementById("saveModal").style.display = "flex";
+}
+
+function closeSaveModal(){
+document.getElementById("saveModal").style.display = "none";
+}
+
+function saveWithEmail(){
+const email = document.getElementById("saveEmail").value;
+
+if(!email){
+alert("Enter your email");
+return;
+}
+
+const data = {
+...currentProperty,
+email,
+savedAt:new Date().toISOString()
+};
+
+localStorage.setItem("p8_saved_property", JSON.stringify(data));
+
+closeSaveModal();
+
+alert("Saved! You can come back anytime.");
 }
 </script>
 
