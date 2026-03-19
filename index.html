@@ -30,6 +30,7 @@ font-size:18px;
 display:flex;
 gap:16px;
 align-items:center;
+flex-wrap:wrap;
 }
 
 .btn{
@@ -54,6 +55,7 @@ display:flex;
 gap:40px;
 padding:40px 24px;
 flex-wrap:wrap;
+align-items:center;
 }
 
 .hero-left{
@@ -69,6 +71,7 @@ margin-bottom:16px;
 .hero-left p{
 color:#cbd5e1;
 margin-bottom:20px;
+line-height:1.5;
 }
 
 .hero-buttons{
@@ -91,6 +94,10 @@ border-radius:16px;
 padding:30px 24px;
 }
 
+.section h2{
+margin-bottom:18px;
+}
+
 .cards{
 display:flex;
 gap:16px;
@@ -101,27 +108,70 @@ flex-wrap:wrap;
 background:#111827;
 padding:16px;
 border-radius:16px;
-width:250px;
+width:260px;
 }
 
 .card img{
 width:100%;
+height:170px;
+object-fit:cover;
 border-radius:12px;
 margin-bottom:10px;
 }
 
 .card h3{
 margin-bottom:6px;
+font-size:18px;
 }
 
 .card p{
 color:#94a3b8;
 font-size:14px;
 margin-bottom:10px;
+line-height:1.5;
 }
 
-/* MODAL */
-#saveModal{
+.card small{
+display:block;
+color:#cbd5e1;
+margin-bottom:10px;
+}
+
+.card-actions{
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+/* Saved banner */
+#savedBanner{
+display:none;
+margin:24px;
+padding:18px;
+background:#111827;
+border:1px solid #1f2937;
+border-radius:14px;
+}
+
+#savedBanner h3{
+margin-bottom:8px;
+}
+
+#savedBanner p{
+color:#cbd5e1;
+margin-bottom:12px;
+line-height:1.5;
+}
+
+.saved-actions{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+/* Modals */
+#saveModal,
+#contactModal{
 display:none;
 position:fixed;
 top:0;
@@ -132,13 +182,60 @@ background:rgba(0,0,0,0.6);
 align-items:center;
 justify-content:center;
 z-index:9999;
+padding:16px;
 }
+
 .modal-box{
 background:#111827;
 padding:20px;
 border-radius:12px;
 width:90%;
-max-width:400px;
+max-width:420px;
+}
+
+.modal-box h3{
+margin-bottom:10px;
+}
+
+.modal-box p{
+color:#94a3b8;
+margin:10px 0 14px;
+line-height:1.5;
+}
+
+.modal-box input,
+.modal-box textarea{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:none;
+margin-bottom:10px;
+background:#1f2937;
+color:white;
+}
+
+.modal-actions{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.note{
+color:#94a3b8;
+font-size:13px;
+margin-top:8px;
+}
+
+@media(max-width:700px){
+.hero-left h1{
+font-size:32px;
+}
+.cards{
+flex-direction:column;
+}
+.card{
+width:100%;
+}
 }
 </style>
 </head>
@@ -147,136 +244,277 @@ max-width:400px;
 
 <!-- NAV -->
 <div class="nav">
-<div class="logo">P8 Rental</div>
+  <div class="logo">P8 Rental</div>
 
-<div class="nav-right">
-<button class="btn btn-outline" onclick="scrollToSection()">Browse Rentals</button>
-<button class="btn btn-primary" onclick="goOwner()">List Property</button>
+  <div class="nav-right">
+    <button class="btn btn-outline" onclick="scrollToSection()">Browse Rentals</button>
+    <button class="btn btn-primary" onclick="goOwner()">List Property</button>
+  </div>
 </div>
+
+<!-- SAVED BANNER -->
+<div id="savedBanner">
+  <h3>Resume your saved property</h3>
+  <p id="savedBannerText"></p>
+
+  <div class="saved-actions">
+    <button class="btn btn-primary" onclick="resumeSavedProperty()">Resume</button>
+    <button class="btn btn-outline" onclick="clearSavedProperty()">Clear</button>
+  </div>
 </div>
 
 <!-- HERO -->
 <div class="hero">
-<div class="hero-left">
-<h1>Find or list quality spaces</h1>
-<p>Rooms, ADUs, and flexible stays for professionals.</p>
+  <div class="hero-left">
+    <h1>Find or list quality spaces</h1>
+    <p>
+      Rooms, ADUs, and flexible stays for professionals, travel workers,
+      and everyday renters looking for a simpler rental experience.
+    </p>
 
-<div class="hero-buttons">
-<button class="btn btn-primary" onclick="scrollToSection()">Browse Rentals</button>
-<button class="btn btn-outline" onclick="goOwner()">For Owners</button>
-</div>
-</div>
+    <div class="hero-buttons">
+      <button class="btn btn-primary" onclick="scrollToSection()">Browse Rentals</button>
+      <button class="btn btn-outline" onclick="goOwner()">For Owners</button>
+    </div>
+  </div>
 
-<div class="hero-right">
-<img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae">
-</div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1200&q=80" alt="Rental home">
+  </div>
 </div>
 
 <!-- RENTALS -->
 <div class="section" id="rentals">
-<h2>Available Rentals</h2>
+  <h2>Available Rentals</h2>
 
-<div class="cards">
+  <div class="cards">
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2">
-<h3>Private Room Near Hospital</h3>
-<p>$850/mo • Furnished • Fresno</p>
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80" alt="Private room">
+      <h3>Private Room Near Hospital</h3>
+      <p>$850/mo • Furnished • Fresno</p>
+      <small>Best for travel nurses and professionals.</small>
 
-<button class="btn btn-primary">View</button>
-<button class="btn btn-outline"
-onclick="openSaveModal('Private Room Near Hospital', 850, 'Fresno')">
-Save & continue later
-</button>
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="viewProperty('Private Room Near Hospital', 850, 'Fresno')">View</button>
+        <button class="btn btn-outline" onclick="openSaveModal('Private Room Near Hospital', 850, 'Fresno')">Save & continue later</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80" alt="Studio ADU">
+      <h3>Studio ADU</h3>
+      <p>$1200/mo • Private • Downtown</p>
+      <small>Private entrance and quiet setup.</small>
+
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="viewProperty('Studio ADU', 1200, 'Downtown Fresno')">View</button>
+        <button class="btn btn-outline" onclick="openSaveModal('Studio ADU', 1200, 'Downtown Fresno')">Save & continue later</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80" alt="One bedroom unit">
+      <h3>1 Bedroom Unit</h3>
+      <p>$1450/mo • Parking • Fresno</p>
+      <small>Good for longer stays and working professionals.</small>
+
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="viewProperty('1 Bedroom Unit', 1450, 'Fresno')">View</button>
+        <button class="btn btn-outline" onclick="openSaveModal('1 Bedroom Unit', 1450, 'Fresno')">Save & continue later</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" alt="Quiet home share">
+      <h3>Quiet Home Share</h3>
+      <p>$800/mo • Utilities Included • Fresno</p>
+      <small>Calm environment for mid-term renters.</small>
+
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="viewProperty('Quiet Home Share', 800, 'Fresno')">View</button>
+        <button class="btn btn-outline" onclick="openSaveModal('Quiet Home Share', 800, 'Fresno')">Save & continue later</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80" alt="External listing">
+      <h3>Private Room – Fresno</h3>
+      <p>$900/mo • External Listing</p>
+      <small>P8 can contact the owner and confirm availability for you.</small>
+
+      <div class="card-actions">
+        <button class="btn btn-primary" onclick="contactOwner('Private Room – Fresno', 900, 'Fresno')">Contact Owner</button>
+        <button class="btn btn-outline" onclick="openSaveModal('Private Room – Fresno', 900, 'Fresno')">Save & continue later</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688">
-<h3>Studio ADU</h3>
-<p>$1200/mo • Private • Downtown</p>
-
-<button class="btn btn-primary">View</button>
-<button class="btn btn-outline"
-onclick="openSaveModal('Studio ADU', 1200, 'Downtown')">
-Save & continue later
-</button>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb">
-<h3>1 Bedroom Unit</h3>
-<p>$1450/mo • Parking • Fresno</p>
-
-<button class="btn btn-primary">View</button>
-<button class="btn btn-outline"
-onclick="openSaveModal('1 Bedroom Unit', 1450, 'Fresno')">
-Save & continue later
-</button>
-</div>
-
-</div>
-</div>
-
-<!-- MODAL -->
+<!-- SAVE MODAL -->
 <div id="saveModal">
-<div class="modal-box">
+  <div class="modal-box">
+    <h3>Save this property</h3>
+    <p>Enter your email so you can continue later without starting over.</p>
 
-<h3>Save this property</h3>
-<p style="color:#94a3b8;margin:10px 0;">
-Enter your email to continue later.
-</p>
+    <input id="saveEmail" type="email" placeholder="you@email.com" />
 
-<input id="saveEmail" type="email" placeholder="you@email.com"
-style="width:100%;padding:10px;border-radius:8px;border:none;margin-bottom:10px;" />
-
-<div style="display:flex;gap:10px;">
-<button class="btn btn-primary" onclick="saveWithEmail()">Save</button>
-<button class="btn btn-outline" onclick="closeSaveModal()">Cancel</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveWithEmail()">Save</button>
+      <button class="btn btn-outline" onclick="closeSaveModal()">Cancel</button>
+    </div>
+  </div>
 </div>
 
-</div>
+<!-- CONTACT OWNER MODAL -->
+<div id="contactModal">
+  <div class="modal-box">
+    <h3>Contact Owner</h3>
+    <p>P8 will help you connect with the owner for this external listing.</p>
+
+    <input id="renterName" type="text" placeholder="Your name" />
+    <input id="renterContact" type="text" placeholder="Phone or email" />
+    <input id="moveInDate" type="text" placeholder="Move-in date" />
+    <textarea id="renterNote" placeholder="Optional note to owner"></textarea>
+
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="submitOwnerContact()">Send Request</button>
+      <button class="btn btn-outline" onclick="closeContactModal()">Cancel</button>
+    </div>
+
+    <div class="note">This is a P8-managed connection request.</div>
+  </div>
 </div>
 
 <script>
 function scrollToSection(){
-document.getElementById("rentals").scrollIntoView({behavior:"smooth"});
+  document.getElementById("rentals").scrollIntoView({behavior:"smooth"});
 }
 
 function goOwner(){
-window.location.href = "/list-property.html";
+  window.location.href = "/list-property.html";
 }
 
+function viewProperty(title, price, location){
+  alert("Viewing: " + title + " • $" + price + "/mo • " + location);
+}
+
+/* Save property flow */
 let currentProperty = null;
 
 function openSaveModal(title, price, location){
-currentProperty = {title, price, location};
-document.getElementById("saveModal").style.display = "flex";
+  currentProperty = {title, price, location};
+  document.getElementById("saveModal").style.display = "flex";
 }
 
 function closeSaveModal(){
-document.getElementById("saveModal").style.display = "none";
+  document.getElementById("saveModal").style.display = "none";
 }
 
 function saveWithEmail(){
-const email = document.getElementById("saveEmail").value;
+  const email = document.getElementById("saveEmail").value;
 
-if(!email){
-alert("Enter your email");
-return;
+  if(!email){
+    alert("Enter your email");
+    return;
+  }
+
+  const data = {
+    ...currentProperty,
+    email,
+    savedAt:new Date().toISOString()
+  };
+
+  localStorage.setItem("p8_saved_property", JSON.stringify(data));
+
+  closeSaveModal();
+  showSavedBanner();
+
+  alert("Saved! You can come back anytime.");
 }
 
-const data = {
-...currentProperty,
-email,
-savedAt:new Date().toISOString()
-};
+function showSavedBanner(){
+  const raw = localStorage.getItem("p8_saved_property");
+  if(!raw) return;
 
-localStorage.setItem("p8_saved_property", JSON.stringify(data));
+  const saved = JSON.parse(raw);
+  const banner = document.getElementById("savedBanner");
+  const text = document.getElementById("savedBannerText");
 
-closeSaveModal();
+  text.textContent =
+    saved.title + " • $" + saved.price + "/mo • " + saved.location +
+    " • saved for " + saved.email;
 
-alert("Saved! You can come back anytime.");
+  banner.style.display = "block";
 }
+
+function resumeSavedProperty(){
+  const raw = localStorage.getItem("p8_saved_property");
+  if(!raw) return;
+
+  const saved = JSON.parse(raw);
+
+  alert(
+    "Resuming: " + saved.title +
+    " • $" + saved.price + "/mo • " + saved.location +
+    " • Email: " + saved.email
+  );
+
+  document.getElementById("rentals").scrollIntoView({behavior:"smooth"});
+}
+
+function clearSavedProperty(){
+  localStorage.removeItem("p8_saved_property");
+  document.getElementById("savedBanner").style.display = "none";
+  alert("Saved property cleared.");
+}
+
+/* Contact owner flow */
+let currentInquiryProperty = null;
+
+function contactOwner(title, price, location){
+  currentInquiryProperty = {title, price, location};
+  document.getElementById("contactModal").style.display = "flex";
+}
+
+function closeContactModal(){
+  document.getElementById("contactModal").style.display = "none";
+}
+
+function submitOwnerContact(){
+  const name = document.getElementById("renterName").value.trim();
+  const contact = document.getElementById("renterContact").value.trim();
+  const moveIn = document.getElementById("moveInDate").value.trim();
+  const note = document.getElementById("renterNote").value.trim();
+
+  if(!name || !contact){
+    alert("Please enter your name and contact.");
+    return;
+  }
+
+  const inquiry = {
+    ...currentInquiryProperty,
+    name,
+    contact,
+    moveIn,
+    note,
+    createdAt: new Date().toISOString()
+  };
+
+  localStorage.setItem("p8_owner_inquiry", JSON.stringify(inquiry));
+
+  closeContactModal();
+
+  document.getElementById("renterName").value = "";
+  document.getElementById("renterContact").value = "";
+  document.getElementById("moveInDate").value = "";
+  document.getElementById("renterNote").value = "";
+
+  alert("P8 saved your request and can contact the owner for you.");
+}
+
+showSavedBanner();
 </script>
 
 </body>
