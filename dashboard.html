@@ -1,171 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ProrAI8 Dashboard</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RunP8</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial;
-background:#0b1120;
-color:white;
-padding:30px 20px;
+background:#f5f7fb;
 }
 
-.container{
-max-width:1100px;
+.wrap{
+max-width:900px;
 margin:auto;
+padding:20px;
 }
 
-.topnav{
+.top{
 display:flex;
-gap:12px;
-flex-wrap:wrap;
-margin-bottom:20px;
+justify-content:space-between;
+background:white;
+padding:15px;
+border-bottom:1px solid #eee;
 }
 
-.topnav a{
-padding:10px 14px;
-border-radius:10px;
-background:#1f2937;
+.btn{
+background:#2f5ef7;
 color:white;
+padding:10px 16px;
+border-radius:8px;
 text-decoration:none;
-border:1px solid #334155;
+border:none;
 }
 
-h1{
-margin-top:0;
-}
-
-.dashboard-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-margin-top:20px;
+.hero{
+padding:50px 20px;
+background:white;
 }
 
 .card{
-background:#111827;
-border-radius:16px;
+background:white;
 padding:20px;
-border:1px solid #1f2937;
+margin:15px 0;
+border-radius:12px;
+box-shadow:0 10px 20px rgba(0,0,0,0.05);
 }
 
-.card h3{
-margin-top:0;
-}
-
-.property-table{
+input,textarea,select{
 width:100%;
-border-collapse:collapse;
-margin-top:20px;
-}
-
-.property-table th,
-.property-table td{
-padding:12px;
-border-bottom:1px solid #1f2937;
-text-align:left;
-}
-
-.status{
-padding:6px 10px;
+padding:10px;
+margin:10px 0;
 border-radius:8px;
-font-size:12px;
+border:1px solid #ddd;
 }
 
-.occupied{
-background:#1e3a8a;
+.success{
+display:none;
+background:#d1fae5;
+padding:10px;
+border-radius:8px;
+margin-top:10px;
 }
-
-.vacant{
-background:#065f46;
-}
-
-.upcoming{
-background:#92400e;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-<div class="topnav">
-<a href="index.html">Home</a>
-<a href="list-property.html">Add Property</a>
-<a href="rentals.html">View Rentals</a>
-<a href="inspection.html">Run Inspection</a>
+<div class="top">
+<div><b>RunP8</b></div>
+<a href="#form" class="btn">Get started</a>
 </div>
 
-<h1>Landlord Dashboard</h1>
+<div class="hero wrap">
+<h1>Property management without confusion</h1>
+<p>Clear system. Real process. No guessing.</p>
+<a href="#form" class="btn">Start now</a>
+</div>
 
-<p>Manage your properties, inspections, and listings using the ProrAI8 system.</p>
+<div class="wrap">
+<div class="card">Step 1 – Submit your property</div>
+<div class="card">Step 2 – We prepare it</div>
+<div class="card">Step 3 – We find tenant</div>
+<div class="card">Step 4 – We manage it</div>
+</div>
 
-<div class="dashboard-grid">
-
+<div id="form" class="wrap">
 <div class="card">
-<h3>Total Properties</h3>
-<p>3</p>
+
+<h2>Start your property intake</h2>
+
+<form id="formEl" action="https://formspree.io/f/mreyjvap" method="POST">
+
+<input type="hidden" name="_subject" value="New RunP8 Lead">
+
+<input name="email" placeholder="Email" required>
+<input name="phone" placeholder="Phone">
+
+<input name="street" placeholder="Address">
+<input name="city" placeholder="City">
+
+<select name="service">
+<option>Full management</option>
+<option>Placement only</option>
+</select>
+
+<textarea name="notes" placeholder="Notes"></textarea>
+
+<button class="btn">Submit</button>
+
+</form>
+
+<div class="success" id="done">
+Submitted. We will contact you.
 </div>
 
-<div class="card">
-<h3>Occupied Units</h3>
-<p>1</p>
+</div>
 </div>
 
-<div class="card">
-<h3>Vacant Units</h3>
-<p>1</p>
-</div>
+<script>
+const f = document.getElementById("formEl");
+const done = document.getElementById("done");
 
-<div class="card">
-<h3>Upcoming Vacancies</h3>
-<p>1</p>
-</div>
+f.addEventListener("submit", async function(e){
+e.preventDefault();
 
-</div>
+const data = new FormData(f);
 
-<h2 style="margin-top:40px;">Properties</h2>
+const res = await fetch(f.action,{
+method:"POST",
+body:data,
+headers:{'Accept':'application/json'}
+});
 
-<table class="property-table">
-
-<tr>
-<th>Address</th>
-<th>Type</th>
-<th>Status</th>
-<th>Rent</th>
-</tr>
-
-<tr>
-<td>123 Maple Ave</td>
-<td>House</td>
-<td><span class="status occupied">Occupied</span></td>
-<td>$1800</td>
-</tr>
-
-<tr>
-<td>456 Oak St</td>
-<td>Studio</td>
-<td><span class="status vacant">Vacant</span></td>
-<td>$1200</td>
-</tr>
-
-<tr>
-<td>789 Pine Rd</td>
-<td>Room</td>
-<td><span class="status upcoming">Upcoming Vacancy</span></td>
-<td>$850</td>
-</tr>
-
-</table> 
-
-</div>
+if(res.ok){
+done.style.display="block";
+f.reset();
+}else{
+alert("Error");
+}
+});
+</script>
 
 </body>
 </html>
