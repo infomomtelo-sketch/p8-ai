@@ -1,175 +1,1422 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>RunP8</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>P8 AI | Property Management Made Clear</title>
+  <meta
+    name="description"
+    content="P8 AI helps property owners simplify tenant placement, property management, pricing, and support with a clean, trust-first experience."
+  />
+  <style>
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,Arial,sans-serif;
+      background:#f6f7fb;
+      color:#0f172a;
+      line-height:1.5;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#0b1120;
-  color:white;
-}
+    :root{
+      --bg:#f6f7fb;
+      --surface:#ffffff;
+      --surface-2:#eef2ff;
+      --text:#0f172a;
+      --muted:#5b6474;
+      --line:#e5e7eb;
+      --blue:#315efb;
+      --blue-dark:#2547c7;
+      --soft:#f8fafc;
+      --shadow:0 12px 30px rgba(15,23,42,.08);
+      --radius:24px;
+      --radius-sm:16px;
+      --max:1180px;
+    }
 
-/* HEADER */
-.header{
-  padding:20px;
-  font-size:22px;
-  font-weight:bold;
-}
+    .wrap{
+      width:min(var(--max),calc(100% - 28px));
+      margin:0 auto;
+    }
 
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
-  gap:16px;
-  padding:20px;
-}
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:30;
+      background:rgba(246,247,251,.92);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(15,23,42,.05);
+    }
 
-/* CARD */
-.card{
-  background:#111827;
-  border-radius:12px;
-  overflow:hidden;
-  cursor:pointer;
-  transition:.2s;
-}
+    .topbar-inner{
+      min-height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
 
-.card:hover{
-  transform:translateY(-3px);
-}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:inherit;
+      min-width:0;
+    }
 
-/* ACTIVE CARD */
-.card.active{
-  border:1px solid #2563eb;
-  box-shadow:0 0 0 1px #2563eb40;
-}
+    .brand-mark{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:linear-gradient(145deg,#dbeafe,#eff6ff);
+      display:grid;
+      place-items:center;
+      box-shadow:inset 0 0 0 1px rgba(49,94,251,.08);
+      flex:0 0 auto;
+    }
 
-.card img{
-  width:100%;
-  height:160px;
-  object-fit:cover;
-}
+    .brand-mark span{
+      font-weight:800;
+      font-size:18px;
+      color:var(--blue);
+      letter-spacing:.5px;
+    }
 
-.card-body{
-  padding:14px;
-}
+    .brand-copy{
+      min-width:0;
+    }
 
-.card h3{
-  margin:0 0 6px 0;
-  font-size:16px;
-}
+    .brand-copy strong{
+      display:block;
+      font-size:16px;
+      line-height:1.1;
+    }
 
-.price{
-  color:#22c55e;
-  font-weight:bold;
-  margin-bottom:6px;
-}
+    .brand-copy small{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      margin-top:2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:190px;
+    }
 
-.desc{
-  font-size:13px;
-  color:#94a3b8;
-}
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
 
-/* HOST PANEL */
-.host{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  width:280px;
-  background:#111827;
-  border-radius:12px;
-  padding:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.5);
-}
+    .menu-btn{
+      border:none;
+      background:var(--surface);
+      color:var(--text);
+      width:48px;
+      height:48px;
+      border-radius:14px;
+      box-shadow:var(--shadow);
+      font-size:22px;
+      cursor:pointer;
+    }
 
-.host-title{
-  font-weight:bold;
-  margin-bottom:8px;
-}
+    .cta-btn,
+    .ghost-btn,
+    .dark-btn{
+      appearance:none;
+      border:none;
+      text-decoration:none;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:50px;
+      padding:0 20px;
+      border-radius:16px;
+      font-weight:700;
+      font-size:16px;
+      transition:.18s ease;
+    }
 
-#host-message{
-  font-size:13px;
-  color:#cbd5e1;
-  line-height:1.5;
-}
-</style>
+    .cta-btn{
+      background:var(--blue);
+      color:#fff;
+      box-shadow:0 12px 28px rgba(49,94,251,.24);
+    }
+
+    .cta-btn:hover{background:var(--blue-dark)}
+    .ghost-btn{
+      background:#fff;
+      color:var(--text);
+      box-shadow:var(--shadow);
+    }
+    .dark-btn{
+      background:#0f172a;
+      color:#fff;
+      box-shadow:var(--shadow);
+    }
+
+    .mobile-menu{
+      display:none;
+      background:#fff;
+      border-top:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+
+    .mobile-menu.open{display:block}
+
+    .mobile-menu .wrap{
+      padding:18px 0 22px;
+    }
+
+    .mobile-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .mobile-link{
+      text-decoration:none;
+      color:var(--text);
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px 14px;
+      font-weight:600;
+    }
+
+    .hero{
+      padding:32px 0 26px;
+    }
+
+    .hero-shell{
+      background:
+        radial-gradient(circle at top right, rgba(49,94,251,.11), transparent 32%),
+        linear-gradient(180deg,#ffffff 0%,#f8faff 100%);
+      border:1px solid rgba(15,23,42,.06);
+      border-radius:32px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:0;
+      align-items:stretch;
+    }
+
+    .hero-copy{
+      padding:34px 24px 34px;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      background:#eef2ff;
+      color:var(--blue);
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:18px;
+    }
+
+    h1{
+      margin:0 0 16px;
+      font-size:clamp(38px,6vw,64px);
+      line-height:1.02;
+      letter-spacing:-1.8px;
+    }
+
+    .hero-copy p{
+      margin:0;
+      color:var(--muted);
+      font-size:18px;
+      max-width:650px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:24px;
+    }
+
+    .hero-points{
+      margin-top:24px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .hero-pill{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 14px;
+      font-size:14px;
+      color:var(--text);
+      font-weight:600;
+    }
+
+    .hero-visual{
+      padding:22px;
+      display:flex;
+      align-items:center;
+    }
+
+    .visual-card{
+      width:100%;
+      background:#0f172a;
+      color:#fff;
+      border-radius:28px;
+      padding:20px;
+      min-height:100%;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      justify-content:space-between;
+    }
+
+    .visual-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .visual-badge{
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.12);
+      color:#cbd5e1;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .visual-panel{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:22px;
+      padding:18px;
+    }
+
+    .visual-panel strong{
+      display:block;
+      font-size:18px;
+      margin-bottom:6px;
+    }
+
+    .visual-panel p{
+      margin:0;
+      color:#cbd5e1;
+      font-size:14px;
+    }
+
+    .visual-stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+
+    .visual-stat{
+      background:#fff;
+      color:#0f172a;
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .visual-stat strong{
+      display:block;
+      font-size:24px;
+      line-height:1;
+      margin-bottom:6px;
+    }
+
+    .visual-stat span{
+      color:#64748b;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    section{
+      padding:22px 0;
+    }
+
+    .section-head{
+      text-align:center;
+      margin-bottom:22px;
+    }
+
+    .section-head .mini{
+      color:var(--blue);
+      font-weight:800;
+      font-size:14px;
+      letter-spacing:.2px;
+      margin-bottom:10px;
+      display:block;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:clamp(30px,4vw,48px);
+      line-height:1.08;
+      letter-spacing:-1.2px;
+    }
+
+    .section-head p{
+      color:var(--muted);
+      max-width:740px;
+      margin:14px auto 0;
+      font-size:17px;
+    }
+
+    .steps{
+      display:grid;
+      gap:18px;
+    }
+
+    .step-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .step-inner{
+      display:grid;
+      grid-template-columns:.95fr 1.05fr;
+      gap:0;
+      align-items:stretch;
+    }
+
+    .step-media{
+      min-height:290px;
+      background:#e5e7eb;
+      overflow:hidden;
+    }
+
+    .step-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .step-copy{
+      padding:26px 24px;
+    }
+
+    .step-num{
+      color:var(--blue);
+      font-weight:800;
+      font-size:14px;
+      margin-bottom:10px;
+      display:block;
+    }
+
+    .step-copy h3{
+      margin:0 0 14px;
+      font-size:clamp(28px,4vw,42px);
+      line-height:1.08;
+      letter-spacing:-1px;
+    }
+
+    .step-copy p{
+      margin:0 0 16px;
+      color:var(--muted);
+      font-size:18px;
+    }
+
+    .step-list{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .step-item{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .step-icon{
+      width:40px;
+      height:40px;
+      border-radius:14px;
+      background:#eef2ff;
+      color:var(--blue);
+      font-weight:900;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+    }
+
+    .step-item strong{
+      display:block;
+      font-size:16px;
+      margin-bottom:4px;
+    }
+
+    .step-item span{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .service-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .service-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+
+    .service-card .icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:#eef2ff;
+      color:var(--blue);
+      font-size:20px;
+      margin-bottom:16px;
+    }
+
+    .service-card h3{
+      margin:0 0 10px;
+      font-size:22px;
+      letter-spacing:-.5px;
+    }
+
+    .service-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .intake{
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .intake-copy,
+    .intake-form{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:24px;
+    }
+
+    .intake-copy h2{
+      margin:0 0 12px;
+      font-size:clamp(30px,4vw,48px);
+      line-height:1.06;
+      letter-spacing:-1.2px;
+    }
+
+    .intake-copy p{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:17px;
+    }
+
+    .intake-points{
+      display:grid;
+      gap:12px;
+    }
+
+    .intake-point{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      font-weight:600;
+      color:#334155;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    label{
+      font-size:14px;
+      font-weight:700;
+      color:#1e293b;
+    }
+
+    input,select,textarea{
+      width:100%;
+      border:1px solid #d7dce3;
+      border-radius:16px;
+      min-height:54px;
+      background:#fff;
+      padding:14px 16px;
+      font:inherit;
+      color:#0f172a;
+      outline:none;
+    }
+
+    textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(49,94,251,.12);
+    }
+
+    .radio-box{
+      display:grid;
+      gap:10px;
+    }
+
+    .radio-item{
+      border:1px solid var(--line);
+      background:#f8fafc;
+      border-radius:18px;
+      padding:14px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .radio-item input{
+      min-height:auto;
+      width:auto;
+      margin-top:3px;
+      box-shadow:none;
+    }
+
+    .submit-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:6px;
+    }
+
+    .form-note{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .review-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .review-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .review-stars{
+      color:#f59e0b;
+      letter-spacing:2px;
+      font-size:18px;
+      margin-bottom:10px;
+    }
+
+    .review-card p{
+      margin:0 0 14px;
+      color:#334155;
+      font-size:16px;
+    }
+
+    .review-card strong{
+      display:block;
+      font-size:15px;
+    }
+
+    .stats-shell{
+      background:#0f172a;
+      color:#fff;
+      border-radius:32px;
+      padding:26px 22px;
+      box-shadow:var(--shadow);
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .stat-box{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:22px;
+      padding:18px;
+    }
+
+    .stat-box strong{
+      display:block;
+      font-size:40px;
+      line-height:1;
+      margin-bottom:8px;
+    }
+
+    .stat-box span{
+      color:#cbd5e1;
+      font-weight:600;
+      font-size:14px;
+    }
+
+    .final-cta{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      padding:26px 22px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:16px;
+      align-items:center;
+    }
+
+    .final-cta h2{
+      margin:0 0 8px;
+      font-size:clamp(30px,4vw,48px);
+      line-height:1.05;
+      letter-spacing:-1px;
+    }
+
+    .final-cta p{
+      margin:0;
+      color:var(--muted);
+      font-size:17px;
+      max-width:760px;
+    }
+
+    footer{
+      padding:20px 0 34px;
+    }
+
+    .footer-shell{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:24px 22px;
+    }
+
+    .footer-top{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:flex-start;
+      margin-bottom:20px;
+    }
+
+    .footer-brand{
+      max-width:360px;
+    }
+
+    .footer-brand p{
+      margin:10px 0 0;
+      color:var(--muted);
+    }
+
+    .footer-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:18px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+    }
+
+    .footer-col h4{
+      margin:0 0 12px;
+      font-size:13px;
+      color:#64748b;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+    }
+
+    .footer-col a,
+    .footer-col span{
+      display:block;
+      color:#334155;
+      text-decoration:none;
+      margin:0 0 10px;
+      font-size:15px;
+    }
+
+    .footer-bottom{
+      margin-top:18px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+      color:#64748b;
+      font-size:13px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    @media (max-width: 980px){
+      .hero-grid,
+      .step-inner,
+      .intake,
+      .final-cta{
+        grid-template-columns:1fr;
+      }
+
+      .hero-visual{
+        padding-top:0;
+      }
+
+      .service-grid,
+      .review-grid,
+      .stats-grid,
+      .footer-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .hero-points,
+      .form-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px){
+      .topbar-inner{
+        min-height:72px;
+      }
+
+      .brand-copy small{
+        max-width:140px;
+      }
+
+      h1{
+        letter-spacing:-1.2px;
+      }
+
+      .hero-copy,
+      .step-copy,
+      .service-card,
+      .intake-copy,
+      .intake-form,
+      .review-card,
+      .stats-shell,
+      .footer-shell{
+        padding-left:18px;
+        padding-right:18px;
+      }
+
+      .hero-points,
+      .service-grid,
+      .review-grid,
+      .stats-grid,
+      .footer-grid,
+      .form-grid,
+      .mobile-grid{
+        grid-template-columns:1fr;
+      }
+
+      .cta-btn,.ghost-btn,.dark-btn{
+        width:100%;
+      }
+
+      .top-actions .cta-btn{
+        width:auto;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">RunP8 Rentals</div>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a href="#top" class="brand">
+        <div class="brand-mark"><span>P8</span></div>
+        <div class="brand-copy">
+          <strong>P8 AI</strong>
+          <small>Property management made clear</small>
+        </div>
+      </a>
 
-<div class="grid">
-
-  <div class="card active">
-    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688" />
-    <div class="card-body">
-      <h3>1 Bedroom Unit in Fresno</h3>
-      <div class="price">$1450/month</div>
-      <div class="desc">Private entrance • Near hospital</div>
+      <div class="top-actions">
+        <a class="cta-btn" href="#start">Get started</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+      </div>
     </div>
-  </div>
 
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1494526585095-c41746248156" />
-    <div class="card-body">
-      <h3>Studio with Private Entry</h3>
-      <div class="price">$1325/month</div>
-      <div class="desc">Budget friendly • Compact</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="wrap">
+        <div class="mobile-grid">
+          <a class="mobile-link" href="#how">How it works</a>
+          <a class="mobile-link" href="#services">Services</a>
+          <a class="mobile-link" href="#start">Get started</a>
+          <a class="mobile-link" href="#reviews">Reviews</a>
+          <a class="mobile-link" href="#numbers">By the numbers</a>
+          <a class="mobile-link" href="#footer">Contact</a>
+        </div>
+        <a class="dark-btn" href="#start">Start owner intake</a>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858" />
-    <div class="card-body">
-      <h3>Quiet ADU Near Medical District</h3>
-      <div class="price">$1675/month</div>
-      <div class="desc">Furnished • Quiet area</div>
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-shell">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow">Clear process • Strong support • Owner-first</div>
+            <h1>Property management without the confusion.</h1>
+            <p>
+              P8 AI helps owners simplify tenant placement, pricing, coordination,
+              maintenance, inspections, and support through one clear service flow.
+            </p>
+
+            <div class="hero-actions">
+              <a class="cta-btn" href="#start">Start now</a>
+              <a class="ghost-btn" href="#how">See how it works</a>
+            </div>
+
+            <div class="hero-points">
+              <div class="hero-pill">Tenant placement with clear next steps</div>
+              <div class="hero-pill">Professional service structure owners can trust</div>
+              <div class="hero-pill">Support designed to reduce stress and guesswork</div>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="visual-card">
+              <div class="visual-top">
+                <div class="visual-badge">Owner onboarding</div>
+                <div class="visual-badge">Service-first flow</div>
+              </div>
+
+              <div class="visual-panel">
+                <strong>One clean path from intake to support</strong>
+                <p>
+                  Submit your property, choose the level of service you need,
+                  and move through a guided process built for clarity.
+                </p>
+              </div>
+
+              <div class="visual-stats">
+                <div class="visual-stat">
+                  <strong>4</strong>
+                  <span>Core service steps</span>
+                </div>
+                <div class="visual-stat">
+                  <strong>24/7</strong>
+                  <span>Support mindset</span>
+                </div>
+                <div class="visual-stat">
+                  <strong>1</strong>
+                  <span>Clear owner flow</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="mini">Keeping it simple</span>
+          <h2>How our property management works</h2>
+          <p>
+            A clean service structure helps owners understand what happens next,
+            why it matters, and how support continues after onboarding.
+          </p>
+        </div>
+
+        <div class="steps">
+          <article class="step-card">
+            <div class="step-inner">
+              <div class="step-media">
+                <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80" alt="Home and management planning" />
+              </div>
+              <div class="step-copy">
+                <span class="step-num">Step 1</span>
+                <h3>Start with the right information</h3>
+                <p>
+                  Owners begin with a simple intake so the property, service needs,
+                  location, and goals are clear from the start.
+                </p>
+
+                <div class="step-list">
+                  <div class="step-item">
+                    <div class="step-icon">01</div>
+                    <div>
+                      <strong>Simple intake</strong>
+                      <span>Contact details, address, and service selection without unnecessary friction.</span>
+                    </div>
+                  </div>
+                  <div class="step-item">
+                    <div class="step-icon">02</div>
+                    <div>
+                      <strong>Clear direction</strong>
+                      <span>Know whether you need tenant placement, ongoing management, or both.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-inner">
+              <div class="step-copy">
+                <span class="step-num">Step 2</span>
+                <h3>Your property concierge team</h3>
+                <p>
+                  Once submitted, your property moves into a guided support process
+                  so owners know what is being handled and where they are in the flow.
+                </p>
+
+                <div class="step-list">
+                  <div class="step-item">
+                    <div class="step-icon">03</div>
+                    <div>
+                      <strong>Service coordination</strong>
+                      <span>A structured path for onboarding, communication, and preparation.</span>
+                    </div>
+                  </div>
+                  <div class="step-item">
+                    <div class="step-icon">04</div>
+                    <div>
+                      <strong>Owner clarity</strong>
+                      <span>Less guessing, fewer dead ends, and a more confident start.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="step-media">
+                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80" alt="Property concierge team" />
+              </div>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-inner">
+              <div class="step-media">
+                <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?auto=format&fit=crop&w=1400&q=80" alt="Tenant placement support" />
+              </div>
+              <div class="step-copy">
+                <span class="step-num">Step 3</span>
+                <h3>Find the right tenant</h3>
+                <p>
+                  Tenant placement should feel organized, not chaotic. The process
+                  is built to make preparation, presentation, and screening easier to follow.
+                </p>
+
+                <div class="step-list">
+                  <div class="step-item">
+                    <div class="step-icon">📷</div>
+                    <div>
+                      <strong>Professional presentation</strong>
+                      <span>Better photos, better showings, and clearer first impressions.</span>
+                    </div>
+                  </div>
+                  <div class="step-item">
+                    <div class="step-icon">✓</div>
+                    <div>
+                      <strong>Screening and lease flow</strong>
+                      <span>A smoother path from interest to approved tenant and lease generation.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-inner">
+              <div class="step-copy">
+                <span class="step-num">Step 4</span>
+                <h3>We take care of the rest</h3>
+                <p>
+                  After placement, owners should still feel supported. The service
+                  structure continues through coordination, accounting, maintenance,
+                  inspections, and renewals.
+                </p>
+
+                <div class="step-list">
+                  <div class="step-item">
+                    <div class="step-icon">💸</div>
+                    <div>
+                      <strong>Rent coordination</strong>
+                      <span>Clear handling of ongoing operational steps.</span>
+                    </div>
+                  </div>
+                  <div class="step-item">
+                    <div class="step-icon">🛠</div>
+                    <div>
+                      <strong>Maintenance and inspections</strong>
+                      <span>Requests, renewals, and annual touchpoints managed more clearly.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="step-media">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=80" alt="Ongoing support" />
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="mini">Core services</span>
+          <h2>Everything owners need in one cleaner service flow</h2>
+          <p>
+            Structured service blocks make it easier for owners to understand
+            what is included and what support looks like in practice.
+          </p>
+        </div>
+
+        <div class="service-grid">
+          <div class="service-card">
+            <div class="icon">📸</div>
+            <h3>Professional photography</h3>
+            <p>Present the property clearly and professionally for stronger first impressions.</p>
+          </div>
+          <div class="service-card">
+            <div class="icon">🔁</div>
+            <h3>On-demand showings</h3>
+            <p>A more organized presentation process for qualified renter interest.</p>
+          </div>
+          <div class="service-card">
+            <div class="icon">🧾</div>
+            <h3>Tenant screening</h3>
+            <p>Clearer screening steps to support stronger tenant placement decisions.</p>
+          </div>
+          <div class="service-card">
+            <div class="icon">📄</div>
+            <h3>Lease generation</h3>
+            <p>Move from approved tenant to lease stage with less friction and more structure.</p>
+          </div>
+          <div class="service-card">
+            <div class="icon">💰</div>
+            <h3>Financial accounting</h3>
+            <p>Service-oriented coordination for ongoing property management operations.</p>
+          </div>
+          <div class="service-card">
+            <div class="icon">🛠</div>
+            <h3>Maintenance coordination</h3>
+            <p>Handle requests and property issues with a process owners can follow more easily.</p>
+          </div>
+          <div class="service-card">
+            <div class="icon">🔎</div>
+            <h3>Annual inspections</h3>
+            <p>Keep oversight structured and consistent through scheduled inspections.</p>
+          </div>
+          <div class="service-card">
+            <div class="icon">↻</div>
+            <h3>Renewals and support</h3>
+            <p>Continue with a calmer flow through renewals, updates, and owner support needs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="start">
+      <div class="wrap intake">
+        <div class="intake-copy">
+          <span class="mini" style="display:inline-block;color:var(--blue);font-weight:800;margin-bottom:10px;">Get started</span>
+          <h2>Tell us about your property</h2>
+          <p>
+            This intake is designed to keep things clear. Fill out the basics,
+            choose the service you need, and we’ll take it from there.
+          </p>
+
+          <div class="intake-points">
+            <div class="intake-point">Clear next steps instead of a confusing handoff</div>
+            <div class="intake-point">Owner-first intake with practical service choices</div>
+            <div class="intake-point">A calmer, more professional start to property management</div>
+          </div>
+        </div>
+
+        <form class="intake-form">
+          <div class="form-grid">
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="Enter your email" />
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone number</label>
+              <input id="phone" type="tel" placeholder="Enter your phone number" />
+            </div>
+
+            <div class="field full">
+              <label>Property owner service needed</label>
+              <div class="radio-box">
+                <label class="radio-item">
+                  <input type="radio" name="service" />
+                  <span>Find a tenant and full management</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="service" />
+                  <span>Ongoing management with current tenant in place</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="service" />
+                  <span>Tenant placement only</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field full">
+              <label for="street">Street address</label>
+              <input id="street" type="text" placeholder="Enter property address" />
+            </div>
+
+            <div class="field">
+              <label for="state">State</label>
+              <select id="state">
+                <option>Please select</option>
+                <option>California</option>
+                <option>Nevada</option>
+                <option>Arizona</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="city">City</label>
+              <input id="city" type="text" placeholder="Enter city" />
+            </div>
+
+            <div class="field">
+              <label for="zip">Zip</label>
+              <input id="zip" type="text" placeholder="Enter zip code" />
+            </div>
+
+            <div class="field">
+              <label for="unit">Unit #</label>
+              <input id="unit" type="text" placeholder="Optional" />
+            </div>
+
+            <div class="field full">
+              <label for="notes">Anything else we should know?</label>
+              <textarea id="notes" placeholder="Add a short note about your property or service needs"></textarea>
+            </div>
+          </div>
+
+          <div class="submit-row">
+            <button type="button" class="cta-btn">Start now</button>
+            <span class="form-note">No extra complexity. Just a clear starting point.</span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="reviews">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="mini">Owner trust</span>
+          <h2>Built to feel organized, professional, and easier to follow</h2>
+          <p>
+            Reviews matter because owners want reassurance that the process
+            is not only effective, but also clear and dependable.
+          </p>
+        </div>
+
+        <div class="review-grid">
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p>
+              “Professional, organized, and efficient. The process felt structured,
+              clear, and easy to move through.”
+            </p>
+            <strong>Property owner</strong>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p>
+              “The best part was knowing what was happening next. It removed
+              the feeling of guessing through every step.”
+            </p>
+            <strong>Rental owner</strong>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p>
+              “Strong communication, a cleaner service flow, and support that
+              felt dependable from intake to ongoing management.”
+            </p>
+            <strong>Management client</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="numbers">
+      <div class="wrap">
+        <div class="stats-shell">
+          <div class="section-head" style="margin-bottom:0;text-align:left;">
+            <span class="mini" style="color:#93c5fd;">Transparency by the numbers</span>
+            <h2 style="color:#fff;">A service structure owners can understand and trust</h2>
+            <p style="color:#cbd5e1;max-width:none;">
+              Numbers, proof, and service clarity help turn a landing page into something that feels credible.
+            </p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <strong>2019</strong>
+              <span>Year founded</span>
+            </div>
+            <div class="stat-box">
+              <strong>4,282</strong>
+              <span>Units managed</span>
+            </div>
+            <div class="stat-box">
+              <strong>596</strong>
+              <span>Cities served</span>
+            </div>
+            <div class="stat-box">
+              <strong>9,239</strong>
+              <span>Tenant placements</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap final-cta">
+        <div>
+          <h2>Ready to get started?</h2>
+          <p>
+            Start with a clean intake and a clearer service path for your property.
+            No extra noise. Just a simpler next step.
+          </p>
+        </div>
+        <div style="min-width:220px;">
+          <a class="cta-btn" href="#start" style="width:100%;">Get started</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer">
+    <div class="wrap footer-shell">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#top" class="brand" style="text-decoration:none;">
+            <div class="brand-mark"><span>P8</span></div>
+            <div class="brand-copy">
+              <strong>P8 AI</strong>
+              <small>Property management made clear</small>
+            </div>
+          </a>
+          <p>
+            A cleaner, calmer property management experience built around trust,
+            clarity, and strong next steps.
+          </p>
+        </div>
+
+        <a class="dark-btn" href="#start">Start owner intake</a>
+      </div>
+
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#how">How it works</a>
+          <a href="#services">Services</a>
+          <a href="#numbers">Pricing approach</a>
+          <a href="#reviews">Reviews</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#top">About</a>
+          <a href="#footer">Contact</a>
+          <a href="#reviews">Proof</a>
+          <a href="#numbers">By the numbers</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Information</h4>
+          <span>Service agreement</span>
+          <span>Privacy policy</span>
+          <span>Terms & conditions</span>
+          <span>Cookie policy</span>
+        </div>
+
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <span>start@p8ai.com</span>
+          <span>(555) 610-5585</span>
+          <span>Mon–Fri • 9AM–6PM</span>
+          <span>Owner support and intake</span>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 P8 AI. All rights reserved.</span>
+        <span>Built for clarity, trust, and cleaner owner flow.</span>
+      </div>
     </div>
-  </div>
+  </footer>
 
-</div>
+  <script>
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
 
-<!-- HOST -->
-<div class="host">
-  <div class="host-title">P8 Guide</div>
-  <div id="host-message">
-    This one is a good option for quiet living. 
-    Private entrance makes it feel more independent, and it’s easier for long stays. 
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("open");
+    });
 
-    If you want, I can show you similar places or slightly cheaper options.
-  </div>
-</div>
-
-<script>
-const cards = document.querySelectorAll(".card");
-const hostText = document.getElementById("host-message");
-
-cards.forEach(card => {
-  card.addEventListener("click", () => {
-
-    // highlight selected
-    cards.forEach(c => c.classList.remove("active"));
-    card.classList.add("active");
-
-    // get info
-    const title = card.querySelector("h3").innerText;
-    const price = card.querySelector(".price").innerText;
-    const desc = card.querySelector(".desc").innerText;
-
-    // host reaction
-    hostText.innerText =
-      `${title} is a good option. The price is ${price}. 
-${desc}. 
-
-It looks practical for everyday living. 
-You might want to compare it with one lower-cost option before deciding.`;
-  });
-});
-</script>
-
+    mobileMenu.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.remove("open");
+      });
+    });
+  </script>
 </body>
 </html>
