@@ -666,7 +666,54 @@
         letter-spacing:-1px;
       }
     }
-  </style>
+ /* P8 AI floating helper */
+#p8{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  z-index:9999;
+}
+
+.p8-bubble{
+  background: linear-gradient(145deg,#eef2ff,#f8fafc);
+  border:1px solid #e0e7ff;
+  border-radius:18px;
+  padding:14px;
+  width:220px;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+  font-size:14px;
+}
+
+.p8-bubble strong{
+  display:block;
+  margin-bottom:6px;
+}
+
+.p8-actions{
+  display:flex;
+  gap:6px;
+  margin-top:10px;
+}
+
+.p8-actions button{
+  flex:1;
+  font-size:12px;
+  padding:8px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+}
+
+.p8-rent{
+  background:#2f5ef7;
+  color:white;
+}
+
+.p8-list{
+  background:white;
+  border:1px solid #ddd;
+}
+ </style>
 </head>
 <body>
 
