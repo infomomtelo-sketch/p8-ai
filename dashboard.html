@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,135 +10,111 @@ body{
 margin:0;
 font-family:Arial;
 background:#f5f7fb;
+color:#0f172a;
 }
 
 .wrap{
-max-width:900px;
+max-width:1100px;
 margin:auto;
 padding:20px;
 }
 
-.top{
-display:flex;
-justify-content:space-between;
-background:white;
-padding:15px;
-border-bottom:1px solid #eee;
-}
-
 .btn{
 background:#2f5ef7;
-color:white;
-padding:10px 16px;
-border-radius:8px;
+color:#fff;
+padding:12px 18px;
+border-radius:10px;
 text-decoration:none;
+display:inline-block;
 border:none;
-}
-
-.hero{
-padding:50px 20px;
-background:white;
+cursor:pointer;
 }
 
 .card{
-background:white;
+background:#fff;
 padding:20px;
-margin:15px 0;
-border-radius:12px;
+border-radius:16px;
+margin-bottom:20px;
 box-shadow:0 10px 20px rgba(0,0,0,0.05);
-}
-
-input,textarea,select{
-width:100%;
-padding:10px;
-margin:10px 0;
-border-radius:8px;
-border:1px solid #ddd;
-}
-
-.success{
-display:none;
-background:#d1fae5;
-padding:10px;
-border-radius:8px;
-margin-top:10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="top">
-<div><b>RunP8</b></div>
-<a href="#form" class="btn">Get started</a>
-</div>
+<div class="wrap">
 
-<div class="hero wrap">
 <h1>Property management without confusion</h1>
 <p>Clear system. Real process. No guessing.</p>
+
 <a href="#form" class="btn">Start now</a>
-</div>
 
-<div class="wrap">
-<div class="card">Step 1 – Submit your property</div>
-<div class="card">Step 2 – We prepare it</div>
-<div class="card">Step 3 – We find tenant</div>
-<div class="card">Step 4 – We manage it</div>
-</div>
+  <h2>Featured Properties</h2>
 
-<div id="form" class="wrap">
 <div class="card">
+<img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994" width="100%">
+<h3>Fresno Home</h3>
+<p>$2,450 / month</p>
+</div>
 
-<h2>Start your property intake</h2>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688" width="100%">
+<h3>ADU Unit</h3>
+<p>$1,250 / month</p>
+</div>
 
-<form id="formEl" action="https://formspree.io/f/mreyjvap" method="POST">
+<div class="card">
+<img src="https://images.unsplash.com/photo-1494526585095-c41746248156" width="100%">
+<h3>Private Room</h3>
+<p>$875 / month</p>
+</div>
 
-<input type="hidden" name="_subject" value="New RunP8 Lead">
+  <h2 id="form">Submit your property</h2>
 
-<input name="email" placeholder="Email" required>
-<input name="phone" placeholder="Phone">
+<form id="formData" action="https://formspree.io/f/mreyjvap" method="POST">
 
-<input name="street" placeholder="Address">
-<input name="city" placeholder="City">
+<input name="email" placeholder="Email" required><br><br>
+<input name="phone" placeholder="Phone"><br><br>
+<input name="street" placeholder="Street"><br><br>
+<input name="city" placeholder="City"><br><br>
+<input name="state" placeholder="State"><br><br>
+<input name="zip" placeholder="Zip"><br><br>
 
 <select name="service">
 <option>Full management</option>
 <option>Placement only</option>
-</select>
+</select><br><br>
 
-<textarea name="notes" placeholder="Notes"></textarea>
+<textarea name="notes" placeholder="Notes"></textarea><br><br>
 
 <button class="btn">Submit</button>
 
 </form>
 
-<div class="success" id="done">
-Submitted. We will contact you.
+<div id="success" style="display:none; color:green; margin-top:20px;">
+Submitted successfully. We will contact you.
 </div>
 
-</div>
 </div>
 
 <script>
-const f = document.getElementById("formEl");
-const done = document.getElementById("done");
+const form = document.getElementById("formData");
+const success = document.getElementById("success");
 
-f.addEventListener("submit", async function(e){
+form.addEventListener("submit", async function(e){
 e.preventDefault();
 
-const data = new FormData(f);
+const data = new FormData(form);
 
-const res = await fetch(f.action,{
+const res = await fetch(form.action,{
 method:"POST",
 body:data,
-headers:{'Accept':'application/json'}
+headers:{ "Accept":"application/json" }
 });
 
 if(res.ok){
-done.style.display="block";
-f.reset();
-}else{
-alert("Error");
+form.style.display="none";
+success.style.display="block";
 }
 });
 </script>
