@@ -1163,6 +1163,27 @@
   </footer>
 
   <script>
+<script>
+function p8Speak(message){
+  const chat = document.getElementById("p8Chat");
+  if(!chat) return;
+
+  chat.innerHTML = message;
+}
+
+// RENT flow
+function goRent(){
+  p8Speak("Got it. You're looking for a place. Let me show you available setups below.");
+  goToSection('properties');
+}
+
+// LIST flow
+function goList(){
+  p8Speak("You're looking to list your property. I'll guide you through a quick intake.");
+  goToSection('start');
+}
+</script>
+    
     const menuBtn = document.getElementById("menuBtn");
     const mobileMenu = document.getElementById("mobileMenu");
 
