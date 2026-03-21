@@ -1196,6 +1196,15 @@
    <button onclick="goRent()">Rent</button>
     <button onclick="goList()">List</button>
 
+ <script>
+function go(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const offset = 90; // header height
+  const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top: y, behavior: "smooth" });
+}
+</script>
       <script>
      function goRent() {
     const section = document.getElementById("properties");
