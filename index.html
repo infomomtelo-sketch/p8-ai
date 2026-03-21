@@ -1194,11 +1194,12 @@
 
     <div class="p8-actions">
    <button onclick="goRent()">Rent</button>
-   <button onclick="goList()">List</button>
- <script>
-function goRent() {
-  const section = document.getElementById("properties");
-  if(section){
+    <button onclick="goList()">List</button>
+
+      <script>
+     function goRent() {
+    const section = document.getElementById("properties");
+    if(section){
     section.scrollIntoView({ behavior: "smooth" });
   }
 }
