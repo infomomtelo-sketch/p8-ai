@@ -264,6 +264,17 @@
       font-size:17px;
     }
 
+    .card[onclick],
+    .property-card[onclick]{
+     cursor:pointer;
+     transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .card[onclick]:hover,
+    .property-card[onclick]:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+  }
     .card{
       background:#fff;
       padding:22px;
@@ -832,7 +843,7 @@
         </div>
 
         <div class="properties-grid">
-          <div class="property-card">
+          <div class="property-card" onclick="go('start')" style="cursor:pointer;">
             <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80" alt="Featured property 1">
             <div class="property-body">
               <div class="property-badge">Single Family</div>
@@ -843,7 +854,7 @@
             </div>
           </div>
 
-          <div class="property-card">
+          <div class="property-card" onclick="go('start')" style="cursor:pointer;">
             <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80" alt="Featured property 2">
             <div class="property-body">
               <div class="property-badge">Studio / ADU</div>
@@ -854,7 +865,7 @@
             </div>
           </div>
 
-          <div class="property-card">
+          <div class="property-card" onclick="go('start')" style="cursor:pointer;">
             <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80" alt="Featured property 3">
             <div class="property-body">
               <div class="property-badge">Private Room</div>
@@ -879,37 +890,37 @@
         </div>
 
         <div class="services-grid">
-          <div class="card service-card">
+          <div class="card service-card" onclick="go('start')" style="cursor:pointer;">
             <div class="icon">📸</div>
             <h3>Professional photography</h3>
             <p>Present the property clearly and professionally for stronger first impressions.</p>
           </div>
 
-          <div class="card service-card">
+<div class="card service-card" onclick="go('start')" style="cursor:pointer;">
             <div class="icon">🧾</div>
             <h3>Tenant screening</h3>
             <p>Background checks, income verification, and screening done properly.</p>
           </div>
 
-          <div class="card service-card">
+         <div class="card service-card" onclick="go('start')" style="cursor:pointer;">
             <div class="icon">🏠</div>
             <h3>Home inspections</h3>
             <p>Keep inspection flow visible and structured before and during ongoing management.</p>
           </div>
 
-          <div class="card service-card">
+        <div class="card service-card" onclick="go('start')" style="cursor:pointer;">
             <div class="icon">🛠</div>
             <h3>Maintenance coordination</h3>
             <p>Maintenance requests handled without you coordinating every detail.</p>
           </div>
 
-          <div class="card service-card">
+          <div class="card service-card" onclick="go('start')" style="cursor:pointer;">
             <div class="icon">💰</div>
             <h3>Accounting support</h3>
             <p>Service-oriented financial coordination for ongoing property operations.</p>
           </div>
 
-          <div class="card service-card">
+          <div class="card service-card" onclick="go('start')" style="cursor:pointer;">
             <div class="icon">↻</div>
             <h3>Renewals and support</h3>
             <p>Continue with a calmer flow through renewals, updates, and owner support needs.</p>
@@ -1015,14 +1026,17 @@
             Reviews matter because owners want reassurance that the process is not only effective, but also clear and dependable.
           </p>
         </div>
-
+        <div class="card step-card" onclick="go('start')" style="cursor:pointer;">
         <div class="reviews-grid">
           <div class="card review-card">
             <div class="review-stars">★★★★★</div>
             <p>“I didn’t have to chase updates or guess what was happening. Everything felt clear and handled.”</p>
             <strong>Property owner</strong>
           </div>
-
+            <p>
+             RunP8 is built on clarity and structure — not guesswork.  
+            Clear expectations, consistent process, and proper documentation help reduce misunderstandings and prevent issues from escalating.
+            </p>
           <div class="card review-card">
             <div class="review-stars">★★★★★</div>
             <p>“The best part was knowing what was happening next. It removed the feeling of guessing through every step.”</p>
@@ -1048,7 +1062,11 @@
               Numbers, proof, and visible activity help the business feel credible and real.
             </p>
           </div>
-
+          <div class="owner-trust">
+         <span>✔ Clear expectations from day one</span>
+         <span>✔ Documented communication and agreements</span>
+         <span>✔ Consistent process — no guesswork</span>
+         </div>
           <div class="stats-grid">
             <div class="stat">
               <strong>2019</strong>
