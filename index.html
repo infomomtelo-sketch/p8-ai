@@ -1423,6 +1423,97 @@
   </div>
 
   <script>
+let currentLane = "owner";
+let currentStep = "intake";
+
+const OWNER_FLOW = ["intake","prepare","optimize","publish","qualify","close","manage"];
+const RENTER_FLOW = ["browse","detail","inquiry","prequal","showing","apply","lease"];
+
+function getFlow(){
+  return currentLane === "owner" ? OWNER_FLOW : RENTER_FLOW;
+}
+
+function setLane(lane){
+  currentLane = lane;
+  currentStep = lane === "owner" ? "intake" : "browse";
+  runCurrentState();
+}
+
+function VABrain(lane, step, data = {}){
+  const reports = {
+    owner: {
+      intake:   { status:"in_progress", missing:[], next:"prepare", report:"Owner intake started." },
+      prepare:  { status:"in_progress", missing:["photos"], next:"optimize", report:"Preparing listing materials." },
+      optimize: { status:"in_progress", missing:[], next:"publish", report:"Optimizing positioning and pricing." },
+      publish:  { status:"in_progress", missing:[], next:"qualify", report:"Publishing and attracting interest." },
+      qualify:  { status:"in_progress", missing:[], next:"close", report:"Reviewing renter quality." },
+      close:    { status:"in_progress", missing:[], next:"manage", report:"Finalizing placement." },
+      manage:   { status:"active", missing:[], next:null, report:"Property is in ongoing management." }
+    },
+    renter: {
+      browse:   { status:"in_progress", missing:[], next:"detail", report:"Browsing matching properties." },
+      detail:   { status:"in_progress", missing:[], next:"inquiry", report:"Reviewing property details." },
+      inquiry:  { status:"in_progress", missing:["move-in date"], next:"prequal", report:"Inquiry received." },
+      prequal:  { status:"in_progress", missing:[], next:"showing", report:"Checking basic fit." },
+      showing:  { status:"in_progress", missing:[], next:"apply", report:"Preparing showing coordination." },
+      apply:    { status:"in_progress", missing:[], next:"lease", report:"Application in progress." },
+      lease:    { status:"active", missing:[], next:null, report:"Lease coordination stage." }
+    }
+  };
+
+  return reports[lane][step];
+}
+
+function P8Manager(va){
+  if(va.missing && va.missing.length){
+    return `I can keep this moving, but I still need ${va.missing.join(", ")} first.`;
+  }
+
+  const messages = {
+    "owner:intake": "I’m organizing the property details and getting this ready.",
+    "owner:prepare": "I’m preparing the listing materials for a strong presentation.",
+    "owner:optimize": "I’m improving positioning for better performance.",
+    "owner:publish": "I’m moving this toward live visibility.",
+    "owner:qualify": "I’m focusing on renter quality before moving forward.",
+    "owner:close": "I’m handling the final placement steps.",
+    "owner:manage": "I’m keeping the property in active management flow.",
+
+    "renter:browse": "I’ll help you find the right property faster.",
+    "renter:detail": "Review the details and I’ll guide the next step.",
+    "renter:inquiry": "I received your interest and I’m preparing the next step.",
+    "renter:prequal": "I’m checking basic fit before moving forward.",
+    "renter:showing": "I’m moving this toward showing coordination.",
+    "renter:apply": "I’m guiding the application process now.",
+    "renter:lease": "I’m moving this into lease coordination."
+  };
+
+  return messages[`${currentLane}:${currentStep}`] || va.report;
+}
+
+function runCurrentState(){
+  const va = VABrain(currentLane, currentStep);
+  p8Speak(P8Manager(va));
+}
+
+function nextStep(){
+  const flow = getFlow();
+  const index = flow.indexOf(currentStep);
+  if(index === -1 || index === flow.length - 1) return;
+  currentStep = flow[index + 1];
+  runCurrentState();
+}
+
+function goRent(){
+  setLane("renter");
+  go("properties");
+}
+
+function goList(){
+  setLane("owner");
+  go("start");
+}
+</script>
+    <script>
     function toggleP8(){
   const box = document.getElementById("p8");
   box.classList.toggle("p8-collapsed");
