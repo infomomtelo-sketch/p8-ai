@@ -1007,7 +1007,80 @@
         </div>
       </div>
     </section>
+<section class="section" id="rent-inquiry">
+  <div class="wrap intake-grid">
+    <div class="card intake-copy">
+      <span class="mini">For renters</span>
+      <h2>Tell us what you’re looking for</h2>
+      <p>
+        Looking for a room, ADU, or full home? Share your preferred city,
+        budget, and move-in timing, and we’ll help guide you to the right setup.
+      </p>
 
+      <div class="intake-points">
+        <div class="intake-point">Clear next steps instead of random listings</div>
+        <div class="intake-point">Support for rooms, ADUs, and full homes</div>
+        <div class="intake-point">A calmer way to search and ask questions</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <form action="https://formspree.io/f/mreyjvap" method="POST">
+        <input type="hidden" name="_subject" value="New RunP8 Renter Inquiry">
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="renter-name">Name</label>
+            <input id="renter-name" name="renter_name" type="text" placeholder="Enter your name" required>
+          </div>
+
+          <div class="field">
+            <label for="renter-email">Email</label>
+            <input id="renter-email" name="renter_email" type="email" placeholder="Enter your email" required>
+          </div>
+
+          <div class="field">
+            <label for="renter-phone">Phone</label>
+            <input id="renter-phone" name="renter_phone" type="text" placeholder="Enter your phone number">
+          </div>
+
+          <div class="field">
+            <label for="renter-city">Preferred city</label>
+            <input id="renter-city" name="preferred_city" type="text" placeholder="Fresno, Hanford, etc.">
+          </div>
+
+          <div class="field">
+            <label for="renter-budget">Budget</label>
+            <input id="renter-budget" name="budget" type="text" placeholder="$900 - $1,500">
+          </div>
+
+          <div class="field">
+            <label for="renter-type">Looking for</label>
+            <select id="renter-type" name="rental_type">
+              <option>Private room</option>
+              <option>ADU / Studio</option>
+              <option>Single family home</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="renter-notes">Notes</label>
+            <textarea id="renter-notes" name="renter_notes" placeholder="Tell us what matters most: move-in date, privacy, pets, work location, or anything else"></textarea>
+          </div>
+        </div>
+
+        <div class="form-note">
+          This helps us guide you to the most suitable setup and next steps.
+        </div>
+
+        <div class="submit-row">
+          <button class="btn" type="submit">Send renter inquiry</button>
+          <a href="tel:+15598253038" class="btn-light">Call instead</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
     <section class="section" id="services">
       <div class="wrap">
         <div class="section-head">
