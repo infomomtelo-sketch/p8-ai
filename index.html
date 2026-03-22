@@ -1499,5 +1499,140 @@
 
     console.log("RunP8 system ready");
   </script>
+  <script>
+  let currentStep = "intake";
+
+  const pipelineOrder = [
+    "intake",
+    "listing",
+    "pricing",
+    "marketing",
+    "screening",
+    "lease",
+    "management"
+  ];
+
+  function go(id){
+    const el = document.getElementById(id);
+    if(!el){
+      console.warn("Missing section:", id);
+      return;
+    }
+
+    const offset = 90;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+
+    window.scrollTo({
+      top: y,
+      behavior: "smooth"
+    });
+
+    closeMenu();
+  }
+
+  const menuBtn = document.getElementById("menuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  function openMenu(){
+    if(mobileMenu) mobileMenu.classList.add("open");
+  }
+
+  function closeMenu(){
+    if(mobileMenu) mobileMenu.classList.remove("open");
+  }
+
+  function toggleMenu(){
+    if(mobileMenu) mobileMenu.classList.toggle("open");
+  }
+
+  if(menuBtn){
+    menuBtn.addEventListener("click", toggleMenu);
+  }
+
+  function p8Speak(message){
+    const chat = document.getElementById("p8Chat");
+    if(!chat) return;
+    chat.innerHTML = message;
+  }
+
+  function updatePipelineUI(){
+    document.querySelectorAll(".p8-step").forEach(step => {
+      step.classList.remove("active");
+      if(step.dataset.step === currentStep){
+        step.classList.add("active");
+      }
+    });
+  }
+
+  function setStep(step){
+    currentStep = step;
+    updatePipelineUI();
+
+    const messages = {
+      intake: "We’re starting with intake. Tell me the basics and I’ll organize the property details.",
+      listing: "Now I’m preparing the listing structure and presentation for your property.",
+      pricing: "Next, I’m estimating the pricing direction based on property type and area.",
+      marketing: "Now the property is being positioned for visibility and renter attention.",
+      screening: "The next phase is screening and reviewing renter fit.",
+      lease: "Now we move into lease coordination and final placement steps.",
+      management: "The property is now in ongoing support and management flow."
+    };
+
+    p8Speak(messages[step] || "I’m moving the property through the next step.");
+  }
+
+  function nextStep(){
+    const index = pipelineOrder.indexOf(currentStep);
+    if(index === -1 || index === pipelineOrder.length - 1) return;
+
+    const next = pipelineOrder[index + 1];
+    setStep(next);
+  }
+
+  function goRent(){
+    p8Speak("Got it. You're looking for a place. Let me show you available homes below.");
+    go("properties");
+  }
+
+  function goList(){
+    setStep("intake");
+    go("start");
+  }
+
+  const form = document.getElementById("ownerForm");
+  const success = document.getElementById("formSuccess");
+
+  if(form && success){
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
+
+      const data = new FormData(form);
+
+      try{
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: data,
+          headers: { "Accept": "application/json" }
+        });
+
+        if(res.ok){
+          form.style.display = "none";
+          success.style.display = "block";
+          success.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          form.reset();
+
+          setStep("listing");
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      } catch(err){
+        alert("Network error. Please try again.");
+      }
+    });
+  }
+
+  updatePipelineUI();
+  p8Speak("Hi, I’m P8. I’ll guide the property through each step of the process.");
+</script>
 </body>
 </html>
