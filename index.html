@@ -9,6 +9,29 @@
     content="RunP8 helps property owners simplify tenant placement, pricing, coordination, home inspections, maintenance, accounting, renewals, and support through one clear service flow."
   />
   <style>
+.p8-pipeline{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.p8-step{
+  font-size:12px;
+  padding:6px 8px;
+  border-radius:8px;
+  background:#f8fafc;
+  color:#64748b;
+  border:1px solid #e5e7eb;
+}
+
+.p8-step.active{
+  background:#dbeafe;
+  color:#1d4ed8;
+  border-color:#93c5fd;
+  font-weight:700;
+}
+    
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -1374,7 +1397,15 @@
       <strong>👋 Hi, I’m P8</strong>
       <span>Looking to rent or list a property?</span>
       <div class="p8-chat" id="p8Chat"></div>
-
+<div class="p8-pipeline" id="p8Pipeline">
+  <div class="p8-step active" data-step="intake">1. Intake</div>
+  <div class="p8-step" data-step="listing">2. Listing</div>
+  <div class="p8-step" data-step="pricing">3. Pricing</div>
+  <div class="p8-step" data-step="marketing">4. Marketing</div>
+  <div class="p8-step" data-step="screening">5. Screening</div>
+  <div class="p8-step" data-step="lease">6. Lease</div>
+  <div class="p8-step" data-step="management">7. Management</div>
+</div>
       <div class="p8-actions">
         <button class="p8-rent" onclick="goRent()">Rent</button>
         <button class="p8-list" onclick="goList()">List</button>
