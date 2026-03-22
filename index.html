@@ -1423,6 +1423,39 @@
   </div>
 
   <script>
+    let currentStep = "intake";
+
+function p8Speak(message){
+  const chat = document.getElementById("p8Chat");
+  if(!chat) return;
+  chat.innerHTML = message;
+}
+
+function updatePipelineUI(){
+  document.querySelectorAll("#p8Pipeline .p8-step").forEach(step => {
+    step.classList.remove("active");
+    if(step.dataset.step === currentStep){
+      step.classList.add("active");
+    }
+  });
+}
+
+function setStep(step){
+  currentStep = step;
+  updatePipelineUI();
+
+  const messages = {
+    intake: "I’m organizing the property details now.",
+    prepare: "I’ve received the intake. Next I’m preparing the listing materials.",
+    optimize: "I’m improving the listing for stronger performance.",
+    publish: "I’m moving this toward live visibility.",
+    qualify: "I’m reviewing quality before moving forward.",
+    close: "I’m handling the final placement steps.",
+    manage: "I’m keeping this property in active management flow."
+  };
+
+  p8Speak(messages[step] || "I’m moving this forward.");
+}
 let currentLane = "owner";
 let currentStep = "intake";
 
@@ -1577,6 +1610,7 @@ function goList(){
     if(form && success){
       form.addEventListener("submit", async function(e){
         e.preventDefault();
+        setStep("prepare");
 
         const data = new FormData(form);
 
@@ -1602,7 +1636,9 @@ function goList(){
     }
 
     console.log("RunP8 system ready");
-  </script>
+updatePipelineUI();
+setStep("intake");
+    </script>
   <script>
   let currentStep = "intake";
 
