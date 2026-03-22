@@ -60,6 +60,10 @@
       gap:10px;
       text-decoration:none;
       color:inherit;
+      border:none;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
     }
 
     .mark{
@@ -72,12 +76,14 @@
       color:var(--blue);
       font-weight:800;
       box-shadow: inset 0 0 0 1px rgba(47,94,247,.08);
+      flex:0 0 auto;
     }
 
     .brand-text strong{
       display:block;
       font-size:16px;
       line-height:1.1;
+      text-align:left;
     }
 
     .brand-text small{
@@ -85,6 +91,7 @@
       color:var(--muted);
       font-size:12px;
       margin-top:2px;
+      text-align:left;
     }
 
     .top-actions{
@@ -103,6 +110,7 @@
       box-shadow:var(--shadow);
       font-size:21px;
       cursor:pointer;
+      flex:0 0 auto;
     }
 
     .btn, .btn-light, .btn-dark{
@@ -118,6 +126,7 @@
       font-weight:700;
       font-size:16px;
       transition:.18s ease;
+      font-family:inherit;
     }
 
     .btn{
@@ -164,6 +173,8 @@
 
     .mobile-link{
       display:block;
+      width:100%;
+      text-align:left;
       text-decoration:none;
       color:#0f172a;
       background:#f8fafc;
@@ -171,6 +182,9 @@
       border-radius:14px;
       padding:14px;
       font-weight:600;
+      font-size:16px;
+      cursor:pointer;
+      font-family:inherit;
     }
 
     .hero{
@@ -208,6 +222,12 @@
       font-size:18px;
       max-width:760px;
       margin:0;
+    }
+
+    .credibility{
+      margin-top:10px;
+      font-size:14px;
+      color:#6b7280;
     }
 
     .hero-actions{
@@ -264,17 +284,6 @@
       font-size:17px;
     }
 
-    .card[onclick],
-    .property-card[onclick]{
-     cursor:pointer;
-     transition: transform .15s ease, box-shadow .15s ease;
-    }
-
-    .card[onclick]:hover,
-    .property-card[onclick]:hover{
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
-  }
     .card{
       background:#fff;
       padding:22px;
@@ -294,6 +303,16 @@
       font-weight:800;
       font-size:14px;
       margin-bottom:8px;
+    }
+
+    .step-card{
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+
+    .step-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 30px rgba(15,23,42,.10);
     }
 
     .step-card h3{
@@ -337,6 +356,13 @@
       border-radius:20px;
       overflow:hidden;
       box-shadow:var(--shadow);
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+
+    .property-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 16px 32px rgba(15,23,42,.12);
     }
 
     .property-card img{
@@ -380,10 +406,38 @@
       margin-bottom:14px;
     }
 
+    .area-info{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      font-size:13px;
+      color:#6b7280;
+    }
+
+    .owner-trust{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      font-size:13px;
+      color:#16a34a;
+    }
+
     .services-grid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:16px;
+    }
+
+    .service-card{
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+
+    .service-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 16px 32px rgba(15,23,42,.12);
     }
 
     .service-card .icon{
@@ -407,6 +461,12 @@
       margin:0;
       color:var(--muted);
       font-size:15px;
+    }
+
+    .trust-line{
+      margin-top:6px;
+      font-size:13px;
+      color:#16a34a;
     }
 
     .intake-grid{
@@ -633,6 +693,69 @@
       flex-wrap:wrap;
     }
 
+    /* P8 */
+    #p8{
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      z-index:9999;
+    }
+
+    .p8-bubble{
+      background:linear-gradient(145deg,#eef2ff,#f8fafc);
+      border:1px solid #e0e7ff;
+      border-radius:18px;
+      padding:14px;
+      width:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,.12);
+      font-size:14px;
+      animation:floatIn .5s ease;
+    }
+
+    @keyframes floatIn{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .p8-chat{
+      margin-top:10px;
+      font-size:13px;
+      color:#475569;
+      min-height:18px;
+    }
+
+    .p8-actions{
+      display:flex;
+      gap:6px;
+      margin-top:10px;
+    }
+
+    .p8-actions button{
+      flex:1;
+      font-size:12px;
+      padding:8px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-family:inherit;
+    }
+
+    .p8-rent{
+      background:#2f5ef7;
+      color:white;
+    }
+
+    .p8-list{
+      background:white;
+      border:1px solid #ddd;
+    }
+
     @media (max-width: 980px){
       .pill-row,
       .properties-grid,
@@ -646,10 +769,6 @@
       .intake-grid,
       .final-cta{
         grid-template-columns:1fr;
-      }
-
-      .form-grid{
-        grid-template-columns:1fr 1fr;
       }
     }
 
@@ -676,160 +795,50 @@
       h1{
         letter-spacing:-1px;
       }
+
+      #p8{
+        right:12px;
+        bottom:12px;
+      }
+
+      .p8-bubble{
+        width:200px;
+      }
     }
- /* P8 AI floating helper */
-#p8{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  z-index:9999;
-}
-
-.p8-bubble{
-  background: linear-gradient(145deg,#eef2ff,#f8fafc);
-  border:1px solid #e0e7ff;
-  border-radius:18px;
-  padding:14px;
-  width:220px;
-  box-shadow:0 10px 30px rgba(0,0,0,.12);
-  font-size:14px;
-}
-
-.p8-bubble strong{
-  display:block;
-  margin-bottom:6px;
-}
-
-.p8-actions{
-  display:flex;
-  gap:6px;
-  margin-top:10px;
-}
-
-.p8-actions button{
-  flex:1;
-  font-size:12px;
-  padding:8px;
-  border-radius:10px;
-  border:none;
-  cursor:pointer;
-}
-
-.p8-rent{
-  background:#2f5ef7;
-  color:white;
-}
-
-.p8-list{
-  background:white;
-  border:1px solid #ddd;
-}
- 
- <style>
-  .site-header{
-    position: sticky;
-    top: 0;
-    z-index: 9999;
-    background: #ffffff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  .brand{
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  .menu-toggle{
-    border: none;
-    background: #2563eb;
-    color: white;
-    padding: 10px 14px;
-    border-radius: 10px;
-    font-size: 18px;
-    cursor: pointer;
-  }
-
-  .mobile-menu{
-    position: absolute;
-    top: 72px;
-    right: 20px;
-    width: 260px;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-    padding: 10px;
-    display: none;
-    z-index: 10000;
-    pointer-events: auto;
-  }
-
-  .mobile-menu.open{
-    display: block;
-  }
-
-  .mobile-menu a{
-    display: block;
-    padding: 12px 14px;
-    color: #111827;
-    text-decoration: none;
-    border-radius: 10px;
-    font-weight: 500;
-  }
-
-  .mobile-menu a:hover{
-    background: #f3f4f6;
-  }
-
-  footer{
-    padding: 40px 20px;
-    border-top: 1px solid #e5e7eb;
-    background: #fff;
-  }
-
-  .footer-links{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 18px;
-  }
-
-  .footer-links a{
-    color: #374151;
-    text-decoration: none;
-  }
-
-  .footer-links a:hover{
-    text-decoration: underline;
-  }
-</style> 
   </style>
 </head>
 <body>
 
-  <header class="site-header">
-  <div class="brand" onclick="window.location.href='/'">RunP8</div>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <button class="brand" type="button" onclick="go('top')">
+        <div class="mark">P8</div>
+        <div class="brand-text">
+          <strong>RunP8</strong>
+          <small>Property management made clear</small>
+        </div>
+      </button>
 
-  <button id="menuToggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
-    ☰
-  </button>
+      <div class="top-actions">
+        <button class="btn" type="button" onclick="go('start')">Get started</button>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+      </div>
+    </div>
 
-  <nav id="mobileMenu" class="mobile-menu">
-    <a href="#how-it-works">How it works</a>
-    <a href="#services">Services</a>
-    <a href="#reviews">Reviews</a>
-    <a href="#featured-homes">Featured homes</a>
-    <a href="#contact">Contact</a>
-    <a href="/legal/privacy.html">Privacy Policy</a>
-    <a href="/legal/terms.html">Terms of Service</a>
-    <a href="/legal/cookies.html">Cookie Policy</a>
-    <a href="/legal/disclaimer.html">Disclaimer</a>
-  </nav>
-</header>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="wrap">
+        <div class="mobile-grid">
+          <button class="mobile-link" type="button" onclick="go('how')">How it works</button>
+          <button class="mobile-link" type="button" onclick="go('properties')">Featured homes</button>
+          <button class="mobile-link" type="button" onclick="go('services')">Services</button>
+          <button class="mobile-link" type="button" onclick="go('start')">Get started</button>
+          <button class="mobile-link" type="button" onclick="go('reviews')">Reviews</button>
+          <button class="mobile-link" type="button" onclick="go('footer')">Contact</button>
+        </div>
+        <button class="btn-dark" type="button" onclick="go('start')">Start owner intake</button>
+      </div>
+    </div>
+  </header>
 
   <main id="top">
     <section class="hero">
@@ -840,6 +849,15 @@
           RunP8 helps property owners place tenants, manage operations, and stay organized
           without guessing what happens next. Every step is structured, visible, and supported.
         </p>
+        <p class="credibility">
+          Founded by a certified home inspector with real-world property management experience.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn" type="button" onclick="go('start')">Start now</button>
+          <button class="btn-light" type="button" onclick="go('how')">See how it works</button>
+          <a href="tel:+15598253038" class="btn-light">Call now</a>
+        </div>
 
         <div class="pill-row">
           <div class="pill">Know what happens next at every step</div>
@@ -861,7 +879,7 @@
         </div>
 
         <div class="steps-grid">
-          <div class="card step-card">
+          <div class="card step-card" onclick="go('start')">
             <div class="step-title">Step 1</div>
             <h3>Start with a clear property intake</h3>
             <p>Owners begin with a simple intake so the property, goals, address, and service needs are clear from the beginning.</p>
@@ -871,7 +889,7 @@
             </div>
           </div>
 
-          <div class="card step-card">
+          <div class="card step-card" onclick="go('services')">
             <div class="step-title">Step 2</div>
             <h3>Prepare and position the property correctly</h3>
             <p>Once submitted, the property moves into a guided preparation flow with pricing support, photography, showings, and inspection readiness.</p>
@@ -881,7 +899,7 @@
             </div>
           </div>
 
-          <div class="card step-card">
+          <div class="card step-card" onclick="go('properties')">
             <div class="step-title">Step 3</div>
             <h3>Place a qualified and reliable tenant</h3>
             <p>Tenant placement should feel organized, not chaotic. The process is built to make presentation, screening, and lease flow easier to follow.</p>
@@ -891,7 +909,7 @@
             </div>
           </div>
 
-          <div class="card step-card">
+          <div class="card step-card" onclick="go('start')">
             <div class="step-title">Step 4</div>
             <h3>Manage the property without constant stress</h3>
             <p>After placement, owners should still feel supported through maintenance, accounting, inspections, and renewals.</p>
@@ -915,36 +933,75 @@
         </div>
 
         <div class="properties-grid">
-          <div class="property-card" onclick="go('start')" style="cursor:pointer;">
+          <div class="property-card" onclick="go('start')">
             <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80" alt="Featured property 1">
             <div class="property-body">
               <div class="property-badge">Single Family</div>
               <h3>Fresno Home</h3>
               <div class="property-meta">$2,450/mo • Fresno, CA</div>
               <div class="property-note">Clean exterior, private yard, and strong family appeal.</div>
-              <a href="#start" class="btn">Request this setup</a>
+
+              <div class="area-info">
+                <span>📍 Quiet residential neighborhood</span>
+                <span>🏥 Near hospitals and grocery stores</span>
+                <span>🚗 Easy access to main roads</span>
+              </div>
+
+              <div class="owner-trust">
+                <span>✔ Managed tenant placement</span>
+                <span>✔ Inspection-aware property handling</span>
+                <span>✔ Structured lease and support</span>
+              </div>
+
+              <button class="btn" type="button" onclick="event.stopPropagation(); go('start')">Request this setup</button>
             </div>
           </div>
 
-          <div class="property-card" onclick="go('start')" style="cursor:pointer;">
+          <div class="property-card" onclick="go('start')">
             <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80" alt="Featured property 2">
             <div class="property-body">
               <div class="property-badge">Studio / ADU</div>
               <h3>Quiet ADU Unit</h3>
               <div class="property-meta">$1,250/mo • Fresno, CA</div>
               <div class="property-note">Simple, calm setup ideal for one person or mid-term placement.</div>
-              <a href="#start" class="btn">Request this setup</a>
+
+              <div class="area-info">
+                <span>🌿 Peaceful and private setting</span>
+                <span>🛒 Close to daily essentials</span>
+                <span>👤 Ideal for single occupant</span>
+              </div>
+
+              <div class="owner-trust">
+                <span>✔ Suitable tenant matching</span>
+                <span>✔ Ongoing support available</span>
+                <span>✔ Clear use and expectations</span>
+              </div>
+
+              <button class="btn" type="button" onclick="event.stopPropagation(); go('start')">Request this setup</button>
             </div>
           </div>
 
-          <div class="property-card" onclick="go('start')" style="cursor:pointer;">
+          <div class="property-card" onclick="go('start')">
             <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80" alt="Featured property 3">
             <div class="property-body">
               <div class="property-badge">Private Room</div>
               <h3>Owner-Occupied Rental</h3>
               <div class="property-meta">$875/mo • Fresno, CA</div>
               <div class="property-note">Good fit for room-by-room owner strategy with cleaner management flow.</div>
-              <a href="#start" class="btn">Request this setup</a>
+
+              <div class="area-info">
+                <span>🏡 Shared home environment</span>
+                <span>🔒 More controlled and secure setting</span>
+                <span>💡 Good for budget-conscious renters</span>
+              </div>
+
+              <div class="owner-trust">
+                <span>✔ Controlled tenant environment</span>
+                <span>✔ Respect for shared space</span>
+                <span>✔ Clear house structure</span>
+              </div>
+
+              <button class="btn" type="button" onclick="event.stopPropagation(); go('start')">Request this setup</button>
             </div>
           </div>
         </div>
@@ -961,37 +1018,39 @@
           </p>
         </div>
 
-        <div class="card service-card" onclick="goToSection('start')">
-  <div class="icon">📸</div>
-  <h3>Professional photography</h3>
-  <p>Present the property clearly...</p>
-</div>
+        <div class="services-grid">
+          <div class="card service-card" onclick="go('start')">
+            <div class="icon">📸</div>
+            <h3>Professional photography</h3>
+            <p>Present the property clearly and professionally for stronger first impressions.</p>
+          </div>
 
-<div class="card service-card" onclick="go('start')" style="cursor:pointer;">
+          <div class="card service-card" onclick="go('start')">
             <div class="icon">🧾</div>
             <h3>Tenant screening</h3>
             <p>Background checks, income verification, and screening done properly.</p>
           </div>
 
-         <div class="card service-card" onclick="go('start')" style="cursor:pointer;">
+          <div class="card service-card" onclick="go('start')">
             <div class="icon">🏠</div>
             <h3>Home inspections</h3>
             <p>Keep inspection flow visible and structured before and during ongoing management.</p>
+            <div class="trust-line">✔ Led by a certified home inspector</div>
           </div>
 
-        <div class="card service-card" onclick="go('start')" style="cursor:pointer;">
+          <div class="card service-card" onclick="go('footer')">
             <div class="icon">🛠</div>
             <h3>Maintenance coordination</h3>
             <p>Maintenance requests handled without you coordinating every detail.</p>
           </div>
 
-          <div class="card service-card" onclick="go('start')" style="cursor:pointer;">
+          <div class="card service-card" onclick="go('footer')">
             <div class="icon">💰</div>
             <h3>Accounting support</h3>
             <p>Service-oriented financial coordination for ongoing property operations.</p>
           </div>
 
-          <div class="card service-card" onclick="go('start')" style="cursor:pointer;">
+          <div class="card service-card" onclick="go('footer')">
             <div class="icon">↻</div>
             <h3>Renewals and support</h3>
             <p>Continue with a calmer flow through renewals, updates, and owner support needs.</p>
@@ -1015,14 +1074,14 @@
             <div class="intake-point">Owner-first intake with practical service choices</div>
             <div class="intake-point">A calmer, more professional start to property management</div>
           </div>
+
+          <p style="margin-top:16px; font-size:14px; color:#64748b;">
+            Prefer to talk? Call us directly at <a href="tel:+15598253038">559-825-3038</a>
+          </p>
         </div>
 
         <div class="card">
-          
-        </div>
-      </div>
-    </section>
-        <form id="ownerForm" action="https://formspree.io/f/mreyjvap" method="POST">
+          <form id="ownerForm" action="https://formspree.io/f/mreyjvap" method="POST">
             <input type="hidden" name="_subject" value="New RunP8 Lead">
 
             <div class="form-grid">
@@ -1080,14 +1139,21 @@
             </div>
 
             <div class="submit-row">
-              <button class="btn" type="submit">Submit</button>
-              <span class="form-note" style="margin:0;">No extra complexity. Just a clear starting point.</span>
+              <button class="btn" type="submit">Submit property</button>
+              <a href="tel:+15598253038" class="btn-light">Call instead</a>
             </div>
           </form>
 
           <div class="form-success" id="formSuccess">
             ✅ Submitted successfully. We received your property details and the next step will be a quick review and follow-up.
+            <div style="margin-top:14px;">
+              <button class="btn-light" type="button" onclick="location.reload()">Submit another property</button>
+            </div>
           </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="reviews">
       <div class="wrap">
         <div class="section-head">
@@ -1097,17 +1163,14 @@
             Reviews matter because owners want reassurance that the process is not only effective, but also clear and dependable.
           </p>
         </div>
-        <div class="card step-card" onclick="go('start')" style="cursor:pointer;">
+
         <div class="reviews-grid">
           <div class="card review-card">
             <div class="review-stars">★★★★★</div>
             <p>“I didn’t have to chase updates or guess what was happening. Everything felt clear and handled.”</p>
             <strong>Property owner</strong>
           </div>
-            <p>
-             RunP8 is built on clarity and structure — not guesswork.  
-            Clear expectations, consistent process, and proper documentation help reduce misunderstandings and prevent issues from escalating.
-            </p>
+
           <div class="card review-card">
             <div class="review-stars">★★★★★</div>
             <p>“The best part was knowing what was happening next. It removed the feeling of guessing through every step.”</p>
@@ -1133,11 +1196,7 @@
               Numbers, proof, and visible activity help the business feel credible and real.
             </p>
           </div>
-          <div class="owner-trust">
-         <span>✔ Clear expectations from day one</span>
-         <span>✔ Documented communication and agreements</span>
-         <span>✔ Consistent process — no guesswork</span>
-         </div>
+
           <div class="stats-grid">
             <div class="stat">
               <strong>2019</strong>
@@ -1169,53 +1228,46 @@
           </p>
         </div>
         <div style="min-width:220px;">
-          <a href="#start" class="btn" style="width:100%;">Get started</a>
+          <button class="btn" type="button" onclick="go('start')" style="width:100%;">Get started</button>
         </div>
       </div>
     </section>
   </main>
-<footer>
-  <div class="footer-links">
-    <a href="/legal/privacy.html">Privacy Policy</a>
-    <a href="/legal/terms.html">Terms of Service</a>
-    <a href="/legal/cookies.html">Cookie Policy</a>
-    <a href="/legal/disclaimer.html">Disclaimer</a>
-  </div>
-</footer>
+
   <footer>
     <div class="wrap card" id="footer">
       <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap;">
         <div>
-          <div class="brand" style="margin-bottom:10px;">
+          <button class="brand" type="button" onclick="go('top')" style="margin-bottom:10px;">
             <div class="mark">P8</div>
             <div class="brand-text">
               <strong>RunP8</strong>
               <small>Property management made clear</small>
             </div>
-          </div>
+          </button>
           <p style="margin:0; color:var(--muted); max-width:360px;">
             A cleaner, calmer property management experience built around trust, clarity, and strong next steps.
           </p>
         </div>
 
-        <a href="#start" class="btn-dark">Start owner intake</a>
+        <button class="btn-dark" type="button" onclick="go('start')">Start owner intake</button>
       </div>
 
       <div class="footer-grid">
         <div class="footer-col">
           <h4>Product</h4>
-          <a href="#how">How it works</a>
-          <a href="#properties">Featured homes</a>
-          <a href="#services">Services</a>
-          <a href="#reviews">Reviews</a>
+          <button class="mobile-link" type="button" onclick="go('how')">How it works</button>
+          <button class="mobile-link" type="button" onclick="go('properties')">Featured homes</button>
+          <button class="mobile-link" type="button" onclick="go('services')">Services</button>
+          <button class="mobile-link" type="button" onclick="go('reviews')">Reviews</button>
         </div>
 
         <div class="footer-col">
           <h4>Company</h4>
-          <a href="#top">About</a>
-          <a href="#footer">Contact</a>
-          <a href="#numbers">By the numbers</a>
-          <a href="#start">Owner intake</a>
+          <button class="mobile-link" type="button" onclick="go('top')">About</button>
+          <button class="mobile-link" type="button" onclick="go('footer')">Contact</button>
+          <button class="mobile-link" type="button" onclick="go('numbers')">By the numbers</button>
+          <button class="mobile-link" type="button" onclick="go('start')">Owner intake</button>
         </div>
 
         <div class="footer-col">
@@ -1225,13 +1277,14 @@
           <span>Terms & conditions</span>
           <span>Cookie policy</span>
         </div>
+
         <div class="footer-col">
-        <h4>Connect</h4>
-        <a href="mailto:start@runp8.com">start@runp8.com</a>
-        <a href="tel:+15598253038">(559) 825-3038</a>
-        <span>Mon–Fri • 9AM–6PM</span>
-        <span>Owner support and intake</span>
-       </div>
+          <h4>Connect</h4>
+          <a href="mailto:start@runp8.com">start@runp8.com</a>
+          <a href="tel:+15598253038">(559) 825-3038</a>
+          <span>Mon–Fri • 9AM–6PM</span>
+          <span>Owner support and intake</span>
+        </div>
       </div>
 
       <div class="footer-bottom">
@@ -1241,178 +1294,104 @@
     </div>
   </footer>
 
+  <div id="p8">
+    <div class="p8-bubble">
+      <strong>👋 Hi, I’m P8</strong>
+      <span>Looking to rent or list a property?</span>
+      <div class="p8-chat" id="p8Chat"></div>
+
+      <div class="p8-actions">
+        <button class="p8-rent" onclick="goRent()">Rent</button>
+        <button class="p8-list" onclick="goList()">List</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-<script>
-function p8Speak(message){
-  const chat = document.getElementById("p8Chat");
-  if(!chat) return;
+    function go(id){
+      const el = document.getElementById(id);
+      if(!el){
+        console.warn("Missing section:", id);
+        return;
+      }
 
-  chat.innerHTML = message;
-}
+      const offset = 90;
+      const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
 
-// RENT flow
-function goRent(){
-  p8Speak("Got it. You're looking for a place. Let me show you available setups below.");
-  goToSection('properties');
-}
+      window.scrollTo({
+        top: y,
+        behavior: "smooth"
+      });
 
-// LIST flow
-function goList(){
-  p8Speak("You're looking to list your property. I'll guide you through a quick intake.");
-  goToSection('start');
-}
-</script>
-    
+      closeMenu();
+    }
+
     const menuBtn = document.getElementById("menuBtn");
     const mobileMenu = document.getElementById("mobileMenu");
 
-    menuBtn.addEventListener("click", () => {
-      mobileMenu.classList.toggle("open");
-    });
+    function openMenu(){
+      if(mobileMenu) mobileMenu.classList.add("open");
+    }
 
-    mobileMenu.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => {
-        mobileMenu.classList.remove("open");
-      });
-    });
+    function closeMenu(){
+      if(mobileMenu) mobileMenu.classList.remove("open");
+    }
+
+    function toggleMenu(){
+      if(mobileMenu) mobileMenu.classList.toggle("open");
+    }
+
+    if(menuBtn){
+      menuBtn.addEventListener("click", toggleMenu);
+    }
+
+    function p8Speak(message){
+      const chat = document.getElementById("p8Chat");
+      if(!chat) return;
+      chat.innerHTML = message;
+    }
+
+    function goRent(){
+      p8Speak("Got it. You're looking for a place. Let me show you available homes below.");
+      go("properties");
+    }
+
+    function goList(){
+      p8Speak("You're listing a property. I’ll guide you through a quick intake.");
+      go("start");
+    }
 
     const form = document.getElementById("ownerForm");
     const success = document.getElementById("formSuccess");
 
-    form.addEventListener("submit", async function(e){
-      e.preventDefault();
+    if(form && success){
+      form.addEventListener("submit", async function(e){
+        e.preventDefault();
 
-      const data = new FormData(form);
+        const data = new FormData(form);
 
-      try{
-        const res = await fetch(form.action, {
-          method: "POST",
-          body: data,
-          headers: { "Accept": "application/json" }
-        });
+        try{
+          const res = await fetch(form.action, {
+            method: "POST",
+            body: data,
+            headers: { "Accept": "application/json" }
+          });
 
-        if(res.ok){
-          form.style.display = "none";
-          success.style.display = "block";
-          success.scrollIntoView({ behavior: "smooth", block: "nearest" });
-          form.reset();
-        } else {
-          alert("Something went wrong. Please try again.");
+          if(res.ok){
+            form.style.display = "none";
+            success.style.display = "block";
+            success.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            form.reset();
+          } else {
+            alert("Something went wrong. Please try again.");
+          }
+        } catch(err){
+          alert("Network error. Please try again.");
         }
-      } catch(err){
-        alert("Network error. Please try again.");
-      }
-    });
-  </script>
-<div id="p8">
-  <div class="p8-bubble">
-    <div class="p8-chat" id="p8Chat"></div>
-    <strong>👋 Hi, I’m P8</strong>
-    <span>Looking to rent or list a property?</span>
-
-    <div class="p8-actions">
-   <button onclick="goRent()">Rent</button>
-    <button onclick="goList()">List</button>
-<script>
-function go(id){
-  const el = document.getElementById(id);
-  if(!el) return;
-
-  const offset = 90;
-  const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
-
-  window.scrollTo({
-    top: y,
-    behavior: "smooth"
-  });
-
-  const mobileMenu = document.getElementById("mobileMenu");
-  if(mobileMenu){
-    mobileMenu.classList.remove("open");
-  }
-}
-
-function p8Speak(message){
-  const chat = document.getElementById("p8Chat");
-  if(!chat) return;
-  chat.innerHTML = message;
-}
-
-function goRent(){
-  p8Speak("Got it. You're looking for a place. Let me show you available setups below.");
-  go('properties');
-}
-
-function goList(){
-  p8Speak("You're listing a property. I'll guide you through a quick intake.");
-  go('start');
-}
-
-const menuBtn = document.getElementById("menuBtn");
-const mobileMenu = document.getElementById("mobileMenu");
-
-if(menuBtn && mobileMenu){
-  menuBtn.addEventListener("click", function(){
-    mobileMenu.classList.toggle("open");
-  });
-}
-
-const form = document.getElementById("ownerForm");
-const success = document.getElementById("formSuccess");
-
-if(form && success){
-  form.addEventListener("submit", async function(e){
-    e.preventDefault();
-
-    const data = new FormData(form);
-
-    try{
-      const res = await fetch(form.action, {
-        method: "POST",
-        body: data,
-        headers: { "Accept": "application/json" }
       });
-
-      if(res.ok){
-        form.style.display = "none";
-        success.style.display = "block";
-        success.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        form.reset();
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
-    } catch(err){
-      alert("Network error. Please try again.");
     }
-  });
-}
-</script>
-   
-    </div>
-  </div>
-</div>
-<script>
-  const menuToggle = document.getElementById("menuToggle");
-  const mobileMenu = document.getElementById("mobileMenu");
 
-  menuToggle.addEventListener("click", function (e) {
-    e.stopPropagation();
-    mobileMenu.classList.toggle("open");
-    const expanded = mobileMenu.classList.contains("open");
-    menuToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
-  });
-
-  mobileMenu.addEventListener("click", function (e) {
-    e.stopPropagation();
-  });
-
-  document.addEventListener("click", function () {
-    mobileMenu.classList.remove("open");
-    menuToggle.setAttribute("aria-expanded", "false");
-  });
-</script>
-
+    console.log("RunP8 system ready");
+  </script>
 </body>
-
 </html>
-
