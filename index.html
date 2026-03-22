@@ -9,6 +9,13 @@
     content="RunP8 helps property owners simplify tenant placement, pricing, coordination, home inspections, maintenance, accounting, renewals, and support through one clear service flow."
   />
   <style>
+    .p8-collapsed .p8-pipeline{
+  display:none;
+}
+
+.p8-collapsed .p8-actions{
+  margin-top:10px;
+}
 .p8-pipeline{
   margin-top:10px;
   display:flex;
@@ -838,6 +845,7 @@
         <div class="mark">P8</div>
         <div class="brand-text">
           <strong>RunP8</strong>
+          <strong onclick="toggleP8()">👋 Hi, I’m P8</strong>
           <small>Property management made clear</small>
         </div>
       </button>
@@ -1394,6 +1402,7 @@
 
   <div id="p8">
     <div class="p8-bubble">
+      <div id="p8" class="p8-collapsed">
       <strong>👋 Hi, I’m P8</strong>
       <span>Looking to rent or list a property?</span>
       <div class="p8-chat" id="p8Chat"></div>
@@ -1414,6 +1423,10 @@
   </div>
 
   <script>
+    function toggleP8(){
+  const box = document.getElementById("p8");
+  box.classList.toggle("p8-collapsed");
+}
     function go(id){
       const el = document.getElementById(id);
       if(!el){
