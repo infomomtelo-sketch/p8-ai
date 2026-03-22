@@ -1174,7 +1174,14 @@
       </div>
     </section>
   </main>
-
+<footer>
+  <div class="footer-links">
+    <a href="/legal/privacy.html">Privacy Policy</a>
+    <a href="/legal/terms.html">Terms of Service</a>
+    <a href="/legal/cookies.html">Cookie Policy</a>
+    <a href="/legal/disclaimer.html">Disclaimer</a>
+  </div>
+</footer>
   <footer>
     <div class="wrap card" id="footer">
       <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap;">
@@ -1384,6 +1391,28 @@ if(form && success){
     </div>
   </div>
 </div>
+<script>
+  const menuToggle = document.getElementById("menuToggle");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  menuToggle.addEventListener("click", function (e) {
+    e.stopPropagation();
+    mobileMenu.classList.toggle("open");
+    const expanded = mobileMenu.classList.contains("open");
+    menuToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+  });
+
+  mobileMenu.addEventListener("click", function (e) {
+    e.stopPropagation();
+  });
+
+  document.addEventListener("click", function () {
+    mobileMenu.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  });
+</script>
+
 </body>
+
 </html>
 
