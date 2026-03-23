@@ -279,62 +279,64 @@
           the property moves into preparation and listing steps.
         </p>
 
-        <form id="ownerForm" action="https://formspree.io/f/mreyjvap" method="POST">
-          <input type="hidden" name="_subject" value="New RunP8 Owner Intake" />
+        <form id="ownerForm" action="https://formspree.io/f/xnjgedbv" method="POST">
+  
+  <input type="hidden" name="_subject" value="New Owner Intake - RunP8" />
+  <input type="hidden" name="source" value="RunP8 Owner Flow" />
 
-          <div class="form-grid">
-            <div class="field">
-              <label for="ownerName">Name</label>
-              <input id="ownerName" name="owner_name" type="text" required />
-            </div>
+  <div class="field">
+    <label>Name</label>
+    <input name="owner_name" type="text" required placeholder="Your Name" />
+  </div>
 
-            <div class="field">
-              <label for="ownerEmail">Email</label>
-              <input id="ownerEmail" name="owner_email" type="email" required />
-            </div>
+  <div class="field">
+    <label>Email</label>
+    <input name="owner_email" type="email" required placeholder="Email Address" />
+  </div>
 
-            <div class="field">
-              <label for="ownerPhone">Phone</label>
-              <input id="ownerPhone" name="owner_phone" type="text" />
-            </div>
+  <div class="field">
+    <label>Phone</label>
+    <input name="owner_phone" type="text" placeholder="Phone Number" />
+  </div>
 
-            <div class="field">
-              <label for="propertyType">Property Type</label>
-              <select id="propertyType" name="property_type">
-                <option>Room</option>
-                <option>Studio</option>
-                <option>ADU</option>
-                <option>Apartment</option>
-                <option>House</option>
-              </select>
-            </div>
+  <div class="field">
+    <label>Property Address</label>
+    <input name="property_address" type="text" placeholder="Street Address" />
+  </div>
 
-            <div class="field full">
-              <label for="propertyAddress">Property Address</label>
-              <input id="propertyAddress" name="property_address" type="text" />
-            </div>
+  <div class="field">
+    <label>City</label>
+    <input name="property_city" type="text" placeholder="City" />
+  </div>
 
-            <div class="field">
-              <label for="propertyCity">City</label>
-              <input id="propertyCity" name="property_city" type="text" />
-            </div>
+  <div class="field">
+    <label>Property Type</label>
+    <select name="property_type">
+      <option>Room</option>
+      <option>Studio</option>
+      <option>ADU</option>
+      <option>Apartment</option>
+      <option>House</option>
+    </select>
+  </div>
 
-            <div class="field">
-              <label for="targetRent">Target Rent</label>
-              <input id="targetRent" name="target_rent" type="text" placeholder="$1,800" />
-            </div>
+  <div class="field">
+    <label>Target Rent</label>
+    <input name="target_rent" type="text" placeholder="$1500" />
+  </div>
 
-            <div class="field full">
-              <label for="ownerNotes">Notes</label>
-              <textarea id="ownerNotes" name="owner_notes" placeholder="Anything important about timing, occupancy, condition, or goals."></textarea>
-            </div>
-          </div>
+  <div class="field">
+    <label>Notes</label>
+    <textarea name="notes" placeholder="Any details about your property..."></textarea>
+  </div>
 
-          <div class="submit-row">
-            <button class="btn btn-primary" type="submit">Submit Property Intake</button>
-            <a class="btn btn-light" href="tel:+15598253038">Call Instead</a>
-          </div>
-        </form>
+  <button class="submit-btn" type="submit">Submit Property</button>
+
+</form>
+
+<div id="ownerSuccess" style="display:none; margin-top:16px; color:#22c55e; font-weight:700;">
+  ✅ Submission received. Preparing your property...
+</div>
 
         <div class="form-success" id="ownerSuccess">
           ✅ Intake submitted successfully. Your property has entered the owner flow.
@@ -411,5 +413,31 @@
       });
     }
   </script>
+  <script>
+  const ownerForm = document.getElementById("ownerForm");
+
+  ownerForm.addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const data = new FormData(ownerForm);
+
+    try {
+      const res = await fetch(ownerForm.action, {
+        method: "POST",
+        body: data,
+        headers: { "Accept": "application/json" }
+      });
+
+      if(res.ok){
+        window.location.href = "owner-prepare.html";
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+
+    } catch(err){
+      alert("Network error. Please try again.");
+    }
+  });
+</script>
 </body>
 </html>
