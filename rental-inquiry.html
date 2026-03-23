@@ -212,7 +212,15 @@
       </div>
     </div>
   </div>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const propertyName = params.get("property") || "Unknown Property";
+  const propertyId = params.get("id") || "unknown";
 
+  document.getElementById("property_name").value = propertyName;
+  document.getElementById("property_id").value = propertyId;
+  document.getElementById("propertyBadge").innerText = "Property: " + propertyName;
+</script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const propertyName = params.get("property") || "Unknown Property";
