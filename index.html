@@ -1444,17 +1444,24 @@ function setStep(step){
   currentStep = step;
   updatePipelineUI();
 
-  const messages = {
-    intake: "I’m organizing the property details now.",
-    prepare: "I’ve received the intake. Next I’m preparing the listing materials.",
-    optimize: "I’m improving the listing for stronger performance.",
-    publish: "I’m moving this toward live visibility.",
-    qualify: "I’m reviewing quality before moving forward.",
-    close: "I’m handling the final placement steps.",
-    manage: "I’m keeping this property in active management flow."
-  };
+  const va = VABrain(step);
 
-  p8Speak(messages[step] || "I’m moving this forward.");
+  let message = "";
+
+  if(va.missing.length){
+    message = `I can move this forward, but I still need ${va.missing.join(", ")}.`;
+  } else {
+    const cleanMessages = {
+      intake: "I’m organizing the property details now.",
+      prepare: "I’m preparing the listing for a strong presentation.",
+      optimize: "I’m improving this for better performance.",
+      publish: "I’m moving this toward live visibility."
+    };
+
+    message = cleanMessages[step] || "I’m moving this forward.";
+  }
+
+  p8Speak(message);
 }
 let currentLane = "owner";
 let currentStep = "intake";
