@@ -57,6 +57,18 @@
       color: #cbd5e1;
     }
 
+    .property-pill {
+      display: inline-block;
+      margin: 0 0 16px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.18);
+      color: #93c5fd;
+      border: 1px solid rgba(147, 197, 253, 0.35);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
     .field {
       margin-bottom: 14px;
     }
@@ -107,12 +119,7 @@
       border: 1px solid rgba(134, 239, 172, 0.35);
       color: #bbf7d0;
       font-weight: 700;
-    }
-
-    .note {
-      margin-top: 16px;
-      color: #94a3b8;
-      font-size: 13px;
+      line-height: 1.6;
     }
 
     .hold-message {
@@ -125,6 +132,12 @@
       color: #fde68a;
       line-height: 1.6;
     }
+
+    .note {
+      margin-top: 16px;
+      color: #94a3b8;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
@@ -135,14 +148,17 @@
     </div>
 
     <div class="card">
+      <div class="property-pill" id="propertyBadge">Property Inquiry</div>
       <h1>Rental Inquiry</h1>
       <p>
         Continue the rental flow by sharing your move-in timing and a few details about your needs.
       </p>
 
       <form id="renterForm" action="https://formspree.io/f/mreyjvap" method="POST">
-     <input type="hidden" name="_subject" value="New RunP8 Rental Inquiry" />
-    <input type="hidden" name="source" value="RunP8 Rental Flow" />
+        <input type="hidden" name="_subject" value="New RunP8 Rental Inquiry" />
+        <input type="hidden" name="source" value="RunP8 Rental Flow" />
+        <input type="hidden" id="property_name" name="property_name" />
+        <input type="hidden" id="property_id" name="property_id" />
 
         <div class="field">
           <label for="renter-name">Name</label>
@@ -183,7 +199,10 @@
       </form>
 
       <div class="success" id="renterSuccess">
-        ✅ Your inquiry was received. We’ll review your information and continue the next step if timing aligns.
+        ✅ Inquiry submitted successfully.<br><br>
+        We’ve received your request and will review it.<br><br>
+        If this property or a similar match fits your timing, we’ll reach out.<br><br>
+        You can continue browsing other homes.
       </div>
 
       <div class="hold-message" id="holdMessage"></div>
@@ -196,8 +215,12 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const propertyId = params.get("property") || "";
-    document.getElementById("propertyId").value = propertyId;
+    const propertyName = params.get("property") || "Unknown Property";
+    const propertyId = params.get("id") || "unknown";
+
+    document.getElementById("property_name").value = propertyName;
+    document.getElementById("property_id").value = propertyId;
+    document.getElementById("propertyBadge").innerText = "Property: " + propertyName;
 
     function classifyTimeline(moveInDate){
       const today = new Date();
@@ -212,13 +235,11 @@
     }
 
     function getHoldMessage(){
-      return ✅ You're on the list.
+      return `✅ Inquiry received.
 
-Thanks for your inquiry. Based on your move-in timing, this property may already be moving forward with other applicants.
+Thanks for your interest. Based on your move-in timing, this property may already be moving forward with applicants who are ready sooner.
 
-We’ll keep your details on file and reach out if availability changes or if a similar property matches your request.
-
-You can continue browsing other listings while we keep an eye out for you.
+We’ll keep your details on file and reach out if this property or a similar match becomes available closer to your timeline.`;
     }
 
     const renterForm = document.getElementById("renterForm");
