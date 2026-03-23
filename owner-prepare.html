@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prepare Property | RunP8</title>
+  <meta
+    name="description"
+    content="RunP8 owner flow: intake received, property preparing for listing readiness."
+  />
+  <style>
+    *{box-sizing:border-box}
+
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#667085;
+      --line:#e5e7eb;
+      --blue:#2f5ef7;
+      --blue-dark:#1f4ee0;
+      --panel:#eef4ff;
+      --green-bg:#ecfdf3;
+      --green-line:#bbf7d0;
+      --green-text:#166534;
+      --amber-bg:#fffbeb;
+      --amber-line:#fde68a;
+      --amber-text:#92400e;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Arial, sans-serif;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+
+    .topbar a{
+      text-decoration:none;
+      padding:12px 16px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      font-weight:700;
+    }
+
+    .hero{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:40px 28px;
+      margin-bottom:24px;
+      box-shadow:0 14px 40px rgba(15,23,42,.05);
+    }
+
+    .mini{
+      display:inline-block;
+      padding:9px 14px;
+      border-radius:999px;
+      background:var(--panel);
+      color:var(--blue);
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:16px;
+    }
+
+    h1{
+      margin:0 0 12px;
+      font-size:50px;
+      line-height:1.04;
+      letter-spacing:-.03em;
+    }
+
+    .hero p{
+      margin:0;
+      max-width:760px;
+      color:var(--muted);
+      font-size:21px;
+      line-height:1.6;
+    }
+
+    .status-row{
+      margin-top:22px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .status-pill{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:700;
+      border:1px solid var(--line);
+      background:#fff;
+      color:#334155;
+    }
+
+    .status-pill.active{
+      background:var(--panel);
+      color:var(--blue);
+      border-color:#c7dbff;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:24px;
+      box-shadow:0 10px 28px rgba(15,23,42,.04);
+    }
+
+    .card h2{
+      margin:0 0 10px;
+      font-size:34px;
+    }
+
+    .card p{
+      color:var(--muted);
+      line-height:1.65;
+      margin:0 0 18px;
+      font-size:17px;
+    }
+
+    .confirm{
+      padding:16px 18px;
+      border-radius:16px;
+      background:var(--green-bg);
+      border:1px solid var(--green-line);
+      color:var(--green-text);
+      font-weight:700;
+      margin-bottom:18px;
+    }
+
+    .info-box{
+      padding:16px 18px;
+      border-radius:16px;
+      background:var(--amber-bg);
+      border:1px solid var(--amber-line);
+      color:var(--amber-text);
+      line-height:1.6;
+      margin-bottom:18px;
+    }
+
+    .checklist{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .check-item{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      background:#fbfdff;
+    }
+
+    .check-item strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:16px;
+    }
+
+    .check-item span{
+      color:#475467;
+      line-height:1.55;
+      display:block;
+    }
+
+    .steps{
+      display:grid;
+      gap:12px;
+    }
+
+    .step{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      background:#fbfdff;
+    }
+
+    .step strong{
+      display:block;
+      margin-bottom:6px;
+      color:var(--blue);
+      font-size:14px;
+    }
+
+    .step span{
+      color:#334155;
+      font-weight:600;
+      line-height:1.5;
+      display:block;
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .btn{
+      display:inline-block;
+      text-decoration:none;
+      padding:14px 18px;
+      border-radius:12px;
+      font-weight:700;
+      border:none;
+      cursor:pointer;
+      font:inherit;
+    }
+
+    .btn-primary{
+      background:var(--blue);
+      color:#fff;
+    }
+
+    .btn-primary:hover{
+      background:var(--blue-dark);
+    }
+
+    .btn-light{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .note{
+      margin-top:18px;
+      color:#98a2b3;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .footer{
+      padding:28px 0 8px;
+      text-align:center;
+      color:#94a3b8;
+      font-size:14px;
+    }
+
+    @media (max-width: 900px){
+      h1{font-size:40px}
+      .hero p{font-size:18px}
+      .grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 640px){
+      .wrap{padding:18px}
+      h1{font-size:34px}
+      .hero{padding:32px 20px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <a href="index.html">← Back to Home</a>
+      <a href="list-property.html">Back to Owner Intake</a>
+    </div>
+
+    <section class="hero">
+      <span class="mini">Owner flow — Step 2</span>
+      <h1>Your property is now in preparation</h1>
+      <p>
+        Intake has been received. The next step is to prepare the property details
+        before the listing moves toward optimization and publication.
+      </p>
+
+      <div class="status-row">
+        <span class="status-pill">1. Intake Complete</span>
+        <span class="status-pill active">2. Prepare</span>
+        <span class="status-pill">3. Optimize</span>
+        <span class="status-pill">4. Publish</span>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <div class="confirm">
+          ✅ Property intake received successfully.
+        </div>
+
+        <h2>What we are preparing now</h2>
+        <p>
+          Before a property appears in the renter flow, the details should be
+          clear enough to support a clean listing. This protects renter trust,
+          owner trust, and listing quality.
+        </p>
+
+        <div class="info-box">
+          Incomplete property information should stay in the owner flow until the
+          listing is ready enough to be shown publicly.
+        </div>
+
+        <div class="checklist">
+          <div class="check-item">
+            <strong>Property details</strong>
+            <span>Confirm the property type, city, address, rent target, and basic notes.</span>
+          </div>
+
+          <div class="check-item">
+            <strong>Presentation readiness</strong>
+            <span>Make sure the property can be described clearly before it reaches the renter side.</span>
+          </div>
+
+          <div class="check-item">
+            <strong>Pricing clarity</strong>
+            <span>Review whether the rent target is ready to move into the next stage.</span>
+          </div>
+
+          <div class="check-item">
+            <strong>Listing readiness</strong>
+            <span>Only listing-ready properties should move into the public rental flow.</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="list-property.html">Update Intake</a>
+          <a class="btn btn-light" href="rentals.html">View Public Rental Flow</a>
+        </div>
+
+        <div class="note">
+          This page confirms the owner flow is moving forward. The property should
+          stay internal during preparation and should not appear to renters until
+          it is ready to publish.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>What happens next</h2>
+        <p>
+          The owner lane continues through a structured sequence after preparation.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <strong>STEP 2 — Prepare</strong>
+            <span>Organize details, confirm missing information, and get the property ready for listing quality.</span>
+          </div>
+
+          <div class="step">
+            <strong>STEP 3 — Optimize</strong>
+            <span>Review pricing, positioning, and how the property should be presented before publication.</span>
+          </div>
+
+          <div class="step">
+            <strong>STEP 4 — Publish</strong>
+            <span>Once ready, the property moves into the renter-facing listing flow.</span>
+          </div>
+
+          <div class="step">
+            <strong>STEP 5 — Qualify</strong>
+            <span>Renter activity begins only after the property is published and ready for showing/application steps.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      © 2026 RunP8. Owner preparation page.
+    </div>
+  </div>
+</body>
+</html>
