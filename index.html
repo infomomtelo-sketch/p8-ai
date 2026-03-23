@@ -845,7 +845,7 @@
         <div class="mark">P8</div>
         <div class="brand-text">
           <strong>RunP8</strong>
-          <strong onclick="toggleP8()"<strong>P8 Manager</strong>
+          <strong onclick="toggleP8()">👋 Hi, I’m P8</strong>
           <small>Property management made clear</small>
         </div>
       </button>
@@ -1056,7 +1056,7 @@
     </div>
 
     <div class="card">
-      <form id="renterForm" action="https://formspree.io/f/mreyjvap" method="POST">
+      <form action="https://formspree.io/f/mreyjvap" method="POST">
         <input type="hidden" name="_subject" value="New RunP8 Renter Inquiry">
 
         <div class="form-grid">
@@ -1064,11 +1064,8 @@
             <label for="renter-name">Name</label>
             <input id="renter-name" name="renter_name" type="text" placeholder="Enter your name" required>
           </div>
+
           <div class="field">
-           <label for="moveInDate">Move-in date</label>
-             <input id="moveInDate" name="move_in_date" type="date" required>
-          </div>
-           <div class="field">
             <label for="renter-email">Email</label>
             <input id="renter-email" name="renter_email" type="email" placeholder="Enter your email" required>
           </div>
@@ -1107,9 +1104,6 @@
           This helps us guide you to the most suitable setup and next steps.
         </div>
 
-    <div class="form-success" id="renterSuccess" style="display:none;">
-  ✅ Your inquiry was received.
-</div>
         <div class="submit-row">
           <button class="btn" type="submit">Send renter inquiry</button>
           <a href="tel:+15598253038" class="btn-light">Call instead</a>
@@ -1409,7 +1403,7 @@
   <div id="p8">
     <div class="p8-bubble">
       <div id="p8" class="p8-collapsed">
-     <strong>P8 Manager</strong>
+      <strong>👋 Hi, I’m P8</strong>
       <span>Looking to rent or list a property?</span>
       <div class="p8-chat" id="p8Chat"></div>
 <div class="p8-pipeline" id="p8Pipeline">
@@ -1429,225 +1423,6 @@
   </div>
 
   <script>
-    // ===== Timeline Classification =====
-function classifyTimeline(moveInDate){
-  const today = new Date();
-  const moveIn = new Date(moveInDate);
-
-  const diffMonths = (moveIn.getFullYear() - today.getFullYear()) * 12 
-                   + (moveIn.getMonth() - today.getMonth());
-
-  if(diffMonths <= 1) return "immediate";
-  if(diffMonths <= 3) return "near";
-  return "future";
-}
-
-// ===== VA Brain (Renter) =====
-function VABrainRenter(step, data = {}){
-  if(step === "prequal"){
-    const timeline = classifyTimeline(data.moveInDate);
-
-    if(timeline === "future"){
-      return {
-        status: "hold",
-        reason: "future_timeline",
-        next: null
-      };
-    }
-
-    return {
-      status: "ready",
-      next: "showing"
-    };
-  }
-
-  return {
-    status: "in_progress",
-    next: null
-  };
-}
-
-// ===== P8 Response =====
-function P8TimelineResponse(reason){
-  if(reason === "future_timeline"){
-    return `Thanks for your interest. I do need to have the room occupied by April 2026, so I’m moving forward with applicants who are ready within that timeframe.
-
-Because of that, I’m not able to guarantee availability for a May 2026 move-in. I’d be happy to keep your details and contact you if something opens closer to your date.`;
-  }
-
-  return null;
-}
-
-// ===== Runner =====
-function runRenterStep(step, data){
-  const va = VABrainRenter(step, data);
-
-  if(va.status === "hold"){
-    p8Speak(P8TimelineResponse(va.reason));
-    return;
-  }
-
-  if(va.next){
-    currentStep = va.next;
-  }
-
-  p8Speak("I’m moving this to the next step.");
-}
-    let currentStep = "intake";
-
-function p8Speak(message){
-  const chat = document.getElementById("p8Chat");
-  if(!chat) return;
-  chat.innerHTML = message;
-}
-
-function updatePipelineUI(){
-  document.querySelectorAll("#p8Pipeline .p8-step").forEach(step => {
-    step.classList.remove("active");
-    if(step.dataset.step === currentStep){
-      step.classList.add("active");
-    }
-  });
-}
-
-function setStep(step){
-  currentStep = step;
-  updatePipelineUI();
-
-  const va = VABrain(step);
-
-  let message = "";
-
-  if(va.missing.length){
-    message = `I can move this forward, but I still need ${va.missing.join(", ")}.`;
-  } else {
-    const cleanMessages = {
-      intake: "I’m organizing the property details now.",
-      prepare: "I’m preparing the listing for a strong presentation.",
-      optimize: "I’m improving this for better performance.",
-      publish: "I’m moving this toward live visibility."
-    };
-
-    message = cleanMessages[step] || "I’m moving this forward.";
-  }
-
-  p8Speak(message);
-}
-let currentLane = "owner";
-let currentStep = "intake";
-
-const OWNER_FLOW = ["intake","prepare","optimize","publish","qualify","close","manage"];
-const RENTER_FLOW = ["browse","detail","inquiry","prequal","showing","apply","lease"];
-
-function getFlow(){
-  return currentLane === "owner" ? OWNER_FLOW : RENTER_FLOW;
-}
-
-function setLane(lane){
-  currentLane = lane;
-  currentStep = lane === "owner" ? "intake" : "browse";
-  runCurrentState();
-}
-
-function VABrain(lane, step, data = {}){
-  const reports = {
-    owner: {
-      intake:   { status:"in_progress", missing:[], next:"prepare", report:"Owner intake started." },
-      prepare:  { status:"in_progress", missing:["photos"], next:"optimize", report:"Preparing listing materials." },
-      optimize: { status:"in_progress", missing:[], next:"publish", report:"Optimizing positioning and pricing." },
-      publish:  { status:"in_progress", missing:[], next:"qualify", report:"Publishing and attracting interest." },
-      qualify:  { status:"in_progress", missing:[], next:"close", report:"Reviewing renter quality." },
-      close:    { status:"in_progress", missing:[], next:"manage", report:"Finalizing placement." },
-      manage:   { status:"active", missing:[], next:null, report:"Property is in ongoing management." }
-    },
-    renter: {
-      browse:   { status:"in_progress", missing:[], next:"detail", report:"Browsing matching properties." },
-      detail:   { status:"in_progress", missing:[], next:"inquiry", report:"Reviewing property details." },
-      inquiry:  { status:"in_progress", missing:["move-in date"], next:"prequal", report:"Inquiry received." },
-      prequal:  { status:"in_progress", missing:[], next:"showing", report:"Checking basic fit." },
-      showing:  { status:"in_progress", missing:[], next:"apply", report:"Preparing showing coordination." },
-      apply:    { status:"in_progress", missing:[], next:"lease", report:"Application in progress." },
-      lease:    { status:"active", missing:[], next:null, report:"Lease coordination stage." }
-    }
-  };
-
-  return reports[lane][step];
-  function VABrain(step){
-  const reports = {
-    intake: {
-      status: "in_progress",
-      missing: ["property details"],
-      next: "prepare"
-    },
-    prepare: {
-      status: "in_progress",
-      missing: ["photos"],
-      next: "optimize"
-    },
-    optimize: {
-      status: "in_progress",
-      missing: [],
-      next: "publish"
-    }
-  };
-
-  return reports[step] || {
-    status: "in_progress",
-    missing: [],
-    next: null
-  };
-}
-}
-
-function P8Manager(va){
-  if(va.missing && va.missing.length){
-    return `I can keep this moving, but I still need ${va.missing.join(", ")} first.`;
-  }
-
-  const messages = {
-    "owner:intake": "I’m organizing the property details and getting this ready.",
-    "owner:prepare": "I’m preparing the listing materials for a strong presentation.",
-    "owner:optimize": "I’m improving positioning for better performance.",
-    "owner:publish": "I’m moving this toward live visibility.",
-    "owner:qualify": "I’m focusing on renter quality before moving forward.",
-    "owner:close": "I’m handling the final placement steps.",
-    "owner:manage": "I’m keeping the property in active management flow.",
-
-    "renter:browse": "I’ll help you find the right property faster.",
-    "renter:detail": "Review the details and I’ll guide the next step.",
-    "renter:inquiry": "I received your interest and I’m preparing the next step.",
-    "renter:prequal": "I’m checking basic fit before moving forward.",
-    "renter:showing": "I’m moving this toward showing coordination.",
-    "renter:apply": "I’m guiding the application process now.",
-    "renter:lease": "I’m moving this into lease coordination."
-  };
-
-  return messages[`${currentLane}:${currentStep}`] || va.report;
-}
-
-function runCurrentState(){
-  const va = VABrain(currentLane, currentStep);
-  p8Speak(P8Manager(va));
-}
-
-function nextStep(){
-  const flow = getFlow();
-  const index = flow.indexOf(currentStep);
-  if(index === -1 || index === flow.length - 1) return;
-  currentStep = flow[index + 1];
-  runCurrentState();
-}
-
-function goRent(){
-  window.location.href = "rentals.html";
-}
-
-function goList(){
-  setLane("owner");
-  go("start");
-}
-</script>
-    <script>
     function toggleP8(){
   const box = document.getElementById("p8");
   box.classList.toggle("p8-collapsed");
@@ -1711,7 +1486,6 @@ function goList(){
     if(form && success){
       form.addEventListener("submit", async function(e){
         e.preventDefault();
-        setStep("prepare");
 
         const data = new FormData(form);
 
@@ -1737,9 +1511,7 @@ function goList(){
     }
 
     console.log("RunP8 system ready");
-updatePipelineUI();
-setStep("intake");
-    </script>
+  </script>
   <script>
   let currentStep = "intake";
 
