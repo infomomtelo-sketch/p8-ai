@@ -222,19 +222,20 @@
     document.getElementById("property_id").value = propertyId;
     document.getElementById("propertyBadge").innerText = "Property: " + propertyName;
 
-    function classifyTimeline(moveInDate){
+    function classifyTimeline(moveInDate) {
       const today = new Date();
       const moveIn = new Date(moveInDate);
 
-      const diffMonths = (moveIn.getFullYear() - today.getFullYear()) * 12
-                       + (moveIn.getMonth() - today.getMonth());
+      const diffMonths =
+        (moveIn.getFullYear() - today.getFullYear()) * 12 +
+        (moveIn.getMonth() - today.getMonth());
 
-      if(diffMonths <= 1) return "immediate";
-      if(diffMonths <= 3) return "near";
+      if (diffMonths <= 1) return "immediate";
+      if (diffMonths <= 3) return "near";
       return "future";
     }
 
-    function getHoldMessage(){
+    function getHoldMessage() {
       return `✅ Inquiry received.
 
 Thanks for your interest. Based on your move-in timing, this property may already be moving forward with applicants who are ready sooner.
@@ -246,7 +247,7 @@ We’ll keep your details on file and reach out if this property or a similar ma
     const renterSuccess = document.getElementById("renterSuccess");
     const holdMessage = document.getElementById("holdMessage");
 
-    renterForm.addEventListener("submit", async function(e){
+    renterForm.addEventListener("submit", async function(e) {
       e.preventDefault();
 
       renterSuccess.style.display = "none";
@@ -255,7 +256,7 @@ We’ll keep your details on file and reach out if this property or a similar ma
       const moveInDate = document.getElementById("moveInDate").value;
       const timeline = classifyTimeline(moveInDate);
 
-      if(timeline === "future"){
+      if (timeline === "future") {
         holdMessage.innerText = getHoldMessage();
         holdMessage.style.display = "block";
         holdMessage.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -271,14 +272,14 @@ We’ll keep your details on file and reach out if this property or a similar ma
           headers: { "Accept": "application/json" }
         });
 
-        if(res.ok){
+        if (res.ok) {
           renterForm.style.display = "none";
           renterSuccess.style.display = "block";
           renterSuccess.scrollIntoView({ behavior: "smooth", block: "nearest" });
         } else {
           alert("Something went wrong. Please try again.");
         }
-      } catch(err){
+      } catch (err) {
         alert("Network error. Please try again.");
       }
     });
