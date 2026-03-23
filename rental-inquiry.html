@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rental Inquiry | RunP8</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1120;
+      color: white;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .topbar a {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #1f2937;
+      color: white;
+      text-decoration: none;
+      border: 1px solid #334155;
+      font-weight: 600;
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.28);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+    }
+
+    p {
+      color: #cbd5e1;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #e5e7eb;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: white;
+      font-family: inherit;
+    }
+
+    .field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 10px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .success {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(134, 239, 172, 0.35);
+      color: #bbf7d0;
+      font-weight: 700;
+    }
+
+    .note {
+      margin-top: 16px;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .hold-message {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(234, 179, 8, 0.12);
+      border: 1px solid rgba(253, 230, 138, 0.35);
+      color: #fde68a;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a href="rentals.html">← Back to Rentals</a>
+      <a href="index.html">Home</a>
+    </div>
+
+    <div class="card">
+      <h1>Rental Inquiry</h1>
+      <p>
+        Continue the rental flow by sharing your move-in timing and a few details about your needs.
+      </p>
+
+      <form id="renterForm" action="https://formspree.io/f/mreyjvap" method="POST">
+        <input type="hidden" name="_subject" value="New RunP8 Rental Inquiry" />
+        <input type="hidden" name="property_id" id="propertyId" value="" />
+
+        <div class="field">
+          <label for="renter-name">Name</label>
+          <input id="renter-name" name="renter_name" type="text" required />
+        </div>
+
+        <div class="field">
+          <label for="moveInDate">Move-in date</label>
+          <input id="moveInDate" name="move_in_date" type="date" required />
+        </div>
+
+        <div class="field">
+          <label for="renter-email">Email</label>
+          <input id="renter-email" name="renter_email" type="email" required />
+        </div>
+
+        <div class="field">
+          <label for="renter-phone">Phone</label>
+          <input id="renter-phone" name="renter_phone" type="text" />
+        </div>
+
+        <div class="field">
+          <label for="renter-city">Preferred city</label>
+          <input id="renter-city" name="preferred_city" type="text" />
+        </div>
+
+        <div class="field">
+          <label for="renter-budget">Budget</label>
+          <input id="renter-budget" name="budget" type="text" />
+        </div>
+
+        <div class="field">
+          <label for="notes">Notes</label>
+          <textarea id="notes" name="notes" placeholder="Tell us anything important about your timing, work location, or setup needs."></textarea>
+        </div>
+
+        <button class="submit-btn" type="submit">Submit Inquiry</button>
+      </form>
+
+      <div class="success" id="renterSuccess">
+        ✅ Your inquiry was received. We’ll review your information and continue the next step if timing aligns.
+      </div>
+
+      <div class="hold-message" id="holdMessage"></div>
+
+      <div class="note">
+        This inquiry is used to review timing and fit before moving forward in the rental flow.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const propertyId = params.get("property") || "";
+    document.getElementById("propertyId").value = propertyId;
+
+    function classifyTimeline(moveInDate){
+      const today = new Date();
+      const moveIn = new Date(moveInDate);
+
+      const diffMonths = (moveIn.getFullYear() - today.getFullYear()) * 12
+                       + (moveIn.getMonth() - today.getMonth());
+
+      if(diffMonths <= 1) return "immediate";
+      if(diffMonths <= 3) return "near";
+      return "future";
+    }
+
+    function getHoldMessage(){
+      return `Thanks for your interest. I do need to have the room occupied by April 2026, so I’m moving forward with applicants who are ready within that timeframe.
+
+Because of that, I’m not able to guarantee availability for a May 2026 move-in. I’d be happy to keep your details and contact you if something opens closer to your date.`;
+    }
+
+    const renterForm = document.getElementById("renterForm");
+    const renterSuccess = document.getElementById("renterSuccess");
+    const holdMessage = document.getElementById("holdMessage");
+
+    renterForm.addEventListener("submit", async function(e){
+      e.preventDefault();
+
+      renterSuccess.style.display = "none";
+      holdMessage.style.display = "none";
+
+      const moveInDate = document.getElementById("moveInDate").value;
+      const timeline = classifyTimeline(moveInDate);
+
+      if(timeline === "future"){
+        holdMessage.innerText = getHoldMessage();
+        holdMessage.style.display = "block";
+        holdMessage.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        return;
+      }
+
+      const data = new FormData(renterForm);
+
+      try {
+        const res = await fetch(renterForm.action, {
+          method: "POST",
+          body: data,
+          headers: { "Accept": "application/json" }
+        });
+
+        if(res.ok){
+          renterForm.style.display = "none";
+          renterSuccess.style.display = "block";
+          renterSuccess.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      } catch(err){
+        alert("Network error. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>
