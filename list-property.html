@@ -1,123 +1,415 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>List Property - ProrAI8</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>List Your Property | RunP8</title>
+  <style>
+    *{box-sizing:border-box}
 
-<style>
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#667085;
+      --line:#e5e7eb;
+      --blue:#2f5ef7;
+      --panel:#eef4ff;
+    }
 
-body{
-margin:0;
-font-family:Arial;
-background:#0b1120;
-color:white;
-padding:30px 20px;
-}
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Arial, sans-serif;
+    }
 
-.container{
-max-width:700px;
-margin:auto;
-background:#111827;
-padding:25px;
-border-radius:14px;
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
-}
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px;
+    }
 
-h1{
-margin-top:0;
-text-align:center;
-}
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
 
-label{
-display:block;
-margin-top:14px;
-font-size:14px;
-}
+    .topbar a{
+      text-decoration:none;
+      padding:12px 16px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      font-weight:700;
+    }
 
-input,select,textarea{
-width:100%;
-padding:10px;
-margin-top:5px;
-border-radius:8px;
-border:1px solid #1f2937;
-background:#020617;
-color:white;
-}
+    .hero{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:40px 28px;
+      margin-bottom:24px;
+    }
 
-button{
-margin-top:20px;
-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-background:#2563eb;
-color:white;
-font-size:16px;
-cursor:pointer;
-}
+    .mini{
+      display:inline-block;
+      padding:9px 14px;
+      border-radius:999px;
+      background:var(--panel);
+      color:var(--blue);
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:16px;
+    }
 
-.back{
-display:block;
-margin-bottom:15px;
-color:#60a5fa;
-text-decoration:none;
-}
+    h1{
+      margin:0 0 12px;
+      font-size:52px;
+      line-height:1.04;
+      letter-spacing:-.03em;
+    }
 
-</style>
+    .hero p{
+      margin:0;
+      max-width:760px;
+      color:var(--muted);
+      font-size:21px;
+      line-height:1.6;
+    }
+
+    .points{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .point{
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fbfdff;
+      font-weight:600;
+      color:#334155;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:24px;
+    }
+
+    .card h2{
+      margin:0 0 10px;
+      font-size:34px;
+    }
+
+    .card p{
+      color:var(--muted);
+      line-height:1.65;
+      margin:0 0 18px;
+      font-size:17px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    label{
+      font-weight:700;
+      font-size:14px;
+    }
+
+    input, select, textarea{
+      width:100%;
+      padding:13px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      font:inherit;
+    }
+
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .submit-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .btn{
+      display:inline-block;
+      text-decoration:none;
+      padding:14px 18px;
+      border-radius:12px;
+      font-weight:700;
+      border:none;
+      cursor:pointer;
+      font:inherit;
+    }
+
+    .btn-primary{
+      background:var(--blue);
+      color:#fff;
+    }
+
+    .btn-light{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .steps{
+      display:grid;
+      gap:12px;
+    }
+
+    .step{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      background:#fbfdff;
+    }
+
+    .step strong{
+      display:block;
+      margin-bottom:6px;
+      color:var(--blue);
+      font-size:14px;
+    }
+
+    .step span{
+      color:#334155;
+      font-weight:600;
+      line-height:1.5;
+    }
+
+    .form-success{
+      display:none;
+      margin-top:18px;
+      padding:16px;
+      border-radius:14px;
+      background:#ecfdf3;
+      border:1px solid #bbf7d0;
+      color:#166534;
+      font-weight:700;
+    }
+
+    .footer{
+      padding:28px 0 8px;
+      text-align:center;
+      color:#94a3b8;
+      font-size:14px;
+    }
+
+    @media (max-width: 900px){
+      h1{font-size:40px}
+      .hero p{font-size:18px}
+      .points{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 640px){
+      .wrap{padding:18px}
+      h1{font-size:34px}
+      .form-grid{grid-template-columns:1fr}
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
 
-<div class="container">
+    <div class="topbar">
+      <a href="index.html">← Back to Home</a>
+      <a href="rentals.html">Find a Rental</a>
+    </div>
 
-<a class="back" href="index.html">← Back to Home</a>
+    <section class="hero">
+      <span class="mini">For property owners</span>
+      <h1>Start your property process clearly</h1>
+      <p>
+        Submit your property details and move into a cleaner owner flow with
+        preparation, positioning, qualification, and next steps that stay visible.
+      </p>
 
-<h1>List Property</h1>
+      <div class="points">
+        <div class="point">Clear next steps instead of a confusing handoff</div>
+        <div class="point">A structured process from intake to renter placement</div>
+        <div class="point">Professional follow-through after the form is submitted</div>
+      </div>
+    </section>
 
-<p>Add occupied units, vacant properties, or upcoming vacancies.</p>
+    <section class="grid">
+      <div class="card">
+        <h2>Tell us about your property</h2>
+        <p>
+          Start with the basics. This intake helps organize the owner lane before
+          the property moves into preparation and listing steps.
+        </p>
 
-<form>
+        <form id="ownerForm" action="https://formspree.io/f/mreyjvap" method="POST">
+          <input type="hidden" name="_subject" value="New RunP8 Owner Intake" />
 
-<label>Property Address</label>
-<input type="text" placeholder="123 Main St">
+          <div class="form-grid">
+            <div class="field">
+              <label for="ownerName">Name</label>
+              <input id="ownerName" name="owner_name" type="text" required />
+            </div>
 
-<label>Property Type</label>
-<select>
-<option>House</option>
-<option>Apartment</option>
-<option>Studio</option>
-<option>Room</option>
-<option>ADU</option>
-</select>
+            <div class="field">
+              <label for="ownerEmail">Email</label>
+              <input id="ownerEmail" name="owner_email" type="email" required />
+            </div>
 
-<label>Bedrooms</label>
-<input type="number">
+            <div class="field">
+              <label for="ownerPhone">Phone</label>
+              <input id="ownerPhone" name="owner_phone" type="text" />
+            </div>
 
-<label>Bathrooms</label>
-<input type="number">
+            <div class="field">
+              <label for="propertyType">Property Type</label>
+              <select id="propertyType" name="property_type">
+                <option>Room</option>
+                <option>Studio</option>
+                <option>ADU</option>
+                <option>Apartment</option>
+                <option>House</option>
+              </select>
+            </div>
 
-<label>Monthly Rent ($)</label>
-<input type="number">
+            <div class="field full">
+              <label for="propertyAddress">Property Address</label>
+              <input id="propertyAddress" name="property_address" type="text" />
+            </div>
 
-<label>Occupancy Status</label>
-<select>
-<option>Vacant</option>
-<option>Occupied</option>
-<option>Upcoming Vacancy</option>
-</select>
+            <div class="field">
+              <label for="propertyCity">City</label>
+              <input id="propertyCity" name="property_city" type="text" />
+            </div>
 
-<label>Available Date</label>
-<input type="date">
+            <div class="field">
+              <label for="targetRent">Target Rent</label>
+              <input id="targetRent" name="target_rent" type="text" placeholder="$1,800" />
+            </div>
 
-<label>Notes</label>
-<textarea rows="4" placeholder="Additional details"></textarea>
+            <div class="field full">
+              <label for="ownerNotes">Notes</label>
+              <textarea id="ownerNotes" name="owner_notes" placeholder="Anything important about timing, occupancy, condition, or goals."></textarea>
+            </div>
+          </div>
 
-<button type="submit">Save Property</button>
+          <div class="submit-row">
+            <button class="btn btn-primary" type="submit">Submit Property Intake</button>
+            <a class="btn btn-light" href="tel:+15598253038">Call Instead</a>
+          </div>
+        </form>
 
-</form>
+        <div class="form-success" id="ownerSuccess">
+          ✅ Intake submitted successfully. Your property has entered the owner flow.
+        </div>
+      </div>
 
-</div>
+      <div class="card">
+        <h2>What happens next</h2>
+        <p>
+          After intake, the owner lane continues through a structured sequence.
+        </p>
 
+        <div class="steps">
+          <div class="step">
+            <strong>STEP 1 — Intake</strong>
+            <span>Basic property information is submitted and organized.</span>
+          </div>
+
+          <div class="step">
+            <strong>STEP 2 — Prepare</strong>
+            <span>The property moves into preparation and presentation readiness.</span>
+          </div>
+
+          <div class="step">
+            <strong>STEP 3 — Optimize</strong>
+            <span>Pricing and positioning are reviewed before listing exposure.</span>
+          </div>
+
+          <div class="step">
+            <strong>STEP 4 — Publish</strong>
+            <span>The property moves toward live visibility and renter attention.</span>
+          </div>
+
+          <div class="step">
+            <strong>STEP 5 — Qualify</strong>
+            <span>Renter fit is reviewed before moving into final placement.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      © 2026 RunP8. Owner flow page.
+    </div>
+  </div>
+
+  <script>
+    const ownerForm = document.getElementById("ownerForm");
+    const ownerSuccess = document.getElementById("ownerSuccess");
+
+    if (ownerForm && ownerSuccess) {
+      ownerForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const data = new FormData(ownerForm);
+
+        try {
+          const res = await fetch(ownerForm.action, {
+            method: "POST",
+            body: data,
+            headers: { "Accept": "application/json" }
+          });
+
+          if (res.ok) {
+            ownerForm.style.display = "none";
+            ownerSuccess.style.display = "block";
+            ownerSuccess.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          } else {
+            alert("Something went wrong. Please try again.");
+          }
+        } catch (err) {
+          alert("Network error. Please try again.");
+        }
+      });
+    }
+  </script>
 </body>
 </html>
