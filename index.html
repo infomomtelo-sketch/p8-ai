@@ -1495,6 +1495,31 @@ function VABrain(lane, step, data = {}){
   };
 
   return reports[lane][step];
+  function VABrain(step){
+  const reports = {
+    intake: {
+      status: "in_progress",
+      missing: ["property details"],
+      next: "prepare"
+    },
+    prepare: {
+      status: "in_progress",
+      missing: ["photos"],
+      next: "optimize"
+    },
+    optimize: {
+      status: "in_progress",
+      missing: [],
+      next: "publish"
+    }
+  };
+
+  return reports[step] || {
+    status: "in_progress",
+    missing: [],
+    next: null
+  };
+}
 }
 
 function P8Manager(va){
