@@ -1423,6 +1423,70 @@
   </div>
 
   <script>
+    // ===== Timeline Classification =====
+function classifyTimeline(moveInDate){
+  const today = new Date();
+  const moveIn = new Date(moveInDate);
+
+  const diffMonths = (moveIn.getFullYear() - today.getFullYear()) * 12 
+                   + (moveIn.getMonth() - today.getMonth());
+
+  if(diffMonths <= 1) return "immediate";
+  if(diffMonths <= 3) return "near";
+  return "future";
+}
+
+// ===== VA Brain (Renter) =====
+function VABrainRenter(step, data = {}){
+  if(step === "prequal"){
+    const timeline = classifyTimeline(data.moveInDate);
+
+    if(timeline === "future"){
+      return {
+        status: "hold",
+        reason: "future_timeline",
+        next: null
+      };
+    }
+
+    return {
+      status: "ready",
+      next: "showing"
+    };
+  }
+
+  return {
+    status: "in_progress",
+    next: null
+  };
+}
+
+// ===== P8 Response =====
+function P8TimelineResponse(reason){
+  if(reason === "future_timeline"){
+    return `Thanks for your interest. I do need to have the room occupied by April 2026, so I’m moving forward with applicants who are ready within that timeframe.
+
+Because of that, I’m not able to guarantee availability for a May 2026 move-in. I’d be happy to keep your details and contact you if something opens closer to your date.`;
+  }
+
+  return null;
+}
+
+// ===== Runner =====
+function runRenterStep(step, data){
+  const va = VABrainRenter(step, data);
+
+  if(va.status === "hold"){
+    p8Speak(P8TimelineResponse(va.reason));
+    return;
+  }
+
+  if(va.next){
+    currentStep = va.next;
+  }
+
+  p8Speak("I’m moving this to the next step.");
+}
     let currentStep = "intake";
 
 function p8Speak(message){
