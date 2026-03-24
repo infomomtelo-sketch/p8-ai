@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RunP8 Screening Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    :root{
+      --bg:#0b1120;
+      --panel:#111827;
+      --panel2:#1f2937;
+      --line:#334155;
+      --text:#ffffff;
+      --muted:#cbd5e1;
+      --green:#22c55e;
+      --yellow:#f59e0b;
+      --red:#ef4444;
+      --blue:#2563eb;
+    }
+
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      padding:28px 18px;
+    }
+
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:22px;
+    }
+
+    .topbar a{
+      text-decoration:none;
+      color:white;
+      background:var(--panel2);
+      border:1px solid var(--line);
+      padding:10px 14px;
+      border-radius:10px;
+      font-weight:700;
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size:34px;
+    }
+
+    .subtitle{
+      margin:0 0 22px;
+      color:var(--muted);
+      line-height:1.6;
+      max-width:760px;
+    }
+
+    .summary{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:14px;
+      margin-bottom:22px;
+    }
+
+    .stat{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px;
+    }
+
+    .stat-label{
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:8px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .stat-value{
+      font-size:28px;
+      font-weight:800;
+    }
+
+    .filters{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      margin-bottom:22px;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:12px;
+    }
+
+    .filters label{
+      display:block;
+      margin-bottom:6px;
+      color:var(--muted);
+      font-weight:700;
+      font-size:13px;
+    }
+
+    .filters input,
+    .filters select{
+      width:100%;
+      padding:11px 12px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:#0f172a;
+      color:white;
+      font-family:inherit;
+    }
+
+    .board{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:18px;
+    }
+
+    .lane{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .lane-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:14px;
+      gap:10px;
+    }
+
+    .lane-title{
+      font-size:20px;
+      font-weight:800;
+    }
+
+    .lane-count{
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      border:1px solid var(--line);
+      background:#0f172a;
+      color:var(--muted);
+    }
+
+    .lane.green .lane-title{ color:var(--green); }
+    .lane.yellow .lane-title{ color:var(--yellow); }
+    .lane.red .lane-title{ color:var(--red); }
+
+    .lead{
+      background:#0f172a;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      margin-bottom:12px;
+    }
+
+    .lead:last-child{
+      margin-bottom:0;
+    }
+
+    .lead-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .lead-name{
+      font-weight:800;
+      font-size:18px;
+      margin-bottom:4px;
+    }
+
+    .lead-property{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .tag{
+      padding:6px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .tag.green{
+      background:rgba(34,197,94,.16);
+      color:#86efac;
+      border:1px solid rgba(134,239,172,.25);
+    }
+
+    .tag.yellow{
+      background:rgba(245,158,11,.14);
+      color:#fcd34d;
+      border:1px solid rgba(252,211,77,.22);
+    }
+
+    .tag.red{
+      background:rgba(239,68,68,.14);
+      color:#fca5a5;
+      border:1px solid rgba(252,165,165,.22);
+    }
+
+    .lead-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .meta-box{
+      background:rgba(255,255,255,.02);
+      border:1px solid rgba(255,255,255,.05);
+      border-radius:12px;
+      padding:10px;
+    }
+
+    .meta-label{
+      color:#94a3b8;
+      font-size:11px;
+      font-weight:800;
+      margin-bottom:5px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .meta-value{
+      font-size:14px;
+      line-height:1.45;
+    }
+
+    .notes{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+      margin-bottom:12px;
+    }
+
+    .actions{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:8px;
+    }
+
+    .actions a,
+    .actions button{
+      width:100%;
+      text-align:center;
+      padding:10px 12px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:700;
+      font-size:14px;
+      border:1px solid var(--line);
+      background:var(--panel2);
+      color:white;
+      cursor:pointer;
+      font-family:inherit;
+    }
+
+    .actions .primary{
+      background:var(--blue);
+      border-color:transparent;
+    }
+
+    .actions .ghost{
+      background:transparent;
+    }
+
+    .footer-note{
+      margin-top:20px;
+      color:#94a3b8;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    @media (max-width: 980px){
+      .summary{ grid-template-columns:1fr 1fr; }
+      .filters{ grid-template-columns:1fr 1fr; }
+      .board{ grid-template-columns:1fr; }
+    }
+
+    @media (max-width: 640px){
+      h1{ font-size:28px; }
+      .summary{ grid-template-columns:1fr; }
+      .filters{ grid-template-columns:1fr; }
+      .lead-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a href="index.html">← Back to Home</a>
+      <a href="rentals.html">View Rentals</a>
+    </div>
+
+    <h1>Renter Screening Dashboard</h1>
+    <p class="subtitle">
+      Use this board to review incoming renter inquiries, classify fit, and decide who moves forward to showing or application.
+    </p>
+
+    <div class="summary">
+      <div class="stat">
+        <div class="stat-label">Total Leads</div>
+        <div class="stat-value">9</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Green / Qualified</div>
+        <div class="stat-value">3</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Yellow / Clarify</div>
+        <div class="stat-value">3</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Red / Not Fit</div>
+        <div class="stat-value">3</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div>
+        <label for="propertyFilter">Property</label>
+        <select id="propertyFilter">
+          <option>All Properties</option>
+          <option>Fresno Studio</option>
+          <option>2BR House</option>
+          <option>Private Room</option>
+        </select>
+      </div>
+      <div>
+        <label for="dateFilter">Move-in Timing</label>
+        <select id="dateFilter">
+          <option>All</option>
+          <option>Immediate</option>
+          <option>Near Term</option>
+          <option>Future</option>
+        </select>
+      </div>
+      <div>
+        <label for="budgetFilter">Budget</label>
+        <input id="budgetFilter" type="text" placeholder="$1200+" />
+      </div>
+      <div>
+        <label for="nameFilter">Search Name</label>
+        <input id="nameFilter" type="text" placeholder="Type a renter name" />
+      </div>
+    </div>
+
+    <div class="board">
+      <div class="lane green">
+        <div class="lane-header">
+          <div class="lane-title">Green — Move Forward</div>
+          <div class="lane-count">3 Leads</div>
+        </div>
+
+        <div class="lead">
+          <div class="lead-top">
+            <div>
+              <div class="lead-name">John Dela Cruz</div>
+              <div class="lead-property">Fresno Studio</div>
+            </div>
+            <div class="tag green">Qualified</div>
+          </div>
+
+          <div class="lead-grid">
+            <div class="meta-box">
+              <div class="meta-label">Move-in</div>
+              <div class="meta-value">Within 2 weeks</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Budget</div>
+              <div class="meta-value">$1,300</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Income</div>
+              <div class="meta-value">$4,800/mo</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Occupants</div>
+              <div class="meta-value">1</div>
+            </div>
+          </div>
+
+          <div class="notes">
+            Complete details, strong timing, and budget aligns with property.
+          </div>
+
+          <div class="actions">
+            <a class="primary" href="showing.html?property=Fresno%20Studio&id=fresno-studio">Send to Showing</a>
+            <button>Send Green Reply</button>
+          </div>
+        </div>
+
+        <div class="lead">
+          <div class="lead-top">
+            <div>
+              <div class="lead-name">Maria Santos</div>
+              <div class="lead-property">2BR House</div>
+            </div>
+            <div class="tag green">Qualified</div>
+          </div>
+
+          <div class="lead-grid">
+            <div class="meta-box">
+              <div class="meta-label">Move-in</div>
+              <div class="meta-value">30 days</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Budget</div>
+              <div class="meta-value">$1,900</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Income</div>
+              <div class="meta-value">$6,500/mo</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Occupants</div>
+              <div class="meta-value">2</div>
+            </div>
+          </div>
+
+          <div class="notes">
+            Stable timing and strong income profile for the listing.
+          </div>
+
+          <div class="actions">
+            <a class="primary" href="showing.html?property=2BR%20House&id=fresno-2br">Send to Showing</a>
+            <button>Send Green Reply</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="lane yellow">
+        <div class="lane-header">
+          <div class="lane-title">Yellow — Clarify First</div>
+          <div class="lane-count">3 Leads</div>
+        </div>
+
+        <div class="lead">
+          <div class="lead-top">
+            <div>
+              <div class="lead-name">Alyssa Reyes</div>
+              <div class="lead-property">Private Room</div>
+            </div>
+            <div class="tag yellow">Needs Info</div>
+          </div>
+
+          <div class="lead-grid">
+            <div class="meta-box">
+              <div class="meta-label">Move-in</div>
+              <div class="meta-value">Soon</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Budget</div>
+              <div class="meta-value">Unclear</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Income</div>
+              <div class="meta-value">Not provided</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Occupants</div>
+              <div class="meta-value">Not provided</div>
+            </div>
+          </div>
+
+          <div class="notes">
+            Timing looks possible, but core screening details are missing.
+          </div>
+
+          <div class="actions">
+            <button>Send Clarification Reply</button>
+            <button class="ghost">Move to Green</button>
+          </div>
+        </div>
+
+        <div class="lead">
+          <div class="lead-top">
+            <div>
+              <div class="lead-name">Kevin Ramos</div>
+              <div class="lead-property">Fresno Studio</div>
+            </div>
+            <div class="tag yellow">Needs Info</div>
+          </div>
+
+          <div class="lead-grid">
+            <div class="meta-box">
+              <div class="meta-label">Move-in</div>
+              <div class="meta-value">Flexible</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Budget</div>
+              <div class="meta-value">$1,200</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Income</div>
+              <div class="meta-value">Unclear</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Occupants</div>
+              <div class="meta-value">1</div>
+            </div>
+          </div>
+
+          <div class="notes">
+            Budget works, but move-in and income need confirmation before showing.
+          </div>
+
+          <div class="actions">
+            <button>Send Clarification Reply</button>
+            <button class="ghost">Move to Green</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="lane red">
+        <div class="lane-header">
+          <div class="lane-title">Red — Not Fit Now</div>
+          <div class="lane-count">3 Leads</div>
+        </div>
+
+        <div class="lead">
+          <div class="lead-top">
+            <div>
+              <div class="lead-name">Daniel Lopez</div>
+              <div class="lead-property">Fresno Studio</div>
+            </div>
+            <div class="tag red">Not Fit</div>
+          </div>
+
+          <div class="lead-grid">
+            <div class="meta-box">
+              <div class="meta-label">Move-in</div>
+              <div class="meta-value">5 months out</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Budget</div>
+              <div class="meta-value">$900</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Income</div>
+              <div class="meta-value">Not provided</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Occupants</div>
+              <div class="meta-value">Unknown</div>
+            </div>
+          </div>
+
+          <div class="notes">
+            Move-in timing is too far out and budget does not align.
+          </div>
+
+          <div class="actions">
+            <button>Send Soft Decline</button>
+          </div>
+        </div>
+
+        <div class="lead">
+          <div class="lead-top">
+            <div>
+              <div class="lead-name">Patricia Gomez</div>
+              <div class="lead-property">2BR House</div>
+            </div>
+            <div class="tag red">Not Fit</div>
+          </div>
+
+          <div class="lead-grid">
+            <div class="meta-box">
+              <div class="meta-label">Move-in</div>
+              <div class="meta-value">Unknown</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Budget</div>
+              <div class="meta-value">$1,200</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Income</div>
+              <div class="meta-value">Unknown</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">Occupants</div>
+              <div class="meta-value">4</div>
+            </div>
+          </div>
+
+          <div class="notes">
+            Budget is too low for this listing and submission is incomplete.
+          </div>
+
+          <div class="actions">
+            <button>Send Soft Decline</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      This dashboard is your manual screening layer between renter inquiry and the next approved step in the Ziprent-style flow.
+    </div>
+  </div>
+</body>
+</html>
