@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rental Application | RunP8</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1120;
+      color: white;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .topbar a {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #1f2937;
+      color: white;
+      text-decoration: none;
+      border: 1px solid #334155;
+      font-weight: 600;
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.28);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+    }
+
+    p {
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .property-pill {
+      display: inline-block;
+      margin: 0 0 16px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.18);
+      color: #93c5fd;
+      border: 1px solid rgba(147, 197, 253, 0.35);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #e5e7eb;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: white;
+      font-family: inherit;
+    }
+
+    .field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 10px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 4px;
+    }
+
+    .submit-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .success {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(134, 239, 172, 0.35);
+      color: #bbf7d0;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    .note {
+      margin-top: 16px;
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .next-actions {
+      display: none;
+      margin-top: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .next-actions a {
+      display: inline-block;
+      padding: 11px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #1f2937;
+      color: white;
+      border: 1px solid #334155;
+    }
+
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a href="rentals.html">← Back to Rentals</a>
+      <a href="index.html">Home</a>
+    </div>
+
+    <div class="card">
+      <div class="property-pill" id="propertyBadge">Application</div>
+
+      <h1>Rental Application</h1>
+      <p>
+        Complete this application to continue forward in the renter flow. This helps
+        review fit, timing, and readiness before final approval steps.
+      </p>
+
+      <form id="applyForm" action="https://formspree.io/f/xreynqkp" method="POST">
+        <input type="hidden" name="_subject" value="RunP8 Rental Application" />
+        <input type="hidden" name="source" value="RunP8 Apply Flow" />
+        <input type="hidden" id="property_name" name="property_name" />
+        <input type="hidden" id="property_id" name="property_id" />
+
+        <div class="grid">
+          <div class="field">
+            <label for="fullName">Full Name</label>
+            <input id="fullName" name="full_name" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required />
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="moveInDate">Requested Move-in Date</label>
+            <input id="moveInDate" name="move_in_date" type="date" required />
+          </div>
+
+          <div class="field">
+            <label for="monthlyIncome">Monthly Income</label>
+            <input id="monthlyIncome" name="monthly_income" type="text" placeholder="$4,500" required />
+          </div>
+
+          <div class="field">
+            <label for="employmentStatus">Employment Status</label>
+            <select id="employmentStatus" name="employment_status" required>
+              <option value="">Select one</option>
+              <option>Full-time</option>
+              <option>Part-time</option>
+              <option>Self-employed</option>
+              <option>Contract</option>
+              <option>Student</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="occupants">Number of Occupants</label>
+            <input id="occupants" name="occupants" type="number" min="1" placeholder="1" required />
+          </div>
+
+          <div class="field">
+            <label for="pets">Pets</label>
+            <select id="pets" name="pets">
+              <option>No Pets</option>
+              <option>1 Pet</option>
+              <option>2+ Pets</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="currentAddress">Current Address</label>
+            <input id="currentAddress" name="current_address" type="text" />
+          </div>
+
+          <div class="field full">
+            <label for="reasonForMoving">Reason for Moving</label>
+            <textarea id="reasonForMoving" name="reason_for_moving" placeholder="Tell us briefly why you're moving."></textarea>
+          </div>
+
+          <div class="field full">
+            <label for="additionalNotes">Additional Notes</label>
+            <textarea id="additionalNotes" name="additional_notes" placeholder="Anything important about your application, timing, or housing needs."></textarea>
+          </div>
+        </div>
+
+        <button class="submit-btn" type="submit">Submit Application</button>
+      </form>
+
+      <div class="success" id="applySuccess">
+        ✅ Application submitted successfully.<br><br>
+        We’ve received your information and will review it for fit, timing, and next-step readiness.<br><br>
+        If your application moves forward, we’ll contact you with the next step.
+      </div>
+
+      <div class="next-actions" id="nextActions">
+        <a class="btn-primary" href="rentals.html">Browse More Rentals</a>
+        <a class="btn-secondary" href="index.html">Back to Home</a>
+      </div>
+
+      <div class="note">
+        This application is part of the RunP8 renter flow and helps move qualified renters
+        toward the next stage after showing and review.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const propertyName = params.get("property") || "Unknown Property";
+    const propertyId = params.get("id") || "unknown";
+
+    document.getElementById("propertyBadge").innerText = "Property: " + propertyName;
+    document.getElementById("property_name").value = propertyName;
+    document.getElementById("property_id").value = propertyId;
+
+    const form = document.getElementById("applyForm");
+    const success = document.getElementById("applySuccess");
+    const nextActions = document.getElementById("nextActions");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: data,
+          headers: { "Accept": "application/json" }
+        });
+
+        if (res.ok) {
+          form.style.display = "none";
+          success.style.display = "block";
+          nextActions.style.display = "flex";
+          success.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      } catch (err) {
+        alert("Network error. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>
