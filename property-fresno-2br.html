@@ -1,279 +1,211 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fresno Studio | RunP8</title>
-  <meta
-    name="description"
-    content="RunP8 property details page for Fresno Studio."
-  />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2 Bedroom House | RunP8</title>
+
   <style>
-    *{box-sizing:border-box}
+    * { box-sizing: border-box; }
 
-    :root{
-      --bg:#0b1120;
-      --card:#111827;
-      --text:#ffffff;
-      --muted:#cbd5e1;
-      --line:#1f2937;
-      --blue:#2563eb;
-      --blue-dark:#1d4ed8;
-      --pill-bg:rgba(37, 99, 235, 0.18);
-      --pill-line:rgba(147, 197, 253, 0.35);
-      --pill-text:#93c5fd;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1120;
+      color: white;
+      padding: 30px 20px;
     }
 
-    html,body{
-      margin:0;
-      padding:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family:Arial, sans-serif;
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:24px;
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:24px;
+    .topbar a {
+      text-decoration: none;
+      background: #1f2937;
+      border: 1px solid #334155;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
     }
 
-    .topbar a{
-      display:inline-block;
-      padding:10px 14px;
-      border-radius:10px;
-      background:#1f2937;
-      color:white;
-      text-decoration:none;
-      border:1px solid #334155;
-      font-weight:600;
+    .card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.28);
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns:1.1fr .9fr;
-      gap:18px;
-      align-items:start;
+    .hero-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
     }
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:20px;
-      overflow:hidden;
-      box-shadow:0 14px 32px rgba(0,0,0,0.28);
+    .content {
+      padding: 22px;
     }
 
-    .hero-img{
-      width:100%;
-      height:420px;
-      object-fit:cover;
-      display:block;
+    .price {
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 6px;
     }
 
-    .body{
-      padding:22px;
+    .title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 6px;
     }
 
-    .badge{
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:700;
-      margin-bottom:14px;
-      background:var(--pill-bg);
-      color:var(--pill-text);
-      border:1px solid var(--pill-line);
+    .meta {
+      color: #cbd5e1;
+      margin-bottom: 16px;
     }
 
-    h1{
-      margin:0 0 8px;
-      font-size:40px;
-      line-height:1.05;
-      letter-spacing:-0.03em;
+    .section {
+      margin-bottom: 20px;
     }
 
-    .price{
-      font-size:28px;
-      font-weight:800;
-      margin-bottom:8px;
+    .section h3 {
+      margin-bottom: 8px;
+      font-size: 18px;
     }
 
-    .meta{
-      color:var(--muted);
-      font-size:15px;
-      margin-bottom:18px;
+    .section p {
+      color: #cbd5e1;
+      line-height: 1.6;
     }
 
-    .desc{
-      color:var(--muted);
-      line-height:1.7;
-      font-size:16px;
-      margin:0;
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+      gap: 10px;
     }
 
-    .section-title{
-      margin:0 0 14px;
-      font-size:24px;
+    .feature {
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid #1f2937;
+      font-size: 14px;
     }
 
-    .list{
-      display:grid;
-      gap:10px;
+    .cta {
+      margin-top: 20px;
     }
 
-    .list-item{
-      padding:14px 16px;
-      border:1px solid #334155;
-      border-radius:14px;
-      background:#0f172a;
-      color:#e5e7eb;
-      line-height:1.55;
-      font-size:15px;
+    .cta a {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
     }
 
-    .actions{
-      display:grid;
-      gap:12px;
+    .primary {
+      background: #2563eb;
+      color: white;
     }
 
-    .btn{
-      display:inline-block;
-      text-align:center;
-      padding:14px 18px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:700;
-      font-size:15px;
+    .secondary {
+      margin-top: 10px;
+      background: #1f2937;
+      border: 1px solid #334155;
+      color: white;
     }
 
-    .btn-primary{
-      background:var(--blue);
-      color:white;
+    .note {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #94a3b8;
+      text-align: center;
     }
 
-    .btn-primary:hover{
-      background:var(--blue-dark);
-    }
-
-    .btn-light{
-      background:#1f2937;
-      color:white;
-      border:1px solid #334155;
-    }
-
-    .note{
-      color:#94a3b8;
-      font-size:14px;
-      line-height:1.6;
-      margin-top:12px;
-    }
-
-    @media (max-width: 900px){
-      .grid{
-        grid-template-columns:1fr;
-      }
-
-      .hero-img{
-        height:320px;
-      }
-
-      h1{
-        font-size:34px;
-      }
-    }
-
-    @media (max-width: 640px){
-      .wrap{
-        padding:18px;
-      }
-
-      .hero-img{
-        height:260px;
-      }
-
-      h1{
-        font-size:30px;
-      }
-
-      .price{
-        font-size:24px;
-      }
+    @media(max-width:640px){
+      .hero-img { height: 240px; }
     }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
+  <div class="container">
 
     <div class="topbar">
-      <a href="rentals.html">← Back to Listings</a>
+      <a href="rentals.html">← Back to Rentals</a>
       <a href="index.html">Home</a>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <img
-          class="hero-img"
-          src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80"
-          alt="Fresno Studio"
-        />
-        <div class="body">
-          <div class="badge">Available Now</div>
-          <h1>Fresno Studio</h1>
-          <div class="price">$1,200/mo</div>
-          <div class="meta">Fresno, CA • 1 bed • 1 bath • Furnished Studio</div>
-          <p class="desc">
-            Private entrance, furnished setup, and a simpler living arrangement
-            close to major work routes. This studio is a good fit for renters who
-            want a calm, practical space with straightforward next steps.
+    <div class="card">
+      <img 
+        class="hero-img"
+        src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=1200&q=80"
+        alt="2 Bedroom House"
+      />
+
+      <div class="content">
+
+        <div class="price">$1,800/mo</div>
+        <div class="title">2 Bedroom House</div>
+        <div class="meta">Fresno, CA • 2 bed • 1 bath</div>
+
+        <div class="section">
+          <h3>Overview</h3>
+          <p>
+            This 2-bedroom home offers a comfortable layout for small families or
+            longer-term renters. Located in Fresno with access to nearby schools,
+            work routes, and everyday essentials.
           </p>
         </div>
-      </div>
 
-      <div style="display:grid; gap:18px;">
-        <div class="card">
-          <div class="body">
-            <h2 class="section-title">Highlights</h2>
-            <div class="list">
-              <div class="list-item">Private entrance for more independence and privacy.</div>
-              <div class="list-item">Furnished setup for a simpler move-in experience.</div>
-              <div class="list-item">Close to hospitals, work routes, and daily essentials.</div>
-              <div class="list-item">Good fit for one person looking for a stable, efficient space.</div>
-            </div>
+        <div class="section">
+          <h3>Highlights</h3>
+          <div class="features">
+            <div class="feature">2 Bedrooms</div>
+            <div class="feature">1 Bathroom</div>
+            <div class="feature">Parking</div>
+            <div class="feature">Family Friendly</div>
+            <div class="feature">Quiet Area</div>
+            <div class="feature">Flexible Move-in</div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="body">
-            <h2 class="section-title">Next Step</h2>
-            <p class="desc" style="margin-bottom:18px;">
-              If this property fits your needs, the next step is to schedule a showing.
-            </p>
-
-            <div class="actions">
-              <a class="btn btn-primary" href="showing.html?property=Fresno%20Studio">
-                Schedule Showing
-              </a>
-              <a class="btn btn-light" href="rentals.html">
-                Continue Browsing
-              </a>
-            </div>
-
-            <div class="note">
-              You’ll move to the next renter step after reviewing the property details.
-            </div>
-          </div>
+        <div class="section">
+          <h3>Good Fit For</h3>
+          <p>
+            Renters looking for a stable long-term option, small families, or
+            professionals who need more space than a studio setup.
+          </p>
         </div>
+
+        <div class="cta">
+          <a class="primary"
+             href="showing.html?property=2BR%20House&id=fresno-2br">
+            Schedule Showing
+          </a>
+
+          <a class="secondary" href="rentals.html">
+            Back to Listings
+          </a>
+        </div>
+
+        <div class="note">
+          View details first, then schedule a showing if this property fits your needs.
+        </div>
+
       </div>
     </div>
 
