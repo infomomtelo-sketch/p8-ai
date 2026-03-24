@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Schedule Showing | RunP8</title>
-
   <style>
     * { box-sizing: border-box; }
 
@@ -24,17 +23,19 @@
     .topbar {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 24px;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
+      margin-bottom: 24px;
     }
 
     .topbar a {
-      text-decoration: none;
+      display: inline-block;
       padding: 10px 14px;
       border-radius: 10px;
       background: #1f2937;
       color: white;
+      text-decoration: none;
       border: 1px solid #334155;
       font-weight: 600;
     }
@@ -44,56 +45,74 @@
       border: 1px solid #1f2937;
       border-radius: 18px;
       padding: 22px;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.28);
     }
 
     h1 {
       margin: 0 0 10px;
-      font-size: 32px;
+      font-size: 34px;
     }
 
     p {
       color: #cbd5e1;
+      line-height: 1.6;
     }
 
     .property-pill {
       display: inline-block;
-      margin-bottom: 16px;
+      margin: 0 0 16px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(37, 99, 235, 0.2);
+      background: rgba(37, 99, 235, 0.18);
       color: #93c5fd;
-      font-weight: 700;
+      border: 1px solid rgba(147, 197, 253, 0.35);
       font-size: 13px;
+      font-weight: 700;
     }
 
     .field {
       margin-bottom: 14px;
     }
 
-    label {
+    .field label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-weight: 700;
+      color: #e5e7eb;
     }
 
-    input {
+    .field input,
+    .field textarea,
+    .field select {
       width: 100%;
       padding: 12px;
       border-radius: 10px;
       border: 1px solid #334155;
       background: #0f172a;
       color: white;
+      font-family: inherit;
     }
 
-    .btn {
+    .field textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .submit-btn {
       width: 100%;
-      padding: 13px;
+      padding: 13px 14px;
       border-radius: 10px;
       border: none;
       background: #2563eb;
       color: white;
       font-weight: 700;
+      font-size: 15px;
       cursor: pointer;
+      font-family: inherit;
+    }
+
+    .submit-btn:hover {
+      background: #1d4ed8;
     }
 
     .success {
@@ -105,98 +124,164 @@
       border: 1px solid rgba(134, 239, 172, 0.35);
       color: #bbf7d0;
       font-weight: 700;
+      line-height: 1.6;
     }
 
+    .next-actions {
+      display: none;
+      margin-top: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .next-actions a {
+      display: inline-block;
+      padding: 11px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #1f2937;
+      color: white;
+      border: 1px solid #334155;
+    }
+
+    .note {
+      margin-top: 16px;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 30px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-
     <div class="topbar">
-      <a href="rentals.html">← Back to Listings</a>
+      <a href="rentals.html">← Back to Rentals</a>
       <a href="index.html">Home</a>
     </div>
 
     <div class="card">
-      <div class="property-pill" id="propertyName">Property</div>
+      <div class="property-pill" id="propertyBadge">Showing Request</div>
 
       <h1>Schedule a Showing</h1>
       <p>
-        Choose a time that works for you. We’ll review your request and confirm the next step.
+        Choose a time that works for you. We’ll review your request and confirm
+        the next step based on availability and fit.
       </p>
 
-      <form id="showingForm" action="https://formspree.io/f/mreyjvap" method="POST">
-
+      <form id="showingForm" action="https://formspree.io/f/xreynqkp" method="POST">
         <input type="hidden" name="_subject" value="RunP8 Showing Request" />
-        <input type="hidden" id="property_hidden" name="property_name" />
+        <input type="hidden" name="source" value="RunP8 Showing Flow" />
+        <input type="hidden" id="property_name" name="property_name" />
+        <input type="hidden" id="property_id" name="property_id" />
 
         <div class="field">
-          <label>Name</label>
-          <input name="name" required />
+          <label for="showing-name">Name</label>
+          <input id="showing-name" name="name" type="text" required />
         </div>
 
         <div class="field">
-          <label>Email</label>
-          <input name="email" type="email" required />
+          <label for="showing-email">Email</label>
+          <input id="showing-email" name="email" type="email" required />
         </div>
 
         <div class="field">
-          <label>Phone</label>
-          <input name="phone" />
+          <label for="showing-phone">Phone</label>
+          <input id="showing-phone" name="phone" type="text" />
         </div>
 
         <div class="field">
-          <label>Preferred Date</label>
-          <input name="date" type="date" required />
+          <label for="showing-date">Preferred Date</label>
+          <input id="showing-date" name="preferred_date" type="date" required />
         </div>
 
         <div class="field">
-          <label>Preferred Time</label>
-          <input name="time" type="time" required />
+          <label for="showing-time">Preferred Time</label>
+          <input id="showing-time" name="preferred_time" type="time" required />
         </div>
 
-        <button class="btn" type="submit">Request Showing</button>
+        <div class="field">
+          <label for="showing-notes">Notes</label>
+          <textarea id="showing-notes" name="notes" placeholder="Anything important about your availability or timing."></textarea>
+        </div>
+
+        <button class="submit-btn" type="submit">Request Showing</button>
       </form>
 
-      <div class="success" id="successMsg">
-        ✅ Showing request submitted.<br><br>
-        We’ll review your request and confirm availability.<br><br>
-        You can continue browsing while we process this.
+      <div class="success" id="showingSuccess">
+        ✅ Showing request submitted successfully.<br><br>
+        We’ve received your request and will review availability.<br><br>
+        We’ll follow up with the next step after review.
       </div>
 
-    </div>
+      <div class="next-actions" id="nextActions">
+        <a class="btn-primary" id="continueInquiryLink" href="rental-inquiry.html">Continue to Inquiry</a>
+        <a class="btn-secondary" href="rentals.html">Browse Other Listings</a>
+      </div>
 
+      <div class="note">
+        This step comes after viewing property details and before application.
+      </div>
+    </div>
   </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const property = params.get("property") || "Unknown Property";
+    const propertyName = params.get("property") || "Unknown Property";
+    const propertyId = params.get("id") || "unknown";
 
-    document.getElementById("propertyName").innerText = property;
-    document.getElementById("property_hidden").value = property;
+    document.getElementById("propertyBadge").innerText = "Property: " + propertyName;
+    document.getElementById("property_name").value = propertyName;
+    document.getElementById("property_id").value = propertyId;
+
+    const continueInquiryLink = document.getElementById("continueInquiryLink");
+    continueInquiryLink.href =
+      "rental-inquiry.html?property=" +
+      encodeURIComponent(propertyName) +
+      "&id=" +
+      encodeURIComponent(propertyId);
 
     const form = document.getElementById("showingForm");
-    const success = document.getElementById("successMsg");
+    const success = document.getElementById("showingSuccess");
+    const nextActions = document.getElementById("nextActions");
 
-    form.addEventListener("submit", async function(e){
+    form.addEventListener("submit", async function (e) {
       e.preventDefault();
 
       const data = new FormData(form);
 
-      const res = await fetch(form.action, {
-        method: "POST",
-        body: data,
-        headers: { "Accept": "application/json" }
-      });
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: data,
+          headers: { "Accept": "application/json" }
+        });
 
-      if(res.ok){
-        form.style.display = "none";
-        success.style.display = "block";
-      } else {
-        alert("Error submitting request");
+        if (res.ok) {
+          form.style.display = "none";
+          success.style.display = "block";
+          nextActions.style.display = "flex";
+          success.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      } catch (err) {
+        alert("Network error. Please try again.");
       }
     });
   </script>
-
 </body>
 </html>
