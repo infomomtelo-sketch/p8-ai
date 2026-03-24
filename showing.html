@@ -82,8 +82,7 @@
     }
 
     .field input,
-    .field textarea,
-    .field select {
+    .field textarea {
       width: 100%;
       padding: 12px;
       border-radius: 10px;
@@ -228,7 +227,7 @@
       </div>
 
       <div class="next-actions" id="nextActions">
-        <a class="btn-primary" id="continueInquiryLink" href="rental-inquiry.html">Continue to Inquiry</a>
+        <a class="btn-primary" id="continueApplyLink" href="apply.html">Continue to Application</a>
         <a class="btn-secondary" href="rentals.html">Browse Other Listings</a>
       </div>
 
@@ -247,9 +246,9 @@
     document.getElementById("property_name").value = propertyName;
     document.getElementById("property_id").value = propertyId;
 
-    const continueInquiryLink = document.getElementById("continueInquiryLink");
-    continueInquiryLink.href =
-      "rental-inquiry.html?property=" +
+    const continueApplyLink = document.getElementById("continueApplyLink");
+    continueApplyLink.href =
+      "apply.html?property=" +
       encodeURIComponent(propertyName) +
       "&id=" +
       encodeURIComponent(propertyId);
