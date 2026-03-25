@@ -293,7 +293,40 @@
       </div>
     </div>
   </div>
+<script>
+const form = document.getElementById("applyForm");
 
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const data = new FormData(form);
+
+  const lead = {
+    name: data.get("full_name"),
+    email: data.get("email"),
+    phone: data.get("phone"),
+    move_in: data.get("move_in_date"),
+    property: data.get("property_name"),
+    time: new Date().toISOString()
+  };
+
+  // Save locally
+  const existing = JSON.parse(localStorage.getItem("leads") || "[]");
+  existing.push(lead);
+  localStorage.setItem("leads", JSON.stringify(existing));
+
+  // Continue normal submission
+  fetch(form.action, {
+    method: "POST",
+    body: data,
+    headers: { Accept: "application/json" }
+  });
+
+  // Show success
+  form.style.display = "none";
+  document.getElementById("applySuccess").style.display = "block";
+});
+</script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const propertyName = params.get("property") || "Unknown Property";
