@@ -1,9 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RunP8 Rentals</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Master Bedroom with Private Bath – Fresno | RunP8</title>
 
   <style>
     * { box-sizing: border-box; }
@@ -13,133 +13,240 @@
       font-family: Arial, sans-serif;
       background: #0b1120;
       color: white;
-      padding: 20px;
+      padding: 30px 20px;
     }
 
-    .wrap {
-      max-width: 900px;
+    .container {
+      max-width: 1000px;
       margin: 0 auto;
     }
 
-    h1 {
-      margin-bottom: 20px;
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .topbar a {
+      text-decoration: none;
+      background: #1f2937;
+      border: 1px solid #334155;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
     }
 
     .card {
       background: #111827;
-      border-radius: 16px;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
       overflow: hidden;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 14px 32px rgba(0,0,0,0.28);
     }
 
-    .card img {
+    .gallery {
+      display: grid;
+      gap: 10px;
+      padding: 16px 16px 0 16px;
+    }
+
+    .hero-img {
       width: 100%;
-      height: 220px;
-      object-fit: cover;
+      border-radius: 12px;
       display: block;
+      object-fit: cover;
     }
 
-    .card-body {
-      padding: 18px;
+    .content {
+      padding: 22px;
     }
 
     .price {
-      font-size: 24px;
-      font-weight: bold;
+      font-size: 30px;
+      font-weight: 800;
       margin-bottom: 6px;
     }
 
     .title {
-      font-size: 20px;
-      font-weight: bold;
+      font-size: 26px;
+      font-weight: 700;
       margin-bottom: 6px;
+      line-height: 1.2;
     }
 
     .meta {
       color: #cbd5e1;
-      font-size: 14px;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
+      line-height: 1.6;
+      font-size: 16px;
     }
 
-    .status {
+    .badge {
       display: inline-block;
-      padding: 6px 12px;
+      padding: 7px 12px;
       border-radius: 999px;
-      background: rgba(37,99,235,0.2);
+      background: rgba(37, 99, 235, 0.18);
       color: #93c5fd;
-      font-size: 12px;
-      margin-bottom: 10px;
+      border: 1px solid rgba(147, 197, 253, 0.35);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 18px;
     }
 
-    .desc {
-      font-size: 14px;
+    .section {
+      margin-bottom: 22px;
+    }
+
+    .section h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .section p {
       color: #e5e7eb;
-      margin-bottom: 14px;
-      line-height: 1.5;
+      line-height: 1.7;
+      margin: 0;
+      font-size: 16px;
     }
 
-    .btn {
+    .cta {
+      margin-top: 24px;
+    }
+
+    .cta a {
       display: block;
       text-align: center;
-      padding: 12px;
+      padding: 14px;
       border-radius: 10px;
+      font-weight: 700;
       text-decoration: none;
-      font-weight: bold;
-      margin-bottom: 10px;
     }
 
-    .btn-primary {
+    .primary {
       background: #2563eb;
       color: white;
     }
 
-    .btn-secondary {
+    .secondary {
+      margin-top: 10px;
       background: #1f2937;
-      color: white;
       border: 1px solid #334155;
+      color: white;
+    }
+
+    .note {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #94a3b8;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    @media(max-width:640px){
+      .price { font-size: 26px; }
+      .title { font-size: 24px; }
+      .content { padding: 18px; }
+      .gallery { padding: 12px 12px 0 12px; }
     }
   </style>
 </head>
 
 <body>
+  <div class="container">
 
-  <div class="wrap">
-    <h1>Available Rentals</h1>
+    <div class="topbar">
+      <a href="rentals.html">← Back to Rentals</a>
+      <a href="index.html">Home</a>
+    </div>
 
-    <!-- MASTER BEDROOM LISTING -->
     <div class="card">
 
-      <img src="images/IMG_7730.jpeg" alt="Master Bedroom Fresno">
+      <div class="gallery">
+        <img class="hero-img" src="images/IMG_7730.jpeg" alt="Master bedroom exterior view" />
+        <img class="hero-img" src="images/IMG_7727.jpeg" alt="Master bedroom home at night" />
+        <img class="hero-img" src="images/IMG_7726.jpeg" alt="Master bathroom shower" />
+        <img class="hero-img" src="images/IMG_7725.jpeg" alt="Master bathroom double sink" />
+        <img class="hero-img" src="images/IMG_7724.jpeg" alt="Master bedroom interior" />
+      </div>
 
-      <div class="card-body">
+      <div class="content">
 
-        <div class="price">$1,200/mo • Utilities included</div>
-
+        <div class="price">$1,200/mo (utilities included)</div>
         <div class="title">Master Bedroom with Private Bathroom</div>
-
         <div class="meta">
-          Fresno, CA • Private bath • Shared home
+          5287 North Tisha Ave, Fresno, CA 93723<br>
+          Fresno, CA • Private bath • Quiet shared home
         </div>
 
-        <div class="status">Available Now</div>
+        <div class="badge">Ideal for traveling professionals</div>
 
-        <div class="desc">
-          Ideal for traveling professionals. Clean, quiet, and move-in ready with private bathroom included.
+        <div class="section">
+          <h3>Overview</h3>
+          <p>
+            Spacious master bedroom with private bathroom in a clean, quiet Fresno home.
+            Ideal for traveling professionals, nurses, or working individuals looking
+            for a stable and respectful living environment.
+          </p>
         </div>
 
-        <a class="btn btn-primary" href="property-masters-bedroom.html">
-          View Details
-        </a>
+        <div class="section">
+          <h3>Ideal For</h3>
+          <p>
+            Traveling nurses, professionals on assignment, or individuals who value a
+            quiet, clean, and respectful home environment with a simple move-in process.
+          </p>
+        </div>
 
-        <a class="btn btn-secondary" href="property-masters-bedroom.html">
-          Continue
-        </a>
+        <div class="section">
+          <h3>What You’ll Get</h3>
+          <p>
+            ✔ Private bedroom + private bathroom<br>
+            ✔ Utilities included (no hidden costs)<br>
+            ✔ Quiet and stable household<br>
+            ✔ Simple and fast move-in process<br>
+            ✔ Shared kitchen and common areas
+          </p>
+        </div>
+
+        <div class="section">
+          <h3>Pricing & Terms</h3>
+          <p>
+            $1,200/month (all utilities included)<br><br>
+            Electricity, water, and trash are included.<br><br>
+            Deposit: $500<br><br>
+            Available for immediate move-in.
+          </p>
+        </div>
+
+        <div class="section">
+          <h3>Living Setup</h3>
+          <p>
+            This is a shared home. The master bedroom includes a private bathroom.
+            Kitchen and common areas are shared.
+          </p>
+        </div>
+
+        <div class="cta">
+          <a class="primary"
+             href="showing.html?property=Master%20Bedroom&id=masters-bedroom">
+            Schedule Showing
+          </a>
+
+          <a class="secondary" href="rentals.html">
+            Back to Listings
+          </a>
+        </div>
+
+        <div class="note">
+          No commitment required. You’ll confirm before moving forward.
+        </div>
 
       </div>
     </div>
 
   </div>
-
 </body>
 </html>
