@@ -2,34 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RunP8 Screening Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RunP8 | Screening Dashboard</title>
   <style>
     * { box-sizing: border-box; }
-
-    :root{
-      --bg:#0b1120;
-      --panel:#111827;
-      --panel2:#1f2937;
-      --line:#334155;
-      --text:#ffffff;
-      --muted:#cbd5e1;
-      --green:#22c55e;
-      --yellow:#f59e0b;
-      --red:#ef4444;
-      --blue:#2563eb;
-    }
 
     body{
       margin:0;
       font-family:Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      padding:28px 18px;
+      background:#0b1120;
+      color:white;
+      padding:20px;
     }
 
     .wrap{
-      max-width:1200px;
+      max-width:1100px;
       margin:0 auto;
     }
 
@@ -39,270 +26,222 @@
       align-items:center;
       gap:12px;
       flex-wrap:wrap;
-      margin-bottom:22px;
+      margin-bottom:24px;
     }
 
     .topbar a{
-      text-decoration:none;
-      color:white;
-      background:var(--panel2);
-      border:1px solid var(--line);
+      display:inline-block;
       padding:10px 14px;
       border-radius:10px;
-      font-weight:700;
+      background:#1f2937;
+      color:white;
+      text-decoration:none;
+      border:1px solid #334155;
+      font-weight:600;
     }
 
     h1{
       margin:0 0 8px;
-      font-size:34px;
+      font-size:40px;
     }
 
     .subtitle{
-      margin:0 0 22px;
-      color:var(--muted);
+      color:#cbd5e1;
       line-height:1.6;
-      max-width:760px;
+      margin-bottom:24px;
+      max-width:800px;
     }
 
-    .summary{
+    .status-row{
       display:grid;
-      grid-template-columns:repeat(4, minmax(0,1fr));
-      gap:14px;
-      margin-bottom:22px;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:12px;
+      margin-bottom:24px;
     }
 
-    .stat{
-      background:var(--panel);
-      border:1px solid var(--line);
+    .status-box{
+      background:#111827;
+      border:1px solid #1f2937;
       border-radius:16px;
-      padding:18px;
+      padding:16px;
+      box-shadow:0 10px 28px rgba(0,0,0,0.22);
     }
 
-    .stat-label{
-      color:var(--muted);
+    .status-box .label{
+      color:#94a3b8;
       font-size:13px;
-      margin-bottom:8px;
-      font-weight:700;
-      text-transform:uppercase;
-      letter-spacing:.04em;
+      margin-bottom:6px;
     }
 
-    .stat-value{
+    .status-box .value{
       font-size:28px;
       font-weight:800;
     }
 
-    .filters{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:16px;
-      margin-bottom:22px;
+    .lead-grid{
       display:grid;
-      grid-template-columns:repeat(4, minmax(0,1fr));
-      gap:12px;
+      gap:16px;
     }
 
-    .filters label{
-      display:block;
-      margin-bottom:6px;
-      color:var(--muted);
-      font-weight:700;
-      font-size:13px;
-    }
-
-    .filters input,
-    .filters select{
-      width:100%;
-      padding:11px 12px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      background:#0f172a;
-      color:white;
-      font-family:inherit;
-    }
-
-    .board{
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:18px;
-    }
-
-    .lane{
-      background:var(--panel);
-      border:1px solid var(--line);
+    .lead-card{
+      background:#111827;
+      border:1px solid #1f2937;
       border-radius:18px;
-      padding:16px;
+      padding:18px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.24);
     }
 
-    .lane-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:14px;
-      gap:10px;
-    }
-
-    .lane-title{
-      font-size:20px;
-      font-weight:800;
-    }
-
-    .lane-count{
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:800;
-      border:1px solid var(--line);
-      background:#0f172a;
-      color:var(--muted);
-    }
-
-    .lane.green .lane-title{ color:var(--green); }
-    .lane.yellow .lane-title{ color:var(--yellow); }
-    .lane.red .lane-title{ color:var(--red); }
-
-    .lead{
-      background:#0f172a;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:16px;
-      margin-bottom:12px;
-    }
-
-    .lead:last-child{
-      margin-bottom:0;
-    }
-
-    .lead-top{
+    .lead-header{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      gap:10px;
-      margin-bottom:10px;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
     }
 
     .lead-name{
+      font-size:22px;
       font-weight:800;
-      font-size:18px;
       margin-bottom:4px;
     }
 
-    .lead-property{
-      color:var(--muted);
-      font-size:14px;
+    .lead-meta{
+      color:#cbd5e1;
+      line-height:1.6;
+      font-size:15px;
     }
 
-    .tag{
-      padding:6px 9px;
+    .pill{
+      display:inline-block;
+      padding:7px 12px;
       border-radius:999px;
-      font-size:11px;
-      font-weight:800;
+      font-size:12px;
+      font-weight:700;
+      border:1px solid transparent;
       white-space:nowrap;
     }
 
-    .tag.green{
+    .pill.applied{
+      background:rgba(37,99,235,.18);
+      color:#93c5fd;
+      border-color:rgba(147,197,253,.35);
+    }
+
+    .pill.screening{
+      background:rgba(234,179,8,.18);
+      color:#fde68a;
+      border-color:rgba(253,230,138,.35);
+    }
+
+    .pill.approved{
       background:rgba(34,197,94,.16);
-      color:#86efac;
-      border:1px solid rgba(134,239,172,.25);
+      color:#bbf7d0;
+      border-color:rgba(134,239,172,.35);
     }
 
-    .tag.yellow{
-      background:rgba(245,158,11,.14);
-      color:#fcd34d;
-      border:1px solid rgba(252,211,77,.22);
+    .pill.notfit{
+      background:rgba(239,68,68,.16);
+      color:#fecaca;
+      border-color:rgba(252,165,165,.35);
     }
 
-    .tag.red{
-      background:rgba(239,68,68,.14);
-      color:#fca5a5;
-      border:1px solid rgba(252,165,165,.22);
-    }
-
-    .lead-grid{
+    .details{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
       gap:10px;
-      margin-bottom:12px;
+      margin:14px 0;
     }
 
-    .meta-box{
-      background:rgba(255,255,255,.02);
-      border:1px solid rgba(255,255,255,.05);
+    .detail-box{
+      background:#0f172a;
+      border:1px solid #1f2937;
       border-radius:12px;
-      padding:10px;
+      padding:12px;
     }
 
-    .meta-label{
+    .detail-box .k{
       color:#94a3b8;
-      font-size:11px;
-      font-weight:800;
-      margin-bottom:5px;
-      text-transform:uppercase;
-      letter-spacing:.04em;
+      font-size:12px;
+      margin-bottom:4px;
     }
 
-    .meta-value{
-      font-size:14px;
-      line-height:1.45;
+    .detail-box .v{
+      color:#f8fafc;
+      font-size:15px;
+      font-weight:600;
+      line-height:1.5;
+      word-break:break-word;
     }
 
     .notes{
-      color:var(--muted);
-      font-size:14px;
+      margin-top:10px;
+      color:#e5e7eb;
       line-height:1.6;
-      margin-bottom:12px;
+      font-size:15px;
     }
 
     .actions{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:8px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
     }
 
-    .actions a,
-    .actions button{
-      width:100%;
-      text-align:center;
-      padding:10px 12px;
-      border-radius:10px;
+    .btn{
+      display:inline-block;
       text-decoration:none;
+      padding:11px 14px;
+      border-radius:10px;
       font-weight:700;
       font-size:14px;
-      border:1px solid var(--line);
-      background:var(--panel2);
-      color:white;
+      border:none;
       cursor:pointer;
       font-family:inherit;
     }
 
-    .actions .primary{
-      background:var(--blue);
-      border-color:transparent;
+    .btn-approve{
+      background:#16a34a;
+      color:white;
     }
 
-    .actions .ghost{
-      background:transparent;
+    .btn-ask{
+      background:#2563eb;
+      color:white;
+    }
+
+    .btn-notfit{
+      background:#dc2626;
+      color:white;
+    }
+
+    .btn-secondary{
+      background:#1f2937;
+      color:white;
+      border:1px solid #334155;
+    }
+
+    .empty{
+      background:#111827;
+      border:1px dashed #334155;
+      border-radius:18px;
+      padding:28px;
+      color:#cbd5e1;
+      line-height:1.7;
+      text-align:center;
     }
 
     .footer-note{
-      margin-top:20px;
+      margin-top:24px;
       color:#94a3b8;
       font-size:13px;
       line-height:1.6;
+      text-align:center;
     }
 
-    @media (max-width: 980px){
-      .summary{ grid-template-columns:1fr 1fr; }
-      .filters{ grid-template-columns:1fr 1fr; }
-      .board{ grid-template-columns:1fr; }
-    }
-
-    @media (max-width: 640px){
-      h1{ font-size:28px; }
-      .summary{ grid-template-columns:1fr; }
-      .filters{ grid-template-columns:1fr; }
-      .lead-grid{ grid-template-columns:1fr; }
+    @media (max-width:640px){
+      h1{font-size:32px}
+      .lead-name{font-size:20px}
     }
   </style>
 </head>
@@ -310,314 +249,208 @@
   <div class="wrap">
     <div class="topbar">
       <a href="index.html">← Back to Home</a>
-      <a href="rentals.html">View Rentals</a>
+      <a href="owner/property-inquiries.html">Property Inquiries</a>
     </div>
 
-    <h1>Renter Screening Dashboard</h1>
+    <h1>Screening Dashboard</h1>
     <p class="subtitle">
-      Use this board to review incoming renter inquiries, classify fit, and decide who moves forward to showing or application.
+      Review renter applications, move qualified leads forward, request missing information,
+      or mark an applicant as not a fit. This is the decision step after showing and apply.
     </p>
 
-    <div class="summary">
-      <div class="stat">
-        <div class="stat-label">Total Leads</div>
-        <div class="stat-value">9</div>
+    <div class="status-row">
+      <div class="status-box">
+        <div class="label">Applied</div>
+        <div class="value" id="countApplied">0</div>
       </div>
-      <div class="stat">
-        <div class="stat-label">Green / Qualified</div>
-        <div class="stat-value">3</div>
+      <div class="status-box">
+        <div class="label">Screening</div>
+        <div class="value" id="countScreening">0</div>
       </div>
-      <div class="stat">
-        <div class="stat-label">Yellow / Clarify</div>
-        <div class="stat-value">3</div>
+      <div class="status-box">
+        <div class="label">Approved</div>
+        <div class="value" id="countApproved">0</div>
       </div>
-      <div class="stat">
-        <div class="stat-label">Red / Not Fit</div>
-        <div class="stat-value">3</div>
-      </div>
-    </div>
-
-    <div class="filters">
-      <div>
-        <label for="propertyFilter">Property</label>
-        <select id="propertyFilter">
-          <option>All Properties</option>
-          <option>Fresno Studio</option>
-          <option>2BR House</option>
-          <option>Private Room</option>
-        </select>
-      </div>
-      <div>
-        <label for="dateFilter">Move-in Timing</label>
-        <select id="dateFilter">
-          <option>All</option>
-          <option>Immediate</option>
-          <option>Near Term</option>
-          <option>Future</option>
-        </select>
-      </div>
-      <div>
-        <label for="budgetFilter">Budget</label>
-        <input id="budgetFilter" type="text" placeholder="$1200+" />
-      </div>
-      <div>
-        <label for="nameFilter">Search Name</label>
-        <input id="nameFilter" type="text" placeholder="Type a renter name" />
+      <div class="status-box">
+        <div class="label">Not a Fit</div>
+        <div class="value" id="countNotFit">0</div>
       </div>
     </div>
 
-    <div class="board">
-      <div class="lane green">
-        <div class="lane-header">
-          <div class="lane-title">Green — Move Forward</div>
-          <div class="lane-count">3 Leads</div>
-        </div>
-
-        <div class="lead">
-          <div class="lead-top">
-            <div>
-              <div class="lead-name">John Dela Cruz</div>
-              <div class="lead-property">Fresno Studio</div>
-            </div>
-            <div class="tag green">Qualified</div>
-          </div>
-
-          <div class="lead-grid">
-            <div class="meta-box">
-              <div class="meta-label">Move-in</div>
-              <div class="meta-value">Within 2 weeks</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Budget</div>
-              <div class="meta-value">$1,300</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Income</div>
-              <div class="meta-value">$4,800/mo</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Occupants</div>
-              <div class="meta-value">1</div>
-            </div>
-          </div>
-
-          <div class="notes">
-            Complete details, strong timing, and budget aligns with property.
-          </div>
-
-          <div class="actions">
-            <a class="primary" href="showing.html?property=Fresno%20Studio&id=fresno-studio">Send to Showing</a>
-            <button>Send Green Reply</button>
-          </div>
-        </div>
-
-        <div class="lead">
-          <div class="lead-top">
-            <div>
-              <div class="lead-name">Maria Santos</div>
-              <div class="lead-property">2BR House</div>
-            </div>
-            <div class="tag green">Qualified</div>
-          </div>
-
-          <div class="lead-grid">
-            <div class="meta-box">
-              <div class="meta-label">Move-in</div>
-              <div class="meta-value">30 days</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Budget</div>
-              <div class="meta-value">$1,900</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Income</div>
-              <div class="meta-value">$6,500/mo</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Occupants</div>
-              <div class="meta-value">2</div>
-            </div>
-          </div>
-
-          <div class="notes">
-            Stable timing and strong income profile for the listing.
-          </div>
-
-          <div class="actions">
-            <a class="primary" href="showing.html?property=2BR%20House&id=fresno-2br">Send to Showing</a>
-            <button>Send Green Reply</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="lane yellow">
-        <div class="lane-header">
-          <div class="lane-title">Yellow — Clarify First</div>
-          <div class="lane-count">3 Leads</div>
-        </div>
-
-        <div class="lead">
-          <div class="lead-top">
-            <div>
-              <div class="lead-name">Alyssa Reyes</div>
-              <div class="lead-property">Private Room</div>
-            </div>
-            <div class="tag yellow">Needs Info</div>
-          </div>
-
-          <div class="lead-grid">
-            <div class="meta-box">
-              <div class="meta-label">Move-in</div>
-              <div class="meta-value">Soon</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Budget</div>
-              <div class="meta-value">Unclear</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Income</div>
-              <div class="meta-value">Not provided</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Occupants</div>
-              <div class="meta-value">Not provided</div>
-            </div>
-          </div>
-
-          <div class="notes">
-            Timing looks possible, but core screening details are missing.
-          </div>
-
-          <div class="actions">
-            <button>Send Clarification Reply</button>
-            <button class="ghost">Move to Green</button>
-          </div>
-        </div>
-
-        <div class="lead">
-          <div class="lead-top">
-            <div>
-              <div class="lead-name">Kevin Ramos</div>
-              <div class="lead-property">Fresno Studio</div>
-            </div>
-            <div class="tag yellow">Needs Info</div>
-          </div>
-
-          <div class="lead-grid">
-            <div class="meta-box">
-              <div class="meta-label">Move-in</div>
-              <div class="meta-value">Flexible</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Budget</div>
-              <div class="meta-value">$1,200</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Income</div>
-              <div class="meta-value">Unclear</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Occupants</div>
-              <div class="meta-value">1</div>
-            </div>
-          </div>
-
-          <div class="notes">
-            Budget works, but move-in and income need confirmation before showing.
-          </div>
-
-          <div class="actions">
-            <button>Send Clarification Reply</button>
-            <button class="ghost">Move to Green</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="lane red">
-        <div class="lane-header">
-          <div class="lane-title">Red — Not Fit Now</div>
-          <div class="lane-count">3 Leads</div>
-        </div>
-
-        <div class="lead">
-          <div class="lead-top">
-            <div>
-              <div class="lead-name">Daniel Lopez</div>
-              <div class="lead-property">Fresno Studio</div>
-            </div>
-            <div class="tag red">Not Fit</div>
-          </div>
-
-          <div class="lead-grid">
-            <div class="meta-box">
-              <div class="meta-label">Move-in</div>
-              <div class="meta-value">5 months out</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Budget</div>
-              <div class="meta-value">$900</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Income</div>
-              <div class="meta-value">Not provided</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Occupants</div>
-              <div class="meta-value">Unknown</div>
-            </div>
-          </div>
-
-          <div class="notes">
-            Move-in timing is too far out and budget does not align.
-          </div>
-
-          <div class="actions">
-            <button>Send Soft Decline</button>
-          </div>
-        </div>
-
-        <div class="lead">
-          <div class="lead-top">
-            <div>
-              <div class="lead-name">Patricia Gomez</div>
-              <div class="lead-property">2BR House</div>
-            </div>
-            <div class="tag red">Not Fit</div>
-          </div>
-
-          <div class="lead-grid">
-            <div class="meta-box">
-              <div class="meta-label">Move-in</div>
-              <div class="meta-value">Unknown</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Budget</div>
-              <div class="meta-value">$1,200</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Income</div>
-              <div class="meta-value">Unknown</div>
-            </div>
-            <div class="meta-box">
-              <div class="meta-label">Occupants</div>
-              <div class="meta-value">4</div>
-            </div>
-          </div>
-
-          <div class="notes">
-            Budget is too low for this listing and submission is incomplete.
-          </div>
-
-          <div class="actions">
-            <button>Send Soft Decline</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div id="leadGrid" class="lead-grid"></div>
 
     <div class="footer-note">
-      This dashboard is your manual screening layer between renter inquiry and the next approved step in the Ziprent-style flow.
+      This page is part of the RunP8 Ziprent-style operator flow:
+      inquiry → showing → apply → screening → approval.
     </div>
   </div>
+
+  <script>
+    const leadGrid = document.getElementById("leadGrid");
+
+    function readLeads() {
+      return JSON.parse(localStorage.getItem("leads") || "[]");
+    }
+
+    function readStatuses() {
+      return JSON.parse(localStorage.getItem("leadStatuses") || "{}");
+    }
+
+    function saveStatuses(statuses) {
+      localStorage.setItem("leadStatuses", JSON.stringify(statuses));
+    }
+
+    function statusLabel(status) {
+      if (status === "screening") return "Screening";
+      if (status === "approved") return "Approved";
+      if (status === "notfit") return "Not a Fit";
+      return "Applied";
+    }
+
+    function statusClass(status) {
+      if (status === "screening") return "screening";
+      if (status === "approved") return "approved";
+      if (status === "notfit") return "notfit";
+      return "applied";
+    }
+
+    function updateCounts(leads, statuses) {
+      let applied = 0, screening = 0, approved = 0, notfit = 0;
+
+      leads.forEach((lead, index) => {
+        const key = lead.time || String(index);
+        const status = statuses[key] || "applied";
+
+        if (status === "screening") screening++;
+        else if (status === "approved") approved++;
+        else if (status === "notfit") notfit++;
+        else applied++;
+      });
+
+      document.getElementById("countApplied").innerText = applied;
+      document.getElementById("countScreening").innerText = screening;
+      document.getElementById("countApproved").innerText = approved;
+      document.getElementById("countNotFit").innerText = notfit;
+    }
+
+    function render() {
+      const leads = readLeads();
+      const statuses = readStatuses();
+
+      leadGrid.innerHTML = "";
+
+      if (!leads.length) {
+        leadGrid.innerHTML = `
+          <div class="empty">
+            No applications yet.<br><br>
+            Once a renter submits the apply form on this same browser/device,
+            they will appear here for screening.
+          </div>
+        `;
+        updateCounts([], {});
+        return;
+      }
+
+      leads.slice().reverse().forEach((lead, reverseIndex) => {
+        const originalIndex = leads.length - 1 - reverseIndex;
+        const key = lead.time || String(originalIndex);
+        const status = statuses[key] || "applied";
+
+        const mailApprove = `mailto:${encodeURIComponent(lead.email || "")}?subject=${encodeURIComponent("Application Approved - RunP8")}&body=${encodeURIComponent(
+`Hi ${lead.name || ""},
+
+Thanks for your application for ${lead.property || "the property"}.
+
+Everything looks good so far. We can move forward to the next step.
+
+Please confirm your availability and we’ll continue from there.
+
+– RunP8`
+        )}`;
+
+        const mailAsk = `mailto:${encodeURIComponent(lead.email || "")}?subject=${encodeURIComponent("Request More Info - RunP8")}&body=${encodeURIComponent(
+`Hi ${lead.name || ""},
+
+Thanks for your application.
+
+Before moving forward, please confirm:
+- move-in date
+- monthly income
+
+Once confirmed, we’ll proceed to the next step.
+
+– RunP8`
+        )}`;
+
+        const mailNotFit = `mailto:${encodeURIComponent(lead.email || "")}?subject=${encodeURIComponent("Application Update - RunP8")}&body=${encodeURIComponent(
+`Hi ${lead.name || ""},
+
+Thank you for your interest.
+
+At this time, we’re moving forward with applicants who better match the current requirements.
+
+We appreciate your time.
+
+– RunP8`
+        )}`;
+
+        const card = document.createElement("div");
+        card.className = "lead-card";
+        card.innerHTML = `
+          <div class="lead-header">
+            <div>
+              <div class="lead-name">${lead.name || "Unknown Applicant"}</div>
+              <div class="lead-meta">${lead.property || "Unknown Property"}</div>
+            </div>
+            <span class="pill ${statusClass(status)}">${statusLabel(status)}</span>
+          </div>
+
+          <div class="details">
+            <div class="detail-box">
+              <div class="k">Email</div>
+              <div class="v">${lead.email || "N/A"}</div>
+            </div>
+            <div class="detail-box">
+              <div class="k">Phone</div>
+              <div class="v">${lead.phone || "N/A"}</div>
+            </div>
+            <div class="detail-box">
+              <div class="k">Move-in</div>
+              <div class="v">${lead.move_in || "N/A"}</div>
+            </div>
+            <div class="detail-box">
+              <div class="k">Submitted</div>
+              <div class="v">${lead.time ? new Date(lead.time).toLocaleString() : "N/A"}</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-secondary" data-status="screening">Mark Screening</button>
+            <button class="btn btn-secondary" data-status="approved">Mark Approved</button>
+            <button class="btn btn-secondary" data-status="notfit">Mark Not a Fit</button>
+            <a class="btn btn-approve" href="${mailApprove}">Email Approve</a>
+            <a class="btn btn-ask" href="${mailAsk}">Email Ask Info</a>
+            <a class="btn btn-notfit" href="${mailNotFit}">Email Not Fit</a>
+          </div>
+        `;
+
+        card.querySelectorAll("button[data-status]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const nextStatus = btn.getAttribute("data-status");
+            const current = readStatuses();
+            current[key] = nextStatus;
+            saveStatuses(current);
+            render();
+          });
+        });
+
+        leadGrid.appendChild(card);
+      });
+
+      updateCounts(leads, statuses);
+    }
+
+    render();
+  </script>
 </body>
 </html>
