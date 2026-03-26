@@ -1,1030 +1,281 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RunP8 | Property rentals guided by AI</title>
-  <meta
-    name="description"
-    content="RunP8 helps with property listings, rentals, showings, applications, rent payments, and support through a guided AI chat experience."
-  />
-  <style>
-  .choice-row{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin:8px 0 14px 0;
-  }
+"use client";
+import { useState, useRef, useEffect } from "react";
 
-  .choice-btn{
-    border:1px solid #dbe4ee;
-    background:#f8fbff;
-    color:#142133;
-    padding:10px 14px;
-    border-radius:999px;
-    cursor:pointer;
-    font-size:13px;
-    line-height:1.2;
-  }
+export default function HouseholdPage() {
+  const [messages, setMessages] = useState([
+    { type: "ai", text: "What do you need?" }
+  ]);
 
-  .choice-btn:hover{
-    background:#eef6ff;
-    border-color:#bfd3ea;
-  }
-</style>
-<style>
-.quick-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
+  const [flow, setFlow] = useState(null);
+  const [step, setStep] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
-.quick-actions button{
-  flex:1 1 calc(50% - 10px);
-  padding:14px;
-  border-radius:14px;
-  border:1px solid #e2e8f0;
-  background:#f8fafc;
-  font-size:14px;
-  cursor:pointer;
-}
+  const messagesEndRef = useRef(null);
 
-.quick-actions button:hover{
-  background:#eef6ff;
-}
-</style>
-  
-  <style>
-    * { box-sizing: border-box; }
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-    :root{
-      --bg:#f4f7fb;
-      --panel:#ffffff;
-      --panel-soft:#f8fbff;
-      --border:#dbe4ee;
-      --text:#142133;
-      --muted:#607086;
-      --blue:#2563eb;
-      --blue-dark:#1d4ed8;
-      --shadow:0 14px 40px rgba(15,23,42,.08);
-      --radius:22px;
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(180deg,#f6f9fc 0%,#eef4fa 100%);
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .wrap {
-      width: min(1180px, calc(100% - 28px));
-      margin: 0 auto;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-      background: rgba(244,247,251,.82);
-      border-bottom: 1px solid rgba(219,228,238,.9);
-    }
-
-    .topbar-inner {
-      min-height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      letter-spacing: .2px;
-    }
-
-    .brand-badge {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, var(--blue), #60a5fa);
-      color: white;
-      font-weight: 800;
-      box-shadow: 0 10px 24px rgba(37,99,235,.28);
-    }
-
-    .brand-sub {
-      display: block;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .nav a,
-    .nav button {
-      border: 0;
-      background: transparent;
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .nav a:hover,
-    .nav button:hover {
-      background: rgba(37,99,235,.08);
-    }
-
-    .btn-primary {
-      border: 0;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: white;
-      padding: 12px 18px;
-      border-radius: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 12px 28px rgba(37,99,235,.24);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-    }
-
-    .hero {
-      padding: 46px 0 24px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 20px;
-      align-items: stretch;
-    }
-
-    .hero-card,
-    .chat-card,
-    .cabinet-card,
-    .info-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-card {
-      padding: 34px;
-      background:
-        radial-gradient(circle at top right, rgba(96,165,250,.18), transparent 28%),
-        linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(37,99,235,.08);
-      color: var(--blue-dark);
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    h1 {
-      margin: 0 0 14px;
-      font-size: clamp(30px, 5vw, 52px);
-      line-height: 1.05;
-      letter-spacing: -.03em;
-    }
-
-    .hero p {
-      margin: 0;
-      font-size: 17px;
-      line-height: 1.7;
-      color: var(--muted);
-      max-width: 700px;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .btn-secondary {
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--text);
-      padding: 12px 18px;
-      border-radius: 14px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .hero-points {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 12px;
-      margin-top: 26px;
-    }
-
-    .point {
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(248,251,255,.95);
-      border: 1px solid var(--border);
-    }
-
-    .point strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 14px;
-    }
-
-    .point span {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .chat-card {
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      min-height: 560px;
-    }
-
-    .chat-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 14px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .chat-head h2 {
-      margin: 0;
-      font-size: 19px;
-    }
-
-    .chat-head p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .mini-badge {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--blue-dark);
-      background: rgba(37,99,235,.08);
-      padding: 8px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-
-    .messages {
-      flex: 1;
-      overflow: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 6px 2px 12px;
-      min-height: 260px;
-    }
-
-    .msg {
-      max-width: 88%;
-      padding: 14px 15px;
-      border-radius: 18px;
-      line-height: 1.6;
-      font-size: 14px;
-      white-space: pre-wrap;
-    }
-
-    .msg.user {
-      align-self: flex-end;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: white;
-      border-bottom-right-radius: 6px;
-    }
-
-    .msg.ai {
-      align-self: flex-start;
-      background: #f7fafc;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-bottom-left-radius: 6px;
-    }
-
-    .cabinet-panel {
-      margin: 18px 0 0;
-    }
-
-    .cabinet-panel[hidden] {
-      display: none !important;
-    }
-
-    .cabinet-card {
-      padding: 20px;
-      background: linear-gradient(180deg,#ffffff 0%,#f9fbfe 100%);
-    }
-
-    .cabinet-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: start;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .cabinet-head h3 {
-      margin: 0 0 6px;
-      font-size: 22px;
-    }
-
-    .cabinet-head p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      max-width: 680px;
-    }
-
-    .cabinet-close {
-      border: 1px solid var(--border);
-      background: white;
-      padding: 10px 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .cabinet-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 14px;
-    }
-
-    .cabinet-item {
-      width: 100%;
-      text-align: left;
-      border: 1px solid var(--border);
-      background: var(--panel-soft);
-      border-radius: 18px;
-      padding: 16px;
-      cursor: pointer;
-      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
-    }
-
-    .cabinet-item:hover {
-      transform: translateY(-1px);
-      border-color: #c6d3e2;
-      box-shadow: 0 10px 24px rgba(15,23,42,.07);
-    }
-
-    .cabinet-title {
-      display: block;
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .cabinet-sub {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    .chat-input-wrap {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-      align-items: end;
-    }
-
-    .chat-input {
-      flex: 1;
-      min-height: 52px;
-      max-height: 180px;
-      resize: vertical;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px 14px;
-      font-size: 14px;
-      color: var(--text);
-      background: white;
-      outline: none;
-    }
-
-    .chat-input:focus {
-      border-color: #a7c2ff;
-      box-shadow: 0 0 0 4px rgba(37,99,235,.08);
-    }
-
-    .send-btn {
-      min-width: 112px;
-      min-height: 52px;
-      border: 0;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 12px 28px rgba(37,99,235,.22);
-    }
-
-    .features {
-      padding: 10px 0 30px;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 16px;
-    }
-
-    .info-card {
-      padding: 20px;
-    }
-
-    .info-card h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-    }
-
-    .info-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.65;
-    }
-
-    footer {
-      margin-top: 24px;
-      border-top: 1px solid var(--border);
-      background: rgba(255,255,255,.7);
-    }
-
-    .footer-inner {
-      padding: 22px 0 34px;
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .footer-copy {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-      max-width: 720px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: white;
-      border: 1px solid var(--border);
-      font-size: 13px;
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .feature-grid,
-      .cabinet-grid,
-      .hero-points {
-        grid-template-columns: 1fr;
-      }
-
-      .chat-card {
-        min-height: unset;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .topbar-inner {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 10px 0;
-      }
-
-      .nav {
-        justify-content: space-between;
-      }
-
-      .hero-card {
-        padding: 24px;
-      }
-
-      .chat-card,
-      .cabinet-card,
-      .info-card {
-        border-radius: 18px;
-      }
-
-      .chat-input-wrap {
-        flex-direction: column;
-      }
-
-      .send-btn {
-        width: 100%;
-      }
-
-      .cabinet-head {
-        flex-direction: column;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <div class="brand">
-        <div class="brand-badge">P8</div>
-        <div>
-          RunP8
-          <span class="brand-sub">Rentals, listings, applications, and support</span>
-        </div>
-      </div>
-
-      <nav class="nav">
-        <a href="#home">Home</a>
-        <a href="#chat">Chat</a>
-        <button type="button" onclick="openRunP8Cabinet()">RunP8 Cabinet</button>
-        <a href="#help">Help</a>
-        <button class="btn-primary" type="button" onclick="openRunP8Cabinet()">Open RunP8</button>
-      </nav>
-    </div>
-  </header>
-
-  <main id="home">
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div class="hero-card">
-          <div class="eyebrow">Guided property workflows</div>
-          <h1>Run your rental process with one calm, helpful AI.</h1>
-          <p>
-            RunP8 helps owners, renters, and property users move through listings,
-            showings, applications, rent payments, and support with less confusion
-            and fewer broken steps.
-          </p>
-
-          <div class="hero-actions">
-            <button class="btn-primary" type="button" onclick="openRunP8Cabinet()">
-              Open RunP8 Cabinet
-            </button>
-            <button class="btn-secondary" type="button" onclick="focusChatInput()">
-              Ask P8 AI
-            </button>
-          </div>
-
-          <div class="hero-points">
-            <div class="point">
-              <strong>For property owners</strong>
-              <span>Start listing your property and move toward real inquiries.</span>
-            </div>
-            <div class="point">
-              <strong>For renters</strong>
-              <span>Find a place, schedule a showing, and start your application.</span>
-            </div>
-            <div class="point">
-              <strong>For support</strong>
-              <span>Handle payments, move-in questions, repairs, and rental help.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-card" id="chat">
-          <div class="chat-head">
-            <div>
-              <h2>P8 AI</h2>
-              <p>Choose a RunP8 action or ask a question below.</p>
-            </div>
-            <div class="mini-badge">Chat-first experience</div>
-          </div>
-
-          <div class="messages" id="messages">
-            <div class="msg ai">
-              Hi — I can help with property listings, rentals, showings,
-              applications, rent payments, and move-in or repair support.
-              Open the RunP8 cabinet or type what you need.
-            </div>
-          </div>
-
-          <div class="cabinet-panel" id="runp8Cabinet" hidden>
-            <div class="cabinet-card">
-              <div class="cabinet-head">
-                <div>
-                  <h3>What would you like to do?</h3>
-                  <p>
-                    I can help with rentals, property listings, showings,
-                    applications, payments, and support.
-                  </p>
-                </div>
-                <button class="cabinet-close" type="button" onclick="closeRunP8Cabinet()">
-                  Close
-                </button>
-              </div>
-
-              <div class="cabinet-grid">
-                <button class="cabinet-item" data-prompt="I want to list a property on RunP8. Please guide me step by step.">
-                  <span class="cabinet-title">List a property</span>
-                  <span class="cabinet-sub">Start renting out your space</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I want to find a rental on RunP8. Please guide me step by step.">
-                  <span class="cabinet-title">Find a rental</span>
-                  <span class="cabinet-sub">Browse places that fit your needs</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I want to schedule a showing on RunP8. Please help me choose a time.">
-                  <span class="cabinet-title">Schedule a showing</span>
-                  <span class="cabinet-sub">Pick a time that works for you</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I want to start a rental application on RunP8. Please guide me step by step.">
-                  <span class="cabinet-title">Start an application</span>
-                  <span class="cabinet-sub">Begin the approval process</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I want to pay rent on RunP8. Please help me with payment options or billing questions.">
-                  <span class="cabinet-title">Pay rent</span>
-                  <span class="cabinet-sub">Handle rent payments and billing</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I need help with move-in, move-out, or repairs on RunP8. Please guide me.">
-                  <span class="cabinet-title">Move-in or repair help</span>
-                  <span class="cabinet-sub">Get support for property needs</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="chat-input-wrap">
-            <textarea
-              id="chatInput"
-              class="chat-input"
-              placeholder="Ask P8 AI about listings, showings, applications, rent, or support..."
-            ></textarea>
-            <button id="sendBtn" class="send-btn" type="button">Send</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="features" id="help">
-      <div class="wrap feature-grid">
-        <div class="info-card">
-          <h3>Clear next steps</h3>
-          <p>
-            RunP8 should help users move forward without repeated information
-            or too many decisions at once.
-          </p>
-        </div>
-        <div class="info-card">
-          <h3>Guided actions</h3>
-          <p>
-            Instead of dead pages and confusing menus, users can choose a task
-            and get guided step by step.
-          </p>
-        </div>
-        <div class="info-card">
-          <h3>One calm interface</h3>
-          <p>
-            Owners, renters, and support requests can all start in one clean
-            conversation area.
-          </p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap footer-inner">
-      <div class="footer-copy">
-        © 2026 RunP8. This page is designed to guide rental-related actions such as
-        listings, inquiries, showings, applications, payments, and support.
-      </div>
-
-      <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-        <a href="#">Fair Housing</a>
-        <a href="#">Contact</a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-  const messages = document.getElementById("messages");
-  const chatInput = document.getElementById("chatInput");
-  const sendBtn = document.getElementById("sendBtn");
-
-  let flowState = {
-    flow: null,
-    step: null,
-    data: {}
+  const addMessage = (text, type = "ai") => {
+    setMessages(prev => [...prev.slice(-20), { type, text }]);
   };
 
-  function focusChatInput() {
-    document.getElementById("chat").scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(() => chatInput.focus(), 250);
-  }
+  const addOptions = (options) => {
+    setMessages(prev => [...prev.slice(-20), { type: "options", options }]);
+  };
 
-  function addMessage(text, type = "ai") {
-    const div = document.createElement("div");
-    div.className = "msg " + type;
-    div.textContent = text;
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-  }
+  const resetToMain = () => {
+    setFlow(null);
+    setStep(null);
+    addMessage("What do you need?");
+  };
 
-  function addChoiceButtons(options = []) {
-    const row = document.createElement("div");
-    row.className = "choice-row";
+  // ===== START ACTION =====
+  const startAction = (type) => {
+    addMessage(
+      type === "list"
+        ? "List property"
+        : type === "rental"
+        ? "Find rental"
+        : type === "payment"
+        ? "Pay rent"
+        : type,
+      "user"
+    );
 
-    options.forEach((opt) => {
-      const btn = document.createElement("button");
-      btn.className = "choice-btn";
-      btn.type = "button";
-      btn.textContent = opt.label;
-      btn.addEventListener("click", () => {
-        addMessage(opt.label, "user");
-        opt.onClick();
-      });
-      row.appendChild(btn);
-    });
+    if (type === "list") {
+      setFlow("listing");
+      setStep("type");
 
-    messages.appendChild(row);
-    messages.scrollTop = messages.scrollHeight;
-  }
+      addMessage("Property type?");
+      addOptions([
+        { label: "House" },
+        { label: "Apartment" },
+        { label: "Studio" },
+        { label: "Room" },
+        { label: "Back" }
+      ]);
+    }
 
-  function resetFlow() {
-    flowState = {
-      flow: null,
-      step: null,
-      data: {}
-    };
-  }
+    if (type === "rental") {
+      addMessage("Start with?");
+      addOptions([
+        { label: "Location" },
+        { label: "Budget" },
+        { label: "Move-in" },
+        { label: "Bedrooms" },
+        { label: "Back" }
+      ]);
+    }
 
-  function showMainMenu() {
-    resetFlow();
-    addMessage("What would you like to do?");
-    addChoiceButtons([
-      { label: "List a property", onClick: () => startListingFlow() },
-      { label: "Find a rental", onClick: () => addMessage("Next we can build this flow the same way.") },
-      { label: "Schedule a showing", onClick: () => addMessage("Next we can build this flow the same way.") },
-      { label: "Start application", onClick: () => addMessage("Next we can build this flow the same way.") },
-      { label: "Pay rent", onClick: () => addMessage("Next we can build this flow the same way.") },
-      { label: "Move-in / repair help", onClick: () => addMessage("Next we can build this flow the same way.") }
-    ]);
-  }
+    if (type === "payment") {
+      setFlow("payment");
+      setStep("method");
 
-  // LISTING FLOW
-  function startListingFlow() {
-    flowState.flow = "listing";
-    flowState.step = "start";
+      addMessage("Payment method?");
+      addOptions([
+        { label: "Credit card" },
+        { label: "Debit card" },
+        { label: "Bank transfer" },
+        { label: "Back" }
+      ]);
+    }
+  };
 
-    addMessage("I can help you list a property. How would you like to start?");
-    addChoiceButtons([
-      { label: "Property address", onClick: () => askListingAddress() },
-      { label: "Property type", onClick: () => askPropertyType() },
-      { label: "Bedrooms", onClick: () => askBedrooms() },
-      { label: "Monthly rent", onClick: () => askMonthlyRent() },
-      { label: "Back", onClick: () => showMainMenu() }
-    ]);
-  }
+  // ===== HANDLE OPTION =====
+  const handleOption = (option) => {
+    if (option.label === "Back") {
+      resetToMain();
+      return;
+    }
 
-  function askListingAddress() {
-    flowState.step = "address";
-    addMessage("Please enter the property address, or choose an option below.");
-    addChoiceButtons([
-      { label: "Skip", onClick: () => askPropertyType() },
-      { label: "Back", onClick: () => startListingFlow() }
-    ]);
-  }
+    addMessage(option.label, "user");
 
-  function askPropertyType() {
-    flowState.step = "property_type";
-    addMessage("What type of property is it?");
-    addChoiceButtons([
-      { label: "House", onClick: () => saveAndNext("propertyType", "House", askBedrooms) },
-      { label: "Apartment", onClick: () => saveAndNext("propertyType", "Apartment", askBedrooms) },
-      { label: "Studio", onClick: () => saveAndNext("propertyType", "Studio", askBedrooms) },
-      { label: "ADU", onClick: () => saveAndNext("propertyType", "ADU", askBedrooms) },
-      { label: "Room", onClick: () => saveAndNext("propertyType", "Room", askBedrooms) },
-      { label: "Back", onClick: () => startListingFlow() },
-      { label: "Skip", onClick: () => askBedrooms() }
-    ]);
-  }
-
-  function askBedrooms() {
-    flowState.step = "bedrooms";
-    addMessage("How many bedrooms does the property have?");
-    addChoiceButtons([
-      { label: "Studio", onClick: () => saveAndNext("bedrooms", "Studio", askBathrooms) },
-      { label: "1", onClick: () => saveAndNext("bedrooms", "1", askBathrooms) },
-      { label: "2", onClick: () => saveAndNext("bedrooms", "2", askBathrooms) },
-      { label: "3+", onClick: () => saveAndNext("bedrooms", "3+", askBathrooms) },
-      { label: "Back", onClick: () => askPropertyType() },
-      { label: "Skip", onClick: () => askBathrooms() }
-    ]);
-  }
-
-  function askBathrooms() {
-    flowState.step = "bathrooms";
-    addMessage("How many bathrooms does the property have?");
-    addChoiceButtons([
-      { label: "1", onClick: () => saveAndNext("bathrooms", "1", askMonthlyRent) },
-      { label: "1.5", onClick: () => saveAndNext("bathrooms", "1.5", askMonthlyRent) },
-      { label: "2", onClick: () => saveAndNext("bathrooms", "2", askMonthlyRent) },
-      { label: "3+", onClick: () => saveAndNext("bathrooms", "3+", askMonthlyRent) },
-      { label: "Back", onClick: () => askBedrooms() },
-      { label: "Skip", onClick: () => askMonthlyRent() }
-    ]);
-  }
-
-  function askMonthlyRent() {
-    flowState.step = "monthly_rent";
-    addMessage("What is your monthly rent goal?");
-    addChoiceButtons([
-      { label: "Under $1,000", onClick: () => saveAndNext("rentGoal", "Under $1,000", askPhotos) },
-      { label: "$1,000–$2,000", onClick: () => saveAndNext("rentGoal", "$1,000–$2,000", askPhotos) },
-      { label: "$2,000–$3,000", onClick: () => saveAndNext("rentGoal", "$2,000–$3,000", askPhotos) },
-      { label: "$3,000+", onClick: () => saveAndNext("rentGoal", "$3,000+", askPhotos) },
-      { label: "Back", onClick: () => askBathrooms() },
-      { label: "Skip", onClick: () => askPhotos() }
-    ]);
-  }
-
-  function askPhotos() {
-    flowState.step = "photos";
-    addMessage("Would you like to add photos now?");
-    addChoiceButtons([
-      { label: "Yes", onClick: () => finishListingFlow("Great. Photos can be uploaded in the next step.") },
-      { label: "No", onClick: () => finishListingFlow("No problem. You can add photos later.") },
-      { label: "Back", onClick: () => askMonthlyRent() }
-    ]);
-  }
-
-  function finishListingFlow(photoMessage) {
-    flowState.step = "done";
-
-    const summary = [
-      "Here’s your listing progress so far:",
-      flowState.data.propertyType ? `Property type: ${flowState.data.propertyType}` : null,
-      flowState.data.bedrooms ? `Bedrooms: ${flowState.data.bedrooms}` : null,
-      flowState.data.bathrooms ? `Bathrooms: ${flowState.data.bathrooms}` : null,
-      flowState.data.rentGoal ? `Monthly rent goal: ${flowState.data.rentGoal}` : null
-    ].filter(Boolean).join("\n");
-
-    addMessage(summary);
-    addMessage(photoMessage);
-    addMessage("What would you like to do next?");
-    addChoiceButtons([
-      { label: "Continue listing", onClick: () => addMessage("Next we can add address details, amenities, and photos.") },
-      { label: "Start over", onClick: () => startListingFlow() },
-      { label: "Main menu", onClick: () => showMainMenu() }
-    ]);
-  }
-
-  function saveAndNext(key, value, nextFn) {
-    flowState.data[key] = value;
-    nextFn();
-  }
-
-  function handleFreeText(text) {
-    const t = text.toLowerCase();
-
-    if (!flowState.flow) {
-      if (t.includes("list")) {
-        startListingFlow();
-        return;
+    // LISTING FLOW
+    if (flow === "listing") {
+      if (step === "type") {
+        setStep("bedrooms");
+        addMessage("Bedrooms?");
+        addOptions([
+          { label: "Studio" },
+          { label: "1" },
+          { label: "2" },
+          { label: "3+" },
+          { label: "Back" }
+        ]);
+      } else if (step === "bedrooms") {
+        setStep("rent");
+        addMessage("Rent range?");
+        addOptions([
+          { label: "$1k–$2k" },
+          { label: "$2k–$3k" },
+          { label: "$3k+" },
+          { label: "Back" }
+        ]);
+      } else if (step === "rent") {
+        setFlow(null);
+        addMessage("Listing ready.");
+        addOptions([
+          { label: "Add photos" },
+          { label: "Finish later" },
+          { label: "Back" }
+        ]);
       }
-      addMessage("Choose one below or type what you need.");
-      showMainMenu();
-      return;
     }
 
-    if (flowState.flow === "listing" && flowState.step === "address") {
-      flowState.data.address = text;
-      addMessage("Got it. I saved the property address.");
-      askPropertyType();
-      return;
+    // PAYMENT FLOW
+    if (flow === "payment") {
+      if (step === "method") {
+        setStep("invoice");
+        addMessage("Need receipt?");
+        addOptions([
+          { label: "Yes" },
+          { label: "No" },
+          { label: "Back" }
+        ]);
+      } else if (step === "invoice") {
+        if (option.label === "Yes") {
+          setStep("delivery");
+          addMessage("Send via?");
+          addOptions([
+            { label: "Email" },
+            { label: "Text" },
+            { label: "Back" }
+          ]);
+        } else {
+          setFlow(null);
+          addMessage("Done.");
+        }
+      } else if (step === "delivery") {
+        setFlow(null);
+        addMessage("Enter contact.");
+      }
     }
+  };
 
-    addMessage("Choose one below or type what you need.");
-    showMainMenu();
-  }
+  // ===== INPUT =====
+  const sendMessage = () => {
+    if (!inputValue.trim()) return;
 
-  function sendMessage() {
-    const text = chatInput.value.trim();
-    if (!text) return;
+    addMessage(inputValue, "user");
+    setInputValue("");
 
-    addMessage(text, "user");
-    chatInput.value = "";
-    handleFreeText(text);
-  }
+    addMessage("Choose an option or continue.");
+  };
 
-  sendBtn.addEventListener("click", sendMessage);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
 
-  chatInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
+      {/* TOP ACTIONS */}
+      <div style={{ padding: 14 }}>
+        <h2>What do you need?</h2>
 
-  // Initial prompt
-  showMainMenu();
-</script>
-  <script>
-function startAction(type){
-  document.getElementById("chat").scrollIntoView({behavior:"smooth"});
+        <div style={{ display: "flex", gap: 10 }}>
+          <div style={card} onClick={() => startAction("list")}>
+            🏠<div>List</div>
+          </div>
 
-  if(type === "list"){
-    addMessage("List a property", "user");
-    startListingFlow();
-  }
+          <div style={card} onClick={() => startAction("rental")}>
+            🧳<div>Rent</div>
+          </div>
+        </div>
 
-  if(type === "rental"){
-    addMessage("Find a rental", "user");
-    addMessage("How would you like to start?");
-    addChoiceButtons([
-      {label:"Location", onClick:()=>addMessage("Enter your preferred location")},
-      {label:"Budget", onClick:()=>addMessage("Enter your budget range")},
-      {label:"Move-in date", onClick:()=>addMessage("Enter your move-in date")},
-      {label:"Bedrooms", onClick:()=>addMessage("How many bedrooms?")}
-    ]);
-  }
+        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+          <button style={btn} onClick={() => startAction("payment")}>Pay</button>
+          <button style={btn}>Repairs</button>
+        </div>
+      </div>
 
-  if(type === "payment"){
-    addMessage("Pay rent", "user");
-    addMessage("How would you like to pay?");
-    addChoiceButtons([
-      {label:"Credit card", onClick:()=>nextInvoice()},
-      {label:"Debit card", onClick:()=>nextInvoice()},
-      {label:"Bank transfer", onClick:()=>nextInvoice()},
-      {label:"Back", onClick:showMainMenu}
-    ]);
-  }
+      {/* CHAT */}
+      <div style={{ flex: 1, overflowY: "auto", padding: 10 }}>
+        {messages.map((msg, i) => (
+          <div key={i}>
+            {msg.type !== "options" && (
+              <div style={msg.type === "user" ? userMsg : aiMsg}>
+                {msg.text}
+              </div>
+            )}
+
+            {msg.type === "options" && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {msg.options.map((opt, idx) => (
+                  <button key={idx} style={choice} onClick={() => handleOption(opt)}>
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* INPUT */}
+      <div style={inputWrap}>
+        <input
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          placeholder="Type..."
+          style={input}
+        />
+      </div>
+    </div>
+  );
 }
 
-function nextInvoice(){
-  addMessage("Do you need an invoice?");
-  addChoiceButtons([
-    {label:"Yes", onClick:invoiceMethod},
-    {label:"No", onClick:()=>addMessage("You're all set.")},
-    {label:"Back", onClick:showMainMenu}
-  ]);
-}
+/* STYLES */
+const card = {
+  flex: 1,
+  padding: 16,
+  border: "1px solid #ddd",
+  borderRadius: 12,
+  textAlign: "center",
+  cursor: "pointer"
+};
 
-function invoiceMethod(){
-  addMessage("How would you like to receive it?");
-  addChoiceButtons([
-    {label:"Email", onClick:()=>addMessage("Enter your email")},
-    {label:"Text", onClick:()=>addMessage("Enter your phone")},
-    {label:"Back", onClick:nextInvoice}
-  ]);
-}
-</script>
-</body>
-</html>
+const btn = {
+  flex: 1,
+  padding: 10,
+  borderRadius: 10,
+  border: "1px solid #ddd",
+  background: "#f5f5f5"
+};
+
+const aiMsg = {
+  background: "#f1f5f9",
+  padding: 10,
+  borderRadius: 12,
+  marginBottom: 6,
+  maxWidth: "80%"
+};
+
+const userMsg = {
+  background: "#2563eb",
+  color: "white",
+  padding: 10,
+  borderRadius: 12,
+  marginBottom: 6,
+  alignSelf: "flex-end",
+  maxWidth: "80%"
+};
+
+const choice = {
+  padding: "8px 12px",
+  borderRadius: 20,
+  border: "1px solid #ddd",
+  background: "#f8fafc"
+};
+
+const inputWrap = {
+  borderTop: "1px solid #ddd",
+  padding: 10,
+  background: "white"
+};
+
+const input = {
+  width: "100%",
+  padding: 10,
+  borderRadius: 10,
+  border: "1px solid #ddd"
+};
