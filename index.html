@@ -32,6 +32,27 @@
     border-color:#bfd3ea;
   }
 </style>
+<style>
+.quick-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.quick-actions button{
+  flex:1 1 calc(50% - 10px);
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #e2e8f0;
+  background:#f8fafc;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.quick-actions button:hover{
+  background:#eef6ff;
+}
+</style>
   
   <style>
     * { box-sizing: border-box; }
@@ -955,6 +976,55 @@
   // Initial prompt
   showMainMenu();
 </script>
-  
+  <script>
+function startAction(type){
+  document.getElementById("chat").scrollIntoView({behavior:"smooth"});
+
+  if(type === "list"){
+    addMessage("List a property", "user");
+    startListingFlow();
+  }
+
+  if(type === "rental"){
+    addMessage("Find a rental", "user");
+    addMessage("How would you like to start?");
+    addChoiceButtons([
+      {label:"Location", onClick:()=>addMessage("Enter your preferred location")},
+      {label:"Budget", onClick:()=>addMessage("Enter your budget range")},
+      {label:"Move-in date", onClick:()=>addMessage("Enter your move-in date")},
+      {label:"Bedrooms", onClick:()=>addMessage("How many bedrooms?")}
+    ]);
+  }
+
+  if(type === "payment"){
+    addMessage("Pay rent", "user");
+    addMessage("How would you like to pay?");
+    addChoiceButtons([
+      {label:"Credit card", onClick:()=>nextInvoice()},
+      {label:"Debit card", onClick:()=>nextInvoice()},
+      {label:"Bank transfer", onClick:()=>nextInvoice()},
+      {label:"Back", onClick:showMainMenu}
+    ]);
+  }
+}
+
+function nextInvoice(){
+  addMessage("Do you need an invoice?");
+  addChoiceButtons([
+    {label:"Yes", onClick:invoiceMethod},
+    {label:"No", onClick:()=>addMessage("You're all set.")},
+    {label:"Back", onClick:showMainMenu}
+  ]);
+}
+
+function invoiceMethod(){
+  addMessage("How would you like to receive it?");
+  addChoiceButtons([
+    {label:"Email", onClick:()=>addMessage("Enter your email")},
+    {label:"Text", onClick:()=>addMessage("Enter your phone")},
+    {label:"Back", onClick:nextInvoice}
+  ]);
+}
+</script>
 </body>
 </html>
