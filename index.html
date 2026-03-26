@@ -9,6 +9,31 @@
     content="RunP8 helps with property listings, rentals, showings, applications, rent payments, and support through a guided AI chat experience."
   />
   <style>
+  .choice-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:8px 0 14px 0;
+  }
+
+  .choice-btn{
+    border:1px solid #dbe4ee;
+    background:#f8fbff;
+    color:#142133;
+    padding:10px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:13px;
+    line-height:1.2;
+  }
+
+  .choice-btn:hover{
+    background:#eef6ff;
+    border-color:#bfd3ea;
+  }
+</style>
+  
+  <style>
     * { box-sizing: border-box; }
 
     :root{
@@ -708,93 +733,228 @@
   </footer>
 
   <script>
-    const runp8Cabinet = document.getElementById("runp8Cabinet");
-    const messages = document.getElementById("messages");
-    const chatInput = document.getElementById("chatInput");
-    const sendBtn = document.getElementById("sendBtn");
+  const messages = document.getElementById("messages");
+  const chatInput = document.getElementById("chatInput");
+  const sendBtn = document.getElementById("sendBtn");
 
-    function openRunP8Cabinet() {
-      runp8Cabinet.hidden = false;
-      runp8Cabinet.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
+  let flowState = {
+    flow: null,
+    step: null,
+    data: {}
+  };
 
-    function closeRunP8Cabinet() {
-      runp8Cabinet.hidden = true;
-    }
+  function focusChatInput() {
+    document.getElementById("chat").scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => chatInput.focus(), 250);
+  }
 
-    function focusChatInput() {
-      document.getElementById("chat").scrollIntoView({ behavior: "smooth", block: "start" });
-      setTimeout(() => chatInput.focus(), 250);
-    }
+  function addMessage(text, type = "ai") {
+    const div = document.createElement("div");
+    div.className = "msg " + type;
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
 
-    function addMessage(text, type) {
-      const div = document.createElement("div");
-      div.className = "msg " + type;
-      div.textContent = text;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-    }
+  function addChoiceButtons(options = []) {
+    const row = document.createElement("div");
+    row.className = "choice-row";
 
-    function getRunP8Reply(userText) {
-      const t = userText.toLowerCase();
-
-      if (t.includes("list a property") || t.includes("property")) {
-        return "Let’s start your property listing.\n\nPlease share the property address, property type, number of bedrooms and bathrooms, monthly rent goal, and any photos or details you want included.";
-      }
-
-      if (t.includes("find a rental") || t.includes("rental")) {
-        return "I can help you find a rental.\n\nTell me your preferred city or area, budget range, move-in date, and how many bedrooms you need.";
-      }
-
-      if (t.includes("showing")) {
-        return "I can help schedule a showing.\n\nPlease tell me which property you want to see and your preferred day. Available showing flow can be guided Friday through Sunday with time options.";
-      }
-
-      if (t.includes("application")) {
-        return "Let’s begin your application.\n\nPlease share your target move-in date, monthly income, number of occupants, and whether you have any pets. After that, I can guide you to the next step.";
-      }
-
-      if (t.includes("pay rent") || t.includes("rent payment") || t.includes("billing")) {
-        return "I can help with rent payments.\n\nPlease tell me whether you want to pay rent now, review payment options, ask about a due date, or report a billing issue.";
-      }
-
-      if (t.includes("move-in") || t.includes("move out") || t.includes("repair") || t.includes("repairs")) {
-        return "I can help with move-in, move-out, or repair support.\n\nPlease tell me what you need help with, the property address, and whether this is urgent.";
-      }
-
-      return "I can help with listings, rentals, showings, applications, rent payments, and move-in or repair support.\n\nChoose a RunP8 action or tell me what you need.";
-    }
-
-    function sendMessage() {
-      const text = chatInput.value.trim();
-      if (!text) return;
-
-      addMessage(text, "user");
-      chatInput.value = "";
-
-      const reply = getRunP8Reply(text);
-      setTimeout(() => {
-        addMessage(reply, "ai");
-      }, 250);
-    }
-
-    sendBtn.addEventListener("click", sendMessage);
-
-    chatInput.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-
-    document.querySelectorAll(".cabinet-item").forEach((item) => {
-      item.addEventListener("click", () => {
-        const prompt = item.getAttribute("data-prompt") || "";
-        chatInput.value = prompt;
-        closeRunP8Cabinet();
-        sendMessage();
+    options.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.className = "choice-btn";
+      btn.type = "button";
+      btn.textContent = opt.label;
+      btn.addEventListener("click", () => {
+        addMessage(opt.label, "user");
+        opt.onClick();
       });
+      row.appendChild(btn);
     });
-  </script>
+
+    messages.appendChild(row);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function resetFlow() {
+    flowState = {
+      flow: null,
+      step: null,
+      data: {}
+    };
+  }
+
+  function showMainMenu() {
+    resetFlow();
+    addMessage("What would you like to do?");
+    addChoiceButtons([
+      { label: "List a property", onClick: () => startListingFlow() },
+      { label: "Find a rental", onClick: () => addMessage("Next we can build this flow the same way.") },
+      { label: "Schedule a showing", onClick: () => addMessage("Next we can build this flow the same way.") },
+      { label: "Start application", onClick: () => addMessage("Next we can build this flow the same way.") },
+      { label: "Pay rent", onClick: () => addMessage("Next we can build this flow the same way.") },
+      { label: "Move-in / repair help", onClick: () => addMessage("Next we can build this flow the same way.") }
+    ]);
+  }
+
+  // LISTING FLOW
+  function startListingFlow() {
+    flowState.flow = "listing";
+    flowState.step = "start";
+
+    addMessage("I can help you list a property. How would you like to start?");
+    addChoiceButtons([
+      { label: "Property address", onClick: () => askListingAddress() },
+      { label: "Property type", onClick: () => askPropertyType() },
+      { label: "Bedrooms", onClick: () => askBedrooms() },
+      { label: "Monthly rent", onClick: () => askMonthlyRent() },
+      { label: "Back", onClick: () => showMainMenu() }
+    ]);
+  }
+
+  function askListingAddress() {
+    flowState.step = "address";
+    addMessage("Please enter the property address, or choose an option below.");
+    addChoiceButtons([
+      { label: "Skip", onClick: () => askPropertyType() },
+      { label: "Back", onClick: () => startListingFlow() }
+    ]);
+  }
+
+  function askPropertyType() {
+    flowState.step = "property_type";
+    addMessage("What type of property is it?");
+    addChoiceButtons([
+      { label: "House", onClick: () => saveAndNext("propertyType", "House", askBedrooms) },
+      { label: "Apartment", onClick: () => saveAndNext("propertyType", "Apartment", askBedrooms) },
+      { label: "Studio", onClick: () => saveAndNext("propertyType", "Studio", askBedrooms) },
+      { label: "ADU", onClick: () => saveAndNext("propertyType", "ADU", askBedrooms) },
+      { label: "Room", onClick: () => saveAndNext("propertyType", "Room", askBedrooms) },
+      { label: "Back", onClick: () => startListingFlow() },
+      { label: "Skip", onClick: () => askBedrooms() }
+    ]);
+  }
+
+  function askBedrooms() {
+    flowState.step = "bedrooms";
+    addMessage("How many bedrooms does the property have?");
+    addChoiceButtons([
+      { label: "Studio", onClick: () => saveAndNext("bedrooms", "Studio", askBathrooms) },
+      { label: "1", onClick: () => saveAndNext("bedrooms", "1", askBathrooms) },
+      { label: "2", onClick: () => saveAndNext("bedrooms", "2", askBathrooms) },
+      { label: "3+", onClick: () => saveAndNext("bedrooms", "3+", askBathrooms) },
+      { label: "Back", onClick: () => askPropertyType() },
+      { label: "Skip", onClick: () => askBathrooms() }
+    ]);
+  }
+
+  function askBathrooms() {
+    flowState.step = "bathrooms";
+    addMessage("How many bathrooms does the property have?");
+    addChoiceButtons([
+      { label: "1", onClick: () => saveAndNext("bathrooms", "1", askMonthlyRent) },
+      { label: "1.5", onClick: () => saveAndNext("bathrooms", "1.5", askMonthlyRent) },
+      { label: "2", onClick: () => saveAndNext("bathrooms", "2", askMonthlyRent) },
+      { label: "3+", onClick: () => saveAndNext("bathrooms", "3+", askMonthlyRent) },
+      { label: "Back", onClick: () => askBedrooms() },
+      { label: "Skip", onClick: () => askMonthlyRent() }
+    ]);
+  }
+
+  function askMonthlyRent() {
+    flowState.step = "monthly_rent";
+    addMessage("What is your monthly rent goal?");
+    addChoiceButtons([
+      { label: "Under $1,000", onClick: () => saveAndNext("rentGoal", "Under $1,000", askPhotos) },
+      { label: "$1,000–$2,000", onClick: () => saveAndNext("rentGoal", "$1,000–$2,000", askPhotos) },
+      { label: "$2,000–$3,000", onClick: () => saveAndNext("rentGoal", "$2,000–$3,000", askPhotos) },
+      { label: "$3,000+", onClick: () => saveAndNext("rentGoal", "$3,000+", askPhotos) },
+      { label: "Back", onClick: () => askBathrooms() },
+      { label: "Skip", onClick: () => askPhotos() }
+    ]);
+  }
+
+  function askPhotos() {
+    flowState.step = "photos";
+    addMessage("Would you like to add photos now?");
+    addChoiceButtons([
+      { label: "Yes", onClick: () => finishListingFlow("Great. Photos can be uploaded in the next step.") },
+      { label: "No", onClick: () => finishListingFlow("No problem. You can add photos later.") },
+      { label: "Back", onClick: () => askMonthlyRent() }
+    ]);
+  }
+
+  function finishListingFlow(photoMessage) {
+    flowState.step = "done";
+
+    const summary = [
+      "Here’s your listing progress so far:",
+      flowState.data.propertyType ? `Property type: ${flowState.data.propertyType}` : null,
+      flowState.data.bedrooms ? `Bedrooms: ${flowState.data.bedrooms}` : null,
+      flowState.data.bathrooms ? `Bathrooms: ${flowState.data.bathrooms}` : null,
+      flowState.data.rentGoal ? `Monthly rent goal: ${flowState.data.rentGoal}` : null
+    ].filter(Boolean).join("\n");
+
+    addMessage(summary);
+    addMessage(photoMessage);
+    addMessage("What would you like to do next?");
+    addChoiceButtons([
+      { label: "Continue listing", onClick: () => addMessage("Next we can add address details, amenities, and photos.") },
+      { label: "Start over", onClick: () => startListingFlow() },
+      { label: "Main menu", onClick: () => showMainMenu() }
+    ]);
+  }
+
+  function saveAndNext(key, value, nextFn) {
+    flowState.data[key] = value;
+    nextFn();
+  }
+
+  function handleFreeText(text) {
+    const t = text.toLowerCase();
+
+    if (!flowState.flow) {
+      if (t.includes("list")) {
+        startListingFlow();
+        return;
+      }
+      addMessage("Choose one below or type what you need.");
+      showMainMenu();
+      return;
+    }
+
+    if (flowState.flow === "listing" && flowState.step === "address") {
+      flowState.data.address = text;
+      addMessage("Got it. I saved the property address.");
+      askPropertyType();
+      return;
+    }
+
+    addMessage("Choose one below or type what you need.");
+    showMainMenu();
+  }
+
+  function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    addMessage(text, "user");
+    chatInput.value = "";
+    handleFreeText(text);
+  }
+
+  sendBtn.addEventListener("click", sendMessage);
+
+  chatInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Initial prompt
+  showMainMenu();
+</script>
+  
 </body>
 </html>
