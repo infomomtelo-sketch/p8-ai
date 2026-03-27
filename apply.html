@@ -3,580 +3,156 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RunP8 | Apply</title>
-  <meta
-    name="description"
-    content="RunP8 rental application flow."
-  />
+  <title>RunP8</title>
+  <meta name="description" content="RunP8 rental system" />
+
   <style>
     * { box-sizing: border-box; }
 
-    :root{
-      --bg:#f5f7fb;
-      --panel:#ffffff;
-      --text:#0f172a;
-      --muted:#64748b;
-      --line:#dbe4f0;
-      --blue:#2f5bea;
-      --blue-dark:#2448bb;
-      --soft-blue:#eaf0ff;
-      --shadow:0 18px 50px rgba(38, 60, 120, 0.08);
-      --radius:24px;
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Arial, sans-serif;
-    }
-
     body {
-      min-height: 100vh;
-      padding: 24px 16px 48px;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #0f172a;
+      padding: 20px;
     }
 
     .wrap {
-      max-width: 760px;
+      max-width: 700px;
       margin: 0 auto;
     }
 
-    .topbar {
+    .top {
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .logo {
-      width: 82px;
-      height: 82px;
-      border-radius: 24px;
+      width: 70px;
+      height: 70px;
+      border-radius: 18px;
       background: #d9e6ff;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--blue);
-      font-size: 24px;
-      font-weight: 800;
-      border: 1px solid #c9d8f7;
-      flex: 0 0 auto;
+      font-weight: bold;
+      color: #2f5bea;
+      font-size: 20px;
     }
 
-    .brand h1 {
-      margin: 0 0 4px;
-      font-size: 22px;
-      line-height: 1.1;
-    }
-
-    .brand p {
+    h1 {
       margin: 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.4;
+      font-size: 22px;
     }
 
-    .back-link {
-      display: inline-block;
-      margin-bottom: 18px;
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      padding: 22px;
-      box-shadow: var(--shadow);
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 12px 18px;
-      border-radius: 999px;
-      background: var(--soft-blue);
-      color: var(--blue);
-      font-weight: 800;
+    .subtitle {
+      margin: 4px 0 0;
+      color: #64748b;
       font-size: 14px;
-      margin-bottom: 18px;
-    }
-
-    .title {
-      margin: 0 0 10px;
-      font-size: 48px;
-      line-height: 0.98;
-      letter-spacing: -0.03em;
-    }
-
-    .intro {
-      margin: 0 0 22px;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.75;
-    }
-
-    .flow-box {
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 18px;
-      background: #fbfcff;
-    }
-
-    .step-meta {
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .question {
-      margin: 0 0 18px;
-      font-size: 24px;
-      line-height: 1.35;
-      font-weight: 800;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .chip {
-      border: 1px solid #cfd8e6;
-      background: #fff;
-      color: var(--text);
-      border-radius: 999px;
-      padding: 14px 18px;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
-      min-height: 52px;
-    }
-
-    .chip.active {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: #fff;
-    }
-
-    .field {
-      width: 100%;
-      border: 1px solid #cfd8e6;
-      border-radius: 18px;
-      padding: 16px 18px;
-      font-size: 17px;
-      color: var(--text);
-      outline: none;
-      background: #fff;
-      margin-bottom: 14px;
     }
 
     .actions {
       display: flex;
       gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 6px;
+      margin-bottom: 20px;
     }
 
     .btn {
-      border: none;
-      border-radius: 18px;
-      padding: 16px 22px;
-      font-size: 17px;
-      font-weight: 800;
-      cursor: pointer;
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: bold;
       text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 56px;
     }
 
     .btn-primary {
-      background: var(--blue);
-      color: #fff;
-      flex: 1 1 220px;
-    }
-
-    .btn-primary:hover {
-      background: var(--blue-dark);
+      background: #2f5bea;
+      color: white;
     }
 
     .btn-secondary {
-      background: #fff;
-      color: var(--text);
-      border: 1px solid #cfd8e6;
-      flex: 1 1 180px;
+      background: white;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
     }
 
-    .summary {
-      display: grid;
-      gap: 12px;
-      margin: 10px 0 18px;
-    }
-
-    .summary-item {
-      padding: 14px 16px;
+    .card {
+      background: white;
       border-radius: 18px;
-      border: 1px solid var(--line);
-      background: #fff;
-    }
-
-    .summary-label {
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .summary-value {
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .notice {
-      margin-top: 18px;
       padding: 18px;
-      border-radius: 22px;
-      background: #f8fbff;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 16px;
+      margin-bottom: 14px;
+      border: 1px solid #e2e8f0;
     }
 
-    .hidden {
-      display: none;
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
     }
 
-    .footer-links {
-      margin-top: 18px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .footer-link {
-      color: var(--muted);
-      text-decoration: none;
-      font-weight: 700;
+    .card p {
+      margin: 0;
+      color: #64748b;
       font-size: 14px;
     }
 
-    @media (max-width: 640px) {
-      .title {
-        font-size: 34px;
-      }
+    .big {
+      margin-top: 20px;
+    }
 
-      .intro {
-        font-size: 16px;
-      }
-
-      .question {
-        font-size: 21px;
-      }
-
-      .chip {
-        width: 100%;
-      }
-
-      .btn {
-        width: 100%;
-      }
-
-      .topbar {
-        align-items: flex-start;
-      }
+    .big .btn {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 16px;
+      font-size: 16px;
+      border-radius: 16px;
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <a class="back-link" href="/index.html">← Back to home</a>
 
-    <div class="topbar">
+    <!-- HEADER -->
+    <div class="top">
       <div class="logo">P8</div>
-      <div class="brand">
+      <div>
         <h1>RunP8</h1>
-        <p>Rentals and property management made clearer</p>
+        <p class="subtitle">Rentals and property management made clearer</p>
       </div>
+    </div>
+
+    <!-- MAIN ACTIONS -->
+    <div class="actions">
+      <a href="/apply.html" class="btn btn-secondary">Find a Rental</a>
+      <a href="/owner/add-property.html" class="btn btn-primary">List Your Property</a>
+    </div>
+
+    <!-- INFO CARDS -->
+    <div class="card">
+      <h3>For property owners</h3>
+      <p>Start listing your property and move toward real inquiries.</p>
     </div>
 
     <div class="card">
-      <div class="pill">Structured renter approval flow</div>
-      <h2 class="title">Start your rental path</h2>
-      <p class="intro">
-        RunP8 will guide you through a quick approval-first flow so the next steps
-        are clearer for both renters and property owners.
-      </p>
-
-      <div class="flow-box">
-        <div id="stepBox">
-          <div class="step-meta" id="stepMeta">Step 1 of 6</div>
-          <h3 class="question" id="questionText">What is your desired move-in date?</h3>
-
-          <div id="inputArea"></div>
-
-          <div class="actions">
-            <button class="btn btn-secondary hidden" id="backBtn" type="button">Back</button>
-            <button class="btn btn-primary" id="nextBtn" type="button">Continue</button>
-          </div>
-        </div>
-
-        <div id="summaryBox" class="hidden">
-          <div class="step-meta">Application summary</div>
-          <h3 class="question">Review your answers</h3>
-
-          <div class="summary" id="summaryList"></div>
-
-          <div class="notice">
-            Next step: background check and application review. After review,
-            approved renters can move forward to showing, payment, and contract steps.
-          </div>
-
-          <div class="actions">
-            <button class="btn btn-secondary" id="editBtn" type="button">Back</button>
-            <button class="btn btn-primary" id="submitBtn" type="button">Continue to Review</button>
-          </div>
-        </div>
-
-        <div id="doneBox" class="hidden">
-          <div class="step-meta">Application received</div>
-          <h3 class="question">You’re in the review flow</h3>
-
-          <div class="notice">
-            Your prescreen details have been collected.
-            The next step is application review and background check processing.
-            Once approved, your next options can include showing, move-in payment,
-            and contract steps.
-          </div>
-
-          <div class="footer-links">
-            <a class="footer-link" href="/index.html">Back to home</a>
-            <a class="footer-link" href="/owner/add-property.html">Owner side</a>
-          </div>
-        </div>
-      </div>
+      <h3>For renters</h3>
+      <p>Find a place, complete your application, and move forward clearly.</p>
     </div>
+
+    <div class="card">
+      <h3>For support</h3>
+      <p>Payments, move-in questions, repairs, and rental help.</p>
+    </div>
+
+    <!-- PRIMARY PATH -->
+    <div class="big">
+      <a href="/apply.html" class="btn btn-primary">Start Rental Application</a>
+      <a href="/owner/add-property.html" class="btn btn-secondary">List Your Property</a>
+    </div>
+
   </div>
-
-  <script>
-  const steps = [
-    {
-      key: "property",
-      label: "Property",
-      question: "Which property are you applying for?",
-      type: "chips",
-      options: [
-        "Studio 101",
-        "Room 1A",
-        "Room 101",
-        "ADU Back Unit"
-      ]
-    },
-    {
-      key: "moveInDate",
-      label: "Move-in date",
-      question: "What is your desired move-in date?",
-      type: "text",
-      placeholder: "Example: April 15, 2026"
-    },
-    {
-      key: "monthlyIncome",
-      label: "Monthly income",
-      question: "What is your monthly household income?",
-      type: "chips",
-      options: [
-        "Under $2,000",
-        "$2,000-$4,000",
-        "$4,000-$6,000",
-        "$6,000+"
-      ]
-    },
-    {
-      key: "occupants",
-      label: "Occupants",
-      question: "How many occupants will live in the property?",
-      type: "chips",
-      options: ["1", "2", "3", "4+"]
-    },
-    {
-      key: "pets",
-      label: "Pets",
-      question: "Do you have pets?",
-      type: "chips",
-      options: ["No pets", "Yes, 1 pet", "Yes, 2+ pets"]
-    },
-    {
-      key: "creditRange",
-      label: "Estimated credit range",
-      question: "What is your estimated credit range?",
-      type: "chips",
-      options: ["Under 600", "600-649", "650-699", "700+"]
-    },
-    {
-      key: "notes",
-      label: "Anything to mention",
-      question: "Anything else you want the property owner to know?",
-      type: "text",
-      placeholder: "Optional"
-    }
-  ];
-
-  const data = {
-    property: "",
-    moveInDate: "",
-    monthlyIncome: "",
-    occupants: "",
-    pets: "",
-    creditRange: "",
-    notes: ""
-  };
-
-    let currentStep = 0;
-
-    const stepMeta = document.getElementById("stepMeta");
-    const questionText = document.getElementById("questionText");
-    const inputArea = document.getElementById("inputArea");
-    const nextBtn = document.getElementById("nextBtn");
-    const backBtn = document.getElementById("backBtn");
-    const summaryBox = document.getElementById("summaryBox");
-    const stepBox = document.getElementById("stepBox");
-    const summaryList = document.getElementById("summaryList");
-    const editBtn = document.getElementById("editBtn");
-    const submitBtn = document.getElementById("submitBtn");
-    const doneBox = document.getElementById("doneBox");
-
-    function renderStep() {
-      const step = steps[currentStep];
-
-      stepMeta.textContent = `Step ${currentStep + 1} of ${steps.length}`;
-      questionText.textContent = step.question;
-      inputArea.innerHTML = "";
-      backBtn.classList.toggle("hidden", currentStep === 0);
-
-      if (step.type === "text") {
-        const input = document.createElement("input");
-        input.className = "field";
-        input.type = "text";
-        input.placeholder = step.placeholder || "";
-        input.value = data[step.key] || "";
-        input.id = "stepInput";
-        inputArea.appendChild(input);
-      }
-
-      if (step.type === "chips") {
-        const wrap = document.createElement("div");
-        wrap.className = "chips";
-
-        step.options.forEach(option => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "chip";
-          btn.textContent = option;
-
-          if (data[step.key] === option) {
-            btn.classList.add("active");
-          }
-
-          btn.addEventListener("click", () => {
-            data[step.key] = option;
-            renderStep();
-          });
-
-          wrap.appendChild(btn);
-        });
-
-        inputArea.appendChild(wrap);
-      }
-    }
-
-    function validateStep() {
-      const step = steps[currentStep];
-
-      if (step.type === "text") {
-        const input = document.getElementById("stepInput");
-        const value = input.value.trim();
-
-        if (step.key === "notes") {
-          data[step.key] = value || "None provided";
-          return true;
-        }
-
-        if (!value) {
-          alert("Please complete this step before continuing.");
-          return false;
-        }
-
-        data[step.key] = value;
-        return true;
-      }
-
-      if (step.type === "chips") {
-        if (!data[step.key]) {
-          alert("Please choose an option before continuing.");
-          return false;
-        }
-        return true;
-      }
-
-      return true;
-    }
-
-    function showSummary() {
-      stepBox.classList.add("hidden");
-      summaryBox.classList.remove("hidden");
-      summaryList.innerHTML = "";
-
-      steps.forEach(step => {
-        const item = document.createElement("div");
-        item.className = "summary-item";
-        item.innerHTML = `
-          <div class="summary-label">${step.label}</div>
-          <div class="summary-value">${data[step.key] || "Not provided"}</div>
-        `;
-        summaryList.appendChild(item);
-      });
-    }
-
-    nextBtn.addEventListener("click", () => {
-      if (!validateStep()) return;
-
-      if (currentStep < steps.length - 1) {
-        currentStep += 1;
-        renderStep();
-      } else {
-        showSummary();
-      }
-    });
-
-    backBtn.addEventListener("click", () => {
-      if (currentStep > 0) {
-        currentStep -= 1;
-        renderStep();
-      }
-    });
-
-    editBtn.addEventListener("click", () => {
-      summaryBox.classList.add("hidden");
-      stepBox.classList.remove("hidden");
-      currentStep = steps.length - 1;
-      renderStep();
-    });
-
-    submitBtn.addEventListener("click", () => {
-      summaryBox.classList.add("hidden");
-      doneBox.classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-    renderStep();
-  </script>
 </body>
 </html>
