@@ -367,64 +367,77 @@
   </div>
 
   <script>
-    const steps = [
-      {
-        key: "moveInDate",
-        label: "Move-in date",
-        question: "What is your desired move-in date?",
-        type: "text",
-        placeholder: "Example: April 15, 2026"
-      },
-      {
-        key: "monthlyIncome",
-        label: "Monthly income",
-        question: "What is your monthly household income?",
-        type: "chips",
-        options: [
-          "Under $2,000",
-          "$2,000-$4,000",
-          "$4,000-$6,000",
-          "$6,000+"
-        ]
-      },
-      {
-        key: "occupants",
-        label: "Occupants",
-        question: "How many occupants will live in the property?",
-        type: "chips",
-        options: ["1", "2", "3", "4+"]
-      },
-      {
-        key: "pets",
-        label: "Pets",
-        question: "Do you have pets?",
-        type: "chips",
-        options: ["No pets", "Yes, 1 pet", "Yes, 2+ pets"]
-      },
-      {
-        key: "creditRange",
-        label: "Estimated credit range",
-        question: "What is your estimated credit range?",
-        type: "chips",
-        options: ["Under 600", "600-649", "650-699", "700+"]
-      },
-      {
-        key: "notes",
-        label: "Anything to mention",
-        question: "Anything else you want the property owner to know?",
-        type: "text",
-        placeholder: "Optional"
-      }
-    ];
+  const steps = [
+    {
+      key: "property",
+      label: "Property",
+      question: "Which property are you applying for?",
+      type: "chips",
+      options: [
+        "Studio 101",
+        "Room 1A",
+        "Room 101",
+        "ADU Back Unit"
+      ]
+    },
+    {
+      key: "moveInDate",
+      label: "Move-in date",
+      question: "What is your desired move-in date?",
+      type: "text",
+      placeholder: "Example: April 15, 2026"
+    },
+    {
+      key: "monthlyIncome",
+      label: "Monthly income",
+      question: "What is your monthly household income?",
+      type: "chips",
+      options: [
+        "Under $2,000",
+        "$2,000-$4,000",
+        "$4,000-$6,000",
+        "$6,000+"
+      ]
+    },
+    {
+      key: "occupants",
+      label: "Occupants",
+      question: "How many occupants will live in the property?",
+      type: "chips",
+      options: ["1", "2", "3", "4+"]
+    },
+    {
+      key: "pets",
+      label: "Pets",
+      question: "Do you have pets?",
+      type: "chips",
+      options: ["No pets", "Yes, 1 pet", "Yes, 2+ pets"]
+    },
+    {
+      key: "creditRange",
+      label: "Estimated credit range",
+      question: "What is your estimated credit range?",
+      type: "chips",
+      options: ["Under 600", "600-649", "650-699", "700+"]
+    },
+    {
+      key: "notes",
+      label: "Anything to mention",
+      question: "Anything else you want the property owner to know?",
+      type: "text",
+      placeholder: "Optional"
+    }
+  ];
 
-    const data = {
-      moveInDate: "",
-      monthlyIncome: "",
-      occupants: "",
-      pets: "",
-      creditRange: "",
-      notes: ""
-    };
+  const data = {
+    property: "",
+    moveInDate: "",
+    monthlyIncome: "",
+    occupants: "",
+    pets: "",
+    creditRange: "",
+    notes: ""
+  };
 
     let currentStep = 0;
 
