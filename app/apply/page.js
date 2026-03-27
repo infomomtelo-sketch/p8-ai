@@ -80,7 +80,7 @@ export default function ApplyPage() {
   );
 }
 
-const styles = sharedStyles();
+
 function sharedStyles() {
   return {
     page: {
@@ -190,3 +190,4 @@ function sharedStyles() {
     },
   };
 }
+const styles = sharedStyles();
