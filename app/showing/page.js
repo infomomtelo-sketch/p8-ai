@@ -70,7 +70,6 @@ export default function ShowingPage() {
   );
 }
 
-const styles = sharedStyles();
 function sharedStyles() {
   return {
     page: {
@@ -180,3 +179,4 @@ function sharedStyles() {
     },
   };
 }
+const styles = sharedStyles();
