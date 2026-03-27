@@ -3,997 +3,156 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RunP8 | Property rentals guided by AI</title>
-  <meta
-    name="description"
-    content="RunP8 helps with property listings, rentals, showings, applications, rent payments, and support through a guided AI chat experience."
-  />
-  <style>
-  .choice-row{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin:8px 0 14px 0;
-  }
+  <title>RunP8</title>
+  <meta name="description" content="RunP8 rental system" />
 
-  .choice-btn{
-    border:1px solid #dbe4ee;
-    background:#f8fbff;
-    color:#142133;
-    padding:10px 14px;
-    border-radius:999px;
-    cursor:pointer;
-    font-size:13px;
-    line-height:1.2;
-  }
-
-  .choice-btn:hover{
-    background:#eef6ff;
-    border-color:#bfd3ea;
-  }
-</style>
-<style>
-.quick-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-.quick-actions button{
-  flex:1 1 calc(50% - 10px);
-  padding:14px;
-  border-radius:14px;
-  border:1px solid #e2e8f0;
-  background:#f8fafc;
-  font-size:14px;
-  cursor:pointer;
-}
-
-.quick-actions button:hover{
-  background:#eef6ff;
-}
-</style>
-  
   <style>
     * { box-sizing: border-box; }
 
-    :root{
-      --bg:#f4f7fb;
-      --panel:#ffffff;
-      --panel-soft:#f8fbff;
-      --border:#dbe4ee;
-      --text:#142133;
-      --muted:#607086;
-      --blue:#2563eb;
-      --blue-dark:#1d4ed8;
-      --shadow:0 14px 40px rgba(15,23,42,.08);
-      --radius:22px;
-    }
-
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(180deg,#f6f9fc 0%,#eef4fa 100%);
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #0f172a;
+      padding: 20px;
     }
 
     .wrap {
-      width: min(1180px, calc(100% - 28px));
+      max-width: 700px;
       margin: 0 auto;
     }
 
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-      background: rgba(244,247,251,.82);
-      border-bottom: 1px solid rgba(219,228,238,.9);
-    }
-
-    .topbar-inner {
-      min-height: 72px;
+    .top {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      gap: 14px;
+      margin-bottom: 20px;
     }
 
-    .brand {
+    .logo {
+      width: 70px;
+      height: 70px;
+      border-radius: 18px;
+      background: #d9e6ff;
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      letter-spacing: .2px;
-    }
-
-    .brand-badge {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, var(--blue), #60a5fa);
-      color: white;
-      font-weight: 800;
-      box-shadow: 0 10px 24px rgba(37,99,235,.28);
-    }
-
-    .brand-sub {
-      display: block;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .nav a,
-    .nav button {
-      border: 0;
-      background: transparent;
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .nav a:hover,
-    .nav button:hover {
-      background: rgba(37,99,235,.08);
-    }
-
-    .btn-primary {
-      border: 0;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: white;
-      padding: 12px 18px;
-      border-radius: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 12px 28px rgba(37,99,235,.24);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-    }
-
-    .hero {
-      padding: 46px 0 24px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 20px;
-      align-items: stretch;
-    }
-
-    .hero-card,
-    .chat-card,
-    .cabinet-card,
-    .info-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-card {
-      padding: 34px;
-      background:
-        radial-gradient(circle at top right, rgba(96,165,250,.18), transparent 28%),
-        linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(37,99,235,.08);
-      color: var(--blue-dark);
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 16px;
+      justify-content: center;
+      font-weight: bold;
+      color: #2f5bea;
+      font-size: 20px;
     }
 
     h1 {
-      margin: 0 0 14px;
-      font-size: clamp(30px, 5vw, 52px);
-      line-height: 1.05;
-      letter-spacing: -.03em;
-    }
-
-    .hero p {
       margin: 0;
-      font-size: 17px;
-      line-height: 1.7;
-      color: var(--muted);
-      max-width: 700px;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .btn-secondary {
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--text);
-      padding: 12px 18px;
-      border-radius: 14px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .hero-points {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 12px;
-      margin-top: 26px;
-    }
-
-    .point {
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(248,251,255,.95);
-      border: 1px solid var(--border);
-    }
-
-    .point strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 14px;
-    }
-
-    .point span {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .chat-card {
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      min-height: 560px;
-    }
-
-    .chat-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 14px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .chat-head h2 {
-      margin: 0;
-      font-size: 19px;
-    }
-
-    .chat-head p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .mini-badge {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--blue-dark);
-      background: rgba(37,99,235,.08);
-      padding: 8px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-
-    .messages {
-      flex: 1;
-      overflow: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 6px 2px 12px;
-      min-height: 260px;
-    }
-
-    .msg {
-      max-width: 88%;
-      padding: 14px 15px;
-      border-radius: 18px;
-      line-height: 1.6;
-      font-size: 14px;
-      white-space: pre-wrap;
-    }
-
-    .msg.user {
-      align-self: flex-end;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: white;
-      border-bottom-right-radius: 6px;
-    }
-
-    .msg.ai {
-      align-self: flex-start;
-      background: #f7fafc;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-bottom-left-radius: 6px;
-    }
-
-    .cabinet-panel {
-      margin: 18px 0 0;
-    }
-
-    .cabinet-panel[hidden] {
-      display: none !important;
-    }
-
-    .cabinet-card {
-      padding: 20px;
-      background: linear-gradient(180deg,#ffffff 0%,#f9fbfe 100%);
-    }
-
-    .cabinet-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: start;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .cabinet-head h3 {
-      margin: 0 0 6px;
       font-size: 22px;
     }
 
-    .cabinet-head p {
-      margin: 0;
-      color: var(--muted);
+    .subtitle {
+      margin: 4px 0 0;
+      color: #64748b;
       font-size: 14px;
-      line-height: 1.6;
-      max-width: 680px;
     }
 
-    .cabinet-close {
-      border: 1px solid var(--border);
-      background: white;
-      padding: 10px 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .cabinet-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 14px;
-    }
-
-    .cabinet-item {
-      width: 100%;
-      text-align: left;
-      border: 1px solid var(--border);
-      background: var(--panel-soft);
-      border-radius: 18px;
-      padding: 16px;
-      cursor: pointer;
-      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
-    }
-
-    .cabinet-item:hover {
-      transform: translateY(-1px);
-      border-color: #c6d3e2;
-      box-shadow: 0 10px 24px rgba(15,23,42,.07);
-    }
-
-    .cabinet-title {
-      display: block;
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .cabinet-sub {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    .chat-input-wrap {
+    .actions {
       display: flex;
-      gap: 10px;
-      margin-top: 16px;
-      align-items: end;
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
-    .chat-input {
+    .btn {
       flex: 1;
-      min-height: 52px;
-      max-height: 180px;
-      resize: vertical;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px 14px;
-      font-size: 14px;
-      color: var(--text);
-      background: white;
-      outline: none;
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: bold;
+      text-decoration: none;
     }
 
-    .chat-input:focus {
-      border-color: #a7c2ff;
-      box-shadow: 0 0 0 4px rgba(37,99,235,.08);
-    }
-
-    .send-btn {
-      min-width: 112px;
-      min-height: 52px;
-      border: 0;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+    .btn-primary {
+      background: #2f5bea;
       color: white;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 12px 28px rgba(37,99,235,.22);
     }
 
-    .features {
-      padding: 10px 0 30px;
+    .btn-secondary {
+      background: white;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
     }
 
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 16px;
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 14px;
+      border: 1px solid #e2e8f0;
     }
 
-    .info-card {
-      padding: 20px;
-    }
-
-    .info-card h3 {
-      margin: 0 0 8px;
+    .card h3 {
+      margin: 0 0 6px;
       font-size: 18px;
     }
 
-    .info-card p {
+    .card p {
       margin: 0;
-      color: var(--muted);
+      color: #64748b;
       font-size: 14px;
-      line-height: 1.65;
     }
 
-    footer {
-      margin-top: 24px;
-      border-top: 1px solid var(--border);
-      background: rgba(255,255,255,.7);
+    .big {
+      margin-top: 20px;
     }
 
-    .footer-inner {
-      padding: 22px 0 34px;
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .footer-copy {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-      max-width: 720px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: white;
-      border: 1px solid var(--border);
-      font-size: 13px;
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .feature-grid,
-      .cabinet-grid,
-      .hero-points {
-        grid-template-columns: 1fr;
-      }
-
-      .chat-card {
-        min-height: unset;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .topbar-inner {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 10px 0;
-      }
-
-      .nav {
-        justify-content: space-between;
-      }
-
-      .hero-card {
-        padding: 24px;
-      }
-
-      .chat-card,
-      .cabinet-card,
-      .info-card {
-        border-radius: 18px;
-      }
-
-      .chat-input-wrap {
-        flex-direction: column;
-      }
-
-      .send-btn {
-        width: 100%;
-      }
-
-      .cabinet-head {
-        flex-direction: column;
-      }
+    .big .btn {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 16px;
+      font-size: 16px;
+      border-radius: 16px;
     }
   </style>
 </head>
+
 <body>
+  <div class="wrap">
 
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <div class="brand">
-        <div class="brand-badge">P8</div>
-        <div>
-          RunP8
-          <span class="brand-sub">Rentals, listings, applications, and support</span>
-        </div>
-      </div>
-
-      <nav class="nav">
-        <a href="#home">Home</a>
-        <a href="#chat">Chat</a>
-        <button type="button" onclick="openRunP8Cabinet()">RunP8 Cabinet</button>
-        <a href="#help">Help</a>
-        <button class="btn-primary" type="button" onclick="openRunP8Cabinet()">Open RunP8</button>
-      </nav>
-    </div>
-  </header>
-
-  <main id="home">
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div class="hero-card">
-          <div class="eyebrow">Guided property workflows</div>
-          <h1>Run your rental process with one calm, helpful AI.</h1>
-          <p>
-            RunP8 helps owners, renters, and property users move through listings,
-            showings, applications, rent payments, and support with less confusion
-            and fewer broken steps.
-          </p>
-
-          <div class="hero-actions">
-            <button class="btn-primary" type="button" onclick="openRunP8Cabinet()">
-              Open RunP8 Cabinet
-            </button>
-            <button class="btn-secondary" type="button" onclick="focusChatInput()">
-              Ask P8 AI
-            </button>
-          </div>
-
-          <div class="hero-points">
-            <div class="point">
-              <strong>For property owners</strong>
-              <span>Start listing your property and move toward real inquiries.</span>
-            </div>
-            <div class="point">
-              <strong>For renters</strong>
-              <span>Find a place, schedule a showing, and start your application.</span>
-            </div>
-            <div class="point">
-              <strong>For support</strong>
-              <span>Handle payments, move-in questions, repairs, and rental help.</span>
-            </div>
-          </div>
-        </div>
-
-        
-              <div class="cabinet-grid">
-                <button class="cabinet-item" data-prompt="I want to list a property on RunP8. Please guide me step by step.">
-                  <span class="cabinet-title">List a property</span>
-                  <span class="cabinet-sub">Start renting out your space</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I want to find a rental on RunP8. Please guide me step by step.">
-                  <span class="cabinet-title">Find a rental</span>
-                  <span class="cabinet-sub">Browse places that fit your needs</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I want to schedule a showing on RunP8. Please help me choose a time.">
-                  <span class="cabinet-title">Schedule a showing</span>
-                  <span class="cabinet-sub">Pick a time that works for you</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I want to start a rental application on RunP8. Please guide me step by step.">
-                  <span class="cabinet-title">Start an application</span>
-                  <span class="cabinet-sub">Begin the approval process</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I want to pay rent on RunP8. Please help me with payment options or billing questions.">
-                  <span class="cabinet-title">Pay rent</span>
-                  <span class="cabinet-sub">Handle rent payments and billing</span>
-                </button>
-
-                <button class="cabinet-item" data-prompt="I need help with move-in, move-out, or repairs on RunP8. Please guide me.">
-                  <span class="cabinet-title">Move-in or repair help</span>
-                  <span class="cabinet-sub">Get support for property needs</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="chat-input-wrap">
-            <textarea
-              id="chatInput"
-              class="chat-input"
-              placeholder="Ask P8 AI about listings, showings, applications, rent, or support..."
-            ></textarea>
-            <button id="sendBtn" class="send-btn" type="button">Send</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="features" id="help">
-      <div class="wrap feature-grid">
-        <div class="info-card">
-          <h3>Clear next steps</h3>
-          <p>
-            RunP8 should help users move forward without repeated information
-            or too many decisions at once.
-          </p>
-        </div>
-        <div class="info-card">
-          <h3>Guided actions</h3>
-          <p>
-            Instead of dead pages and confusing menus, users can choose a task
-            and get guided step by step.
-          </p>
-        </div>
-        <div class="info-card">
-          <h3>One calm interface</h3>
-          <p>
-            Owners, renters, and support requests can all start in one clean
-            conversation area.
-          </p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap footer-inner">
-      <div class="footer-copy">
-        © 2026 RunP8. This page is designed to guide rental-related actions such as
-        listings, inquiries, showings, applications, payments, and support.
-      </div>
-
-      <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-        <a href="#">Fair Housing</a>
-        <a href="#">Contact</a>
+    <!-- HEADER -->
+    <div class="top">
+      <div class="logo">P8</div>
+      <div>
+        <h1>RunP8</h1>
+        <p class="subtitle">Rentals and property management made clearer</p>
       </div>
     </div>
-  </footer>
 
-  <script>
-  const messages = document.getElementById("messages");
-  const chatInput = document.getElementById("chatInput");
-  const sendBtn = document.getElementById("sendBtn");
+    <!-- MAIN ACTIONS -->
+    <div class="actions">
+      <a href="/apply.html" class="btn btn-secondary">Find a Rental</a>
+      <a href="/owner/add-property.html" class="btn btn-primary">List Your Property</a>
+    </div>
 
-  let flowState = {
-    flow: null,
-    step: null,
-    data: {}
-  };
+    <!-- INFO CARDS -->
+    <div class="card">
+      <h3>For property owners</h3>
+      <p>Start listing your property and move toward real inquiries.</p>
+    </div>
 
-  function focusChatInput() {
-    document.getElementById("chat").scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(() => chatInput.focus(), 250);
-  }
+    <div class="card">
+      <h3>For renters</h3>
+      <p>Find a place, complete your application, and move forward clearly.</p>
+    </div>
 
-  function addMessage(text, type = "ai") {
-    const div = document.createElement("div");
-    div.className = "msg " + type;
-    div.textContent = text;
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-  }
+    <div class="card">
+      <h3>For support</h3>
+      <p>Payments, move-in questions, repairs, and rental help.</p>
+    </div>
 
-  function addChoiceButtons(options = []) {
-    const row = document.createElement("div");
-    row.className = "choice-row";
+    <!-- PRIMARY PATH -->
+    <div class="big">
+      <a href="/apply.html" class="btn btn-primary">Start Rental Application</a>
+      <a href="/owner/add-property.html" class="btn btn-secondary">List Your Property</a>
+    </div>
 
-    options.forEach((opt) => {
-      const btn = document.createElement("button");
-      btn.className = "choice-btn";
-      btn.type = "button";
-      btn.textContent = opt.label;
-      btn.addEventListener("click", () => {
-        addMessage(opt.label, "user");
-        opt.onClick();
-      });
-      row.appendChild(btn);
-    });
-
-    messages.appendChild(row);
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  function resetFlow() {
-    flowState = {
-      flow: null,
-      step: null,
-      data: {}
-    };
-  }
-
-  function showMainMenu() {
-    resetFlow();
-    addMessage("What would you like to do?");
-    addChoiceButtons([
-      { label: "List a property", onClick: () => startListingFlow() },
-      { label: "Find a rental", onClick: () => addMessage("Next we can build this flow the same way.") },
-      { label: "Schedule a showing", onClick: () => addMessage("Next we can build this flow the same way.") },
-      { label: "Start application", onClick: () => addMessage("Next we can build this flow the same way.") },
-      { label: "Pay rent", onClick: () => addMessage("Next we can build this flow the same way.") },
-      { label: "Move-in / repair help", onClick: () => addMessage("Next we can build this flow the same way.") }
-    ]);
-  }
-
-  // LISTING FLOW
-  function startListingFlow() {
-    flowState.flow = "listing";
-    flowState.step = "start";
-
-    addMessage("I can help you list a property. How would you like to start?");
-    addChoiceButtons([
-      { label: "Property address", onClick: () => askListingAddress() },
-      { label: "Property type", onClick: () => askPropertyType() },
-      { label: "Bedrooms", onClick: () => askBedrooms() },
-      { label: "Monthly rent", onClick: () => askMonthlyRent() },
-      { label: "Back", onClick: () => showMainMenu() }
-    ]);
-  }
-
-  function askListingAddress() {
-    flowState.step = "address";
-    addMessage("Please enter the property address, or choose an option below.");
-    addChoiceButtons([
-      { label: "Skip", onClick: () => askPropertyType() },
-      { label: "Back", onClick: () => startListingFlow() }
-    ]);
-  }
-
-  function askPropertyType() {
-    flowState.step = "property_type";
-    addMessage("What type of property is it?");
-    addChoiceButtons([
-      { label: "House", onClick: () => saveAndNext("propertyType", "House", askBedrooms) },
-      { label: "Apartment", onClick: () => saveAndNext("propertyType", "Apartment", askBedrooms) },
-      { label: "Studio", onClick: () => saveAndNext("propertyType", "Studio", askBedrooms) },
-      { label: "ADU", onClick: () => saveAndNext("propertyType", "ADU", askBedrooms) },
-      { label: "Room", onClick: () => saveAndNext("propertyType", "Room", askBedrooms) },
-      { label: "Back", onClick: () => startListingFlow() },
-      { label: "Skip", onClick: () => askBedrooms() }
-    ]);
-  }
-
-  function askBedrooms() {
-    flowState.step = "bedrooms";
-    addMessage("How many bedrooms does the property have?");
-    addChoiceButtons([
-      { label: "Studio", onClick: () => saveAndNext("bedrooms", "Studio", askBathrooms) },
-      { label: "1", onClick: () => saveAndNext("bedrooms", "1", askBathrooms) },
-      { label: "2", onClick: () => saveAndNext("bedrooms", "2", askBathrooms) },
-      { label: "3+", onClick: () => saveAndNext("bedrooms", "3+", askBathrooms) },
-      { label: "Back", onClick: () => askPropertyType() },
-      { label: "Skip", onClick: () => askBathrooms() }
-    ]);
-  }
-
-  function askBathrooms() {
-    flowState.step = "bathrooms";
-    addMessage("How many bathrooms does the property have?");
-    addChoiceButtons([
-      { label: "1", onClick: () => saveAndNext("bathrooms", "1", askMonthlyRent) },
-      { label: "1.5", onClick: () => saveAndNext("bathrooms", "1.5", askMonthlyRent) },
-      { label: "2", onClick: () => saveAndNext("bathrooms", "2", askMonthlyRent) },
-      { label: "3+", onClick: () => saveAndNext("bathrooms", "3+", askMonthlyRent) },
-      { label: "Back", onClick: () => askBedrooms() },
-      { label: "Skip", onClick: () => askMonthlyRent() }
-    ]);
-  }
-
-  function askMonthlyRent() {
-    flowState.step = "monthly_rent";
-    addMessage("What is your monthly rent goal?");
-    addChoiceButtons([
-      { label: "Under $1,000", onClick: () => saveAndNext("rentGoal", "Under $1,000", askPhotos) },
-      { label: "$1,000–$2,000", onClick: () => saveAndNext("rentGoal", "$1,000–$2,000", askPhotos) },
-      { label: "$2,000–$3,000", onClick: () => saveAndNext("rentGoal", "$2,000–$3,000", askPhotos) },
-      { label: "$3,000+", onClick: () => saveAndNext("rentGoal", "$3,000+", askPhotos) },
-      { label: "Back", onClick: () => askBathrooms() },
-      { label: "Skip", onClick: () => askPhotos() }
-    ]);
-  }
-
-  function askPhotos() {
-    flowState.step = "photos";
-    addMessage("Would you like to add photos now?");
-    addChoiceButtons([
-      { label: "Yes", onClick: () => finishListingFlow("Great. Photos can be uploaded in the next step.") },
-      { label: "No", onClick: () => finishListingFlow("No problem. You can add photos later.") },
-      { label: "Back", onClick: () => askMonthlyRent() }
-    ]);
-  }
-
-  function finishListingFlow(photoMessage) {
-    flowState.step = "done";
-
-    const summary = [
-      "Here’s your listing progress so far:",
-      flowState.data.propertyType ? `Property type: ${flowState.data.propertyType}` : null,
-      flowState.data.bedrooms ? `Bedrooms: ${flowState.data.bedrooms}` : null,
-      flowState.data.bathrooms ? `Bathrooms: ${flowState.data.bathrooms}` : null,
-      flowState.data.rentGoal ? `Monthly rent goal: ${flowState.data.rentGoal}` : null
-    ].filter(Boolean).join("\n");
-
-    addMessage(summary);
-    addMessage(photoMessage);
-    addMessage("What would you like to do next?");
-    addChoiceButtons([
-      { label: "Continue listing", onClick: () => addMessage("Next we can add address details, amenities, and photos.") },
-      { label: "Start over", onClick: () => startListingFlow() },
-      { label: "Main menu", onClick: () => showMainMenu() }
-    ]);
-  }
-
-  function saveAndNext(key, value, nextFn) {
-    flowState.data[key] = value;
-    nextFn();
-  }
-
-  function handleFreeText(text) {
-    const t = text.toLowerCase();
-
-    if (!flowState.flow) {
-      if (t.includes("list")) {
-        startListingFlow();
-        return;
-      }
-      addMessage("Choose one below or type what you need.");
-      showMainMenu();
-      return;
-    }
-
-    if (flowState.flow === "listing" && flowState.step === "address") {
-      flowState.data.address = text;
-      addMessage("Got it. I saved the property address.");
-      askPropertyType();
-      return;
-    }
-
-    addMessage("Choose one below or type what you need.");
-    showMainMenu();
-  }
-
-  function sendMessage() {
-    const text = chatInput.value.trim();
-    if (!text) return;
-
-    addMessage(text, "user");
-    chatInput.value = "";
-    handleFreeText(text);
-  }
-
-  sendBtn.addEventListener("click", sendMessage);
-
-  chatInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-
-  // Initial prompt
-  showMainMenu();
-</script>
-  <script>
-function startAction(type){
-  document.getElementById("chat").scrollIntoView({behavior:"smooth"});
-
-  if(type === "list"){
-    addMessage("List a property", "user");
-    startListingFlow();
-  }
-
-  if(type === "rental"){
-    addMessage("Find a rental", "user");
-    addMessage("How would you like to start?");
-    addChoiceButtons([
-      {label:"Location", onClick:()=>addMessage("Enter your preferred location")},
-      {label:"Budget", onClick:()=>addMessage("Enter your budget range")},
-      {label:"Move-in date", onClick:()=>addMessage("Enter your move-in date")},
-      {label:"Bedrooms", onClick:()=>addMessage("How many bedrooms?")}
-    ]);
-  }
-
-  if(type === "payment"){
-    addMessage("Pay rent", "user");
-    addMessage("How would you like to pay?");
-    addChoiceButtons([
-      {label:"Credit card", onClick:()=>nextInvoice()},
-      {label:"Debit card", onClick:()=>nextInvoice()},
-      {label:"Bank transfer", onClick:()=>nextInvoice()},
-      {label:"Back", onClick:showMainMenu}
-    ]);
-  }
-}
-
-function nextInvoice(){
-  addMessage("Do you need an invoice?");
-  addChoiceButtons([
-    {label:"Yes", onClick:invoiceMethod},
-    {label:"No", onClick:()=>addMessage("You're all set.")},
-    {label:"Back", onClick:showMainMenu}
-  ]);
-}
-
-function invoiceMethod(){
-  addMessage("How would you like to receive it?");
-  addChoiceButtons([
-    {label:"Email", onClick:()=>addMessage("Enter your email")},
-    {label:"Text", onClick:()=>addMessage("Enter your phone")},
-    {label:"Back", onClick:nextInvoice}
-  ]);
-}
-</script>
+  </div>
 </body>
 </html>
