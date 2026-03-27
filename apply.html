@@ -1,369 +1,569 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rental Application | RunP8</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RunP8 | Apply</title>
+  <meta
+    name="description"
+    content="RunP8 rental application flow."
+  />
   <style>
     * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b1120;
-      color: white;
-      padding: 30px 20px;
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --line:#dbe4f0;
+      --blue:#2f5bea;
+      --blue-dark:#2448bb;
+      --soft-blue:#eaf0ff;
+      --shadow:0 18px 50px rgba(38, 60, 120, 0.08);
+      --radius:24px;
     }
 
-    .container {
-      max-width: 900px;
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+
+    .wrap {
+      max-width: 760px;
       margin: 0 auto;
     }
 
     .topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
-    .topbar a {
+    .logo {
+      width: 82px;
+      height: 82px;
+      border-radius: 24px;
+      background: #d9e6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      font-size: 24px;
+      font-weight: 800;
+      border: 1px solid #c9d8f7;
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .back-link {
       display: inline-block;
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: #1f2937;
-      color: white;
+      margin-bottom: 18px;
+      color: var(--text);
       text-decoration: none;
-      border: 1px solid #334155;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .card {
-      background: #111827;
-      border: 1px solid #1f2937;
-      border-radius: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 30px;
       padding: 22px;
-      box-shadow: 0 14px 32px rgba(0,0,0,0.28);
+      box-shadow: var(--shadow);
     }
 
-    h1 {
-      margin: 0 0 10px;
-      font-size: 34px;
-    }
-
-    p {
-      color: #cbd5e1;
-      line-height: 1.6;
-    }
-
-    .property-pill {
+    .pill {
       display: inline-block;
-      margin: 0 0 16px;
-      padding: 8px 12px;
+      padding: 12px 18px;
       border-radius: 999px;
-      background: rgba(37, 99, 235, 0.18);
-      color: #93c5fd;
-      border: 1px solid rgba(147, 197, 253, 0.35);
+      background: var(--soft-blue);
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .title {
+      margin: 0 0 10px;
+      font-size: 48px;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+
+    .intro {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    .flow-box {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 18px;
+      background: #fbfcff;
+    }
+
+    .step-meta {
+      color: var(--muted);
       font-size: 13px;
       font-weight: 700;
+      margin-bottom: 10px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+    .question {
+      margin: 0 0 18px;
+      font-size: 24px;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .chip {
+      border: 1px solid #cfd8e6;
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 14px 18px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      min-height: 52px;
+    }
+
+    .chip.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
     }
 
     .field {
+      width: 100%;
+      border: 1px solid #cfd8e6;
+      border-radius: 18px;
+      padding: 16px 18px;
+      font-size: 17px;
+      color: var(--text);
+      outline: none;
+      background: #fff;
       margin-bottom: 14px;
     }
 
-    .field.full {
-      grid-column: 1 / -1;
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 6px;
     }
 
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 700;
-      color: #e5e7eb;
-    }
-
-    .field input,
-    .field textarea,
-    .field select {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #334155;
-      background: #0f172a;
-      color: white;
-      font-family: inherit;
-    }
-
-    .field textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 13px 14px;
-      border-radius: 10px;
+    .btn {
       border: none;
-      background: #2563eb;
-      color: white;
-      font-weight: 700;
-      font-size: 15px;
+      border-radius: 18px;
+      padding: 16px 22px;
+      font-size: 17px;
+      font-weight: 800;
       cursor: pointer;
-      font-family: inherit;
-      margin-top: 4px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 56px;
     }
 
-    .submit-btn:hover {
-      background: #1d4ed8;
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      flex: 1 1 220px;
     }
 
-    .success {
-      display: none;
-      margin-top: 16px;
-      padding: 16px;
-      border-radius: 12px;
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(134, 239, 172, 0.35);
-      color: #bbf7d0;
-      font-weight: 700;
-      line-height: 1.6;
+    .btn-primary:hover {
+      background: var(--blue-dark);
     }
 
-    .note {
-      margin-top: 16px;
-      color: #94a3b8;
+    .btn-secondary {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid #cfd8e6;
+      flex: 1 1 180px;
+    }
+
+    .summary {
+      display: grid;
+      gap: 12px;
+      margin: 10px 0 18px;
+    }
+
+    .summary-item {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .summary-label {
       font-size: 13px;
-      line-height: 1.6;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 4px;
     }
 
-    .next-actions {
+    .summary-value {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .notice {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 22px;
+      background: #f8fbff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .hidden {
       display: none;
-      margin-top: 16px;
+    }
+
+    .footer-links {
+      margin-top: 18px;
+      display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
 
-    .next-actions a {
-      display: inline-block;
-      padding: 11px 14px;
-      border-radius: 10px;
+    .footer-link {
+      color: var(--muted);
       text-decoration: none;
       font-weight: 700;
+      font-size: 14px;
     }
 
-    .btn-primary {
-      background: #2563eb;
-      color: white;
-    }
-
-    .btn-secondary {
-      background: #1f2937;
-      color: white;
-      border: 1px solid #334155;
-    }
-
-    @media (max-width: 720px) {
-      .grid {
-        grid-template-columns: 1fr;
+    @media (max-width: 640px) {
+      .title {
+        font-size: 34px;
       }
 
-      h1 {
-        font-size: 30px;
+      .intro {
+        font-size: 16px;
+      }
+
+      .question {
+        font-size: 21px;
+      }
+
+      .chip {
+        width: 100%;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .topbar {
+        align-items: flex-start;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="wrap">
+    <a class="back-link" href="/index.html">← Back to home</a>
+
     <div class="topbar">
-      <a href="rentals.html">← Back to Rentals</a>
-      <a href="index.html">Home</a>
+      <div class="logo">P8</div>
+      <div class="brand">
+        <h1>RunP8</h1>
+        <p>Rentals and property management made clearer</p>
+      </div>
     </div>
 
     <div class="card">
-      <div class="property-pill" id="propertyBadge">Application</div>
-
-      <h1>Rental Application</h1>
-      <p>
-        Complete this application to continue forward in the renter flow. This helps
-        review fit, timing, and readiness before final approval steps.
+      <div class="pill">Structured renter approval flow</div>
+      <h2 class="title">Start your rental path</h2>
+      <p class="intro">
+        RunP8 will guide you through a quick approval-first flow so the next steps
+        are clearer for both renters and property owners.
       </p>
 
-      <form id="applyForm" action="https://formspree.io/f/xreynqkp" method="POST">
-        <input type="hidden" name="_subject" value="RunP8 Rental Application" />
-        <input type="hidden" name="source" value="RunP8 Apply Flow" />
-        <input type="hidden" id="property_name" name="property_name" />
-        <input type="hidden" id="property_id" name="property_id" />
+      <div class="flow-box">
+        <div id="stepBox">
+          <div class="step-meta" id="stepMeta">Step 1 of 6</div>
+          <h3 class="question" id="questionText">What is your desired move-in date?</h3>
 
-        <div class="grid">
-          <div class="field">
-            <label for="fullName">Full Name</label>
-            <input id="fullName" name="full_name" type="text" required />
-          </div>
+          <div id="inputArea"></div>
 
-          <div class="field">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" required />
-          </div>
-
-          <div class="field">
-            <label for="phone">Phone</label>
-            <input id="phone" name="phone" type="text" required />
-          </div>
-
-          <div class="field">
-            <label for="moveInDate">Requested Move-in Date</label>
-            <input id="moveInDate" name="move_in_date" type="date" required />
-          </div>
-
-          <div class="field">
-            <label for="monthlyIncome">Monthly Income</label>
-            <input id="monthlyIncome" name="monthly_income" type="text" placeholder="$4,500" required />
-          </div>
-
-          <div class="field">
-            <label for="employmentStatus">Employment Status</label>
-            <select id="employmentStatus" name="employment_status" required>
-              <option value="">Select one</option>
-              <option>Full-time</option>
-              <option>Part-time</option>
-              <option>Self-employed</option>
-              <option>Contract</option>
-              <option>Student</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="occupants">Number of Occupants</label>
-            <input id="occupants" name="occupants" type="number" min="1" placeholder="1" required />
-          </div>
-
-          <div class="field">
-            <label for="pets">Pets</label>
-            <select id="pets" name="pets">
-              <option>No Pets</option>
-              <option>1 Pet</option>
-              <option>2+ Pets</option>
-            </select>
-          </div>
-
-          <div class="field full">
-            <label for="currentAddress">Current Address</label>
-            <input id="currentAddress" name="current_address" type="text" />
-          </div>
-
-          <div class="field full">
-            <label for="reasonForMoving">Reason for Moving</label>
-            <textarea id="reasonForMoving" name="reason_for_moving" placeholder="Tell us briefly why you're moving."></textarea>
-          </div>
-
-          <div class="field full">
-            <label for="additionalNotes">Additional Notes</label>
-            <textarea id="additionalNotes" name="additional_notes" placeholder="Anything important about your application, timing, or housing needs."></textarea>
+          <div class="actions">
+            <button class="btn btn-secondary hidden" id="backBtn" type="button">Back</button>
+            <button class="btn btn-primary" id="nextBtn" type="button">Continue</button>
           </div>
         </div>
 
-        <button class="submit-btn" type="submit">Submit Application</button>
-      </form>
+        <div id="summaryBox" class="hidden">
+          <div class="step-meta">Application summary</div>
+          <h3 class="question">Review your answers</h3>
 
-     <div class="success" id="applySuccess">
-  ✅ Application received.<br><br>
-  We’re reviewing your details now.<br><br>
-  If everything looks good, we’ll contact you with the next steps shortly.
-</div>
+          <div class="summary" id="summaryList"></div>
 
-      <div class="next-actions" id="nextActions">
-        <a class="btn-primary" href="rentals.html">Browse More Rentals</a>
-        <a class="btn-secondary" href="index.html">Back to Home</a>
-      </div>
+          <div class="notice">
+            Next step: background check and application review. After review,
+            approved renters can move forward to showing, payment, and contract steps.
+          </div>
 
-      <div class="note">
-        This application is part of the RunP8 renter flow and helps move qualified renters
-        toward the next stage after showing and review.
+          <div class="actions">
+            <button class="btn btn-secondary" id="editBtn" type="button">Back</button>
+            <button class="btn btn-primary" id="submitBtn" type="button">Continue to Review</button>
+          </div>
+        </div>
+
+        <div id="doneBox" class="hidden">
+          <div class="step-meta">Application received</div>
+          <h3 class="question">You’re in the review flow</h3>
+
+          <div class="notice">
+            Your prescreen details have been collected.
+            The next step is application review and background check processing.
+            Once approved, your next options can include showing, move-in payment,
+            and contract steps.
+          </div>
+
+          <div class="footer-links">
+            <a class="footer-link" href="/index.html">Back to home</a>
+            <a class="footer-link" href="/owner/add-property.html">Owner side</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-<script>
-const form = document.getElementById("applyForm");
 
-form.addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  const data = new FormData(form);
-
-  const lead = {
-    name: data.get("full_name"),
-    email: data.get("email"),
-    phone: data.get("phone"),
-    move_in: data.get("move_in_date"),
-    property: data.get("property_name"),
-    time: new Date().toISOString()
-  };
-
-  // Save locally
-  const existing = JSON.parse(localStorage.getItem("leads") || "[]");
-  existing.push(lead);
-  localStorage.setItem("leads", JSON.stringify(existing));
-
-  // Continue normal submission
-  fetch(form.action, {
-    method: "POST",
-    body: data,
-    headers: { Accept: "application/json" }
-  });
-
-  // Show success
-  form.style.display = "none";
-  document.getElementById("applySuccess").style.display = "block";
-});
-</script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const propertyName = params.get("property") || "Unknown Property";
-    const propertyId = params.get("id") || "unknown";
+    const steps = [
+      {
+        key: "moveInDate",
+        label: "Move-in date",
+        question: "What is your desired move-in date?",
+        type: "text",
+        placeholder: "Example: April 15, 2026"
+      },
+      {
+        key: "monthlyIncome",
+        label: "Monthly income",
+        question: "What is your monthly household income?",
+        type: "chips",
+        options: [
+          "Under $2,000",
+          "$2,000-$4,000",
+          "$4,000-$6,000",
+          "$6,000+"
+        ]
+      },
+      {
+        key: "occupants",
+        label: "Occupants",
+        question: "How many occupants will live in the property?",
+        type: "chips",
+        options: ["1", "2", "3", "4+"]
+      },
+      {
+        key: "pets",
+        label: "Pets",
+        question: "Do you have pets?",
+        type: "chips",
+        options: ["No pets", "Yes, 1 pet", "Yes, 2+ pets"]
+      },
+      {
+        key: "creditRange",
+        label: "Estimated credit range",
+        question: "What is your estimated credit range?",
+        type: "chips",
+        options: ["Under 600", "600-649", "650-699", "700+"]
+      },
+      {
+        key: "notes",
+        label: "Anything to mention",
+        question: "Anything else you want the property owner to know?",
+        type: "text",
+        placeholder: "Optional"
+      }
+    ];
 
-    document.getElementById("propertyBadge").innerText = "Property: " + propertyName;
-    document.getElementById("property_name").value = propertyName;
-    document.getElementById("property_id").value = propertyId;
+    const data = {
+      moveInDate: "",
+      monthlyIncome: "",
+      occupants: "",
+      pets: "",
+      creditRange: "",
+      notes: ""
+    };
 
-    const form = document.getElementById("applyForm");
-    const success = document.getElementById("applySuccess");
-    const nextActions = document.getElementById("nextActions");
+    let currentStep = 0;
 
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
+    const stepMeta = document.getElementById("stepMeta");
+    const questionText = document.getElementById("questionText");
+    const inputArea = document.getElementById("inputArea");
+    const nextBtn = document.getElementById("nextBtn");
+    const backBtn = document.getElementById("backBtn");
+    const summaryBox = document.getElementById("summaryBox");
+    const stepBox = document.getElementById("stepBox");
+    const summaryList = document.getElementById("summaryList");
+    const editBtn = document.getElementById("editBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const doneBox = document.getElementById("doneBox");
 
-      const data = new FormData(form);
+    function renderStep() {
+      const step = steps[currentStep];
 
-      try {
-        const res = await fetch(form.action, {
-          method: "POST",
-          body: data,
-          headers: { "Accept": "application/json" }
+      stepMeta.textContent = `Step ${currentStep + 1} of ${steps.length}`;
+      questionText.textContent = step.question;
+      inputArea.innerHTML = "";
+      backBtn.classList.toggle("hidden", currentStep === 0);
+
+      if (step.type === "text") {
+        const input = document.createElement("input");
+        input.className = "field";
+        input.type = "text";
+        input.placeholder = step.placeholder || "";
+        input.value = data[step.key] || "";
+        input.id = "stepInput";
+        inputArea.appendChild(input);
+      }
+
+      if (step.type === "chips") {
+        const wrap = document.createElement("div");
+        wrap.className = "chips";
+
+        step.options.forEach(option => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "chip";
+          btn.textContent = option;
+
+          if (data[step.key] === option) {
+            btn.classList.add("active");
+          }
+
+          btn.addEventListener("click", () => {
+            data[step.key] = option;
+            renderStep();
+          });
+
+          wrap.appendChild(btn);
         });
 
-        if (res.ok) {
-          form.style.display = "none";
-          success.style.display = "block";
-          nextActions.style.display = "flex";
-          success.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        } else {
-          alert("Something went wrong. Please try again.");
+        inputArea.appendChild(wrap);
+      }
+    }
+
+    function validateStep() {
+      const step = steps[currentStep];
+
+      if (step.type === "text") {
+        const input = document.getElementById("stepInput");
+        const value = input.value.trim();
+
+        if (step.key === "notes") {
+          data[step.key] = value || "None provided";
+          return true;
         }
-      } catch (err) {
-        alert("Network error. Please try again.");
+
+        if (!value) {
+          alert("Please complete this step before continuing.");
+          return false;
+        }
+
+        data[step.key] = value;
+        return true;
+      }
+
+      if (step.type === "chips") {
+        if (!data[step.key]) {
+          alert("Please choose an option before continuing.");
+          return false;
+        }
+        return true;
+      }
+
+      return true;
+    }
+
+    function showSummary() {
+      stepBox.classList.add("hidden");
+      summaryBox.classList.remove("hidden");
+      summaryList.innerHTML = "";
+
+      steps.forEach(step => {
+        const item = document.createElement("div");
+        item.className = "summary-item";
+        item.innerHTML = `
+          <div class="summary-label">${step.label}</div>
+          <div class="summary-value">${data[step.key] || "Not provided"}</div>
+        `;
+        summaryList.appendChild(item);
+      });
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (!validateStep()) return;
+
+      if (currentStep < steps.length - 1) {
+        currentStep += 1;
+        renderStep();
+      } else {
+        showSummary();
       }
     });
+
+    backBtn.addEventListener("click", () => {
+      if (currentStep > 0) {
+        currentStep -= 1;
+        renderStep();
+      }
+    });
+
+    editBtn.addEventListener("click", () => {
+      summaryBox.classList.add("hidden");
+      stepBox.classList.remove("hidden");
+      currentStep = steps.length - 1;
+      renderStep();
+    });
+
+    submitBtn.addEventListener("click", () => {
+      summaryBox.classList.add("hidden");
+      doneBox.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    renderStep();
   </script>
 </body>
 </html>
