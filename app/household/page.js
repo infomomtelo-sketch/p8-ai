@@ -3,568 +3,467 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function HouseholdPage() {
-  const [messages, setMessages] = useState([
-    { type: "ai", text: "What do you need?" },
-    {
-      type: "options",
-      options: [
-        { label: "List property", flow: "list" },
-        { label: "Find rental", flow: "rental" },
-        { label: "Schedule showing", flow: "showing" },
-        { label: "Start application", flow: "application" },
-        { label: "Pay rent", flow: "payment" },
-        { label: "Repairs / move-in", flow: "help" },
-      ],
-    },
-  ]);
-
-  const [inputValue, setInputValue] = useState("");
-  const [flow, setFlow] = useState(null);
-  const [step, setStep] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [flow, setFlow] = useState("entry");
+  const [form, setForm] = useState({
+    moveInDate: "",
+    monthlyIncome: "",
+    occupants: "",
+    pets: "",
+    creditRange: "",
+  });
 
   const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    startFlow();
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const addMessage = (text, type = "ai") => {
-    setMessages((prev) => [...prev, { type, text }]);
-  };
+  function startFlow() {
+    setFlow("entry");
+    setForm({
+      moveInDate: "",
+      monthlyIncome: "",
+      occupants: "",
+      pets: "",
+      creditRange: "",
+    });
 
-  const addOptions = (options) => {
-    setMessages((prev) => [...prev, { type: "options", options }]);
-  };
-
-  const resetToMain = () => {
-    setFlow(null);
-    setStep(null);
-    addMessage("What do you need?");
-    addOptions([
-      { label: "List property", flow: "list" },
-      { label: "Find rental", flow: "rental" },
-      { label: "Schedule showing", flow: "showing" },
-      { label: "Start application", flow: "application" },
-      { label: "Pay rent", flow: "payment" },
-      { label: "Repairs / move-in", flow: "help" },
+    setMessages([
+      {
+        type: "ai",
+        text:
+          "Welcome to RunP8. I’ll guide you through the rental process step by step.",
+      },
+      {
+        type: "ai",
+        text:
+          "To move forward, I’ll guide you through a quick approval process. This helps protect all tenants and keeps the process organized.",
+      },
+      {
+        type: "ai",
+        text: "What would you like to do?",
+        options: [
+          { label: "Start Approval", action: "start_approval" },
+          { label: "Ask a Question First", action: "ask_question" },
+        ],
+      },
     ]);
-  };
+  }
 
-  const showNextSteps = () => {
-    addMessage("What would you like to do next?");
-    addOptions([
-      { label: "Find rental", flow: "rental" },
-      { label: "List property", flow: "list" },
-      { label: "Pay rent", flow: "payment" },
-      { label: "Main menu", action: "main" },
-    ]);
-  };
+  function addMessage(type, text, options = null) {
+    setMessages((prev) => [...prev, { type, text, options }]);
+  }
 
-  const startAction = (type) => {
-    const labelMap = {
-      list: "List property",
-      rental: "Find rental",
-      showing: "Schedule showing",
-      application: "Start application",
-      payment: "Pay rent",
-      help: "Repairs / move-in",
-    };
+  function handleOption(action) {
+    switch (action) {
+      case "start_approval":
+        setFlow("prescreen_move_in");
+        addMessage("user", "Start Approval");
+        addMessage("ai", "Let’s begin.");
+        addMessage("ai", "What is your desired move-in date?");
+        break;
 
-    addMessage(labelMap[type] || type, "user");
+      case "ask_question":
+        addMessage("user", "Ask a Question First");
+        addMessage(
+          "ai",
+          "I can help with basic property questions, but approval is required before scheduling a showing or moving forward with lease steps."
+        );
+        addMessage("ai", "What would you like to do next?", [
+          { label: "Start Approval", action: "start_approval" },
+          { label: "Restart", action: "restart_flow" },
+        ]);
+        break;
 
-    if (type === "list") {
-      setFlow("listing");
-      setStep("type");
-      addMessage("Property type?");
-      addOptions([
-        { label: "House" },
-        { label: "Apartment" },
-        { label: "Studio" },
-        { label: "Room" },
-        { label: "Back" },
+      case "submit_background":
+        setFlow("background_pending");
+        addMessage("user", "Continue to Background Check");
+        addMessage(
+          "ai",
+          "To continue, please complete a quick background check."
+        );
+        addMessage(
+          "ai",
+          "Once completed, your application can move to review."
+        );
+        addMessage("ai", "Choose the next step:", [
+          { label: "Mark as Background Check Completed", action: "mark_bg_done" },
+          { label: "Restart", action: "restart_flow" },
+        ]);
+        break;
+
+      case "mark_bg_done":
+        setFlow("approved");
+        addMessage("user", "Background Check Completed");
+        addMessage("ai", "You’re approved ✅");
+        addMessage("ai", "Here are your next steps:", [
+          { label: "Schedule Showing", action: "schedule_showing" },
+          { label: "Move In Now", action: "move_in_now" },
+          { label: "P8 Helpers", action: "p8_helpers" },
+        ]);
+        break;
+
+      case "schedule_showing":
+        addMessage("user", "Schedule Showing");
+        addMessage(
+          "ai",
+          "Available showing days: Friday, Saturday, and Sunday."
+        );
+        addMessage("ai", "Please choose a time window:", [
+          { label: "Friday - 10:00 AM", action: "showing_selected" },
+          { label: "Saturday - 1:00 PM", action: "showing_selected" },
+          { label: "Sunday - 3:00 PM", action: "showing_selected" },
+        ]);
+        break;
+
+      case "showing_selected":
+        addMessage("user", "Selected a showing time");
+        addMessage(
+          "ai",
+          "Your showing request has been recorded. Next, we can continue with move-in steps whenever you’re ready."
+        );
+        addMessage("ai", "Choose the next step:", [
+          { label: "Move In Now", action: "move_in_now" },
+          { label: "P8 Helpers", action: "p8_helpers" },
+          { label: "Restart", action: "restart_flow" },
+        ]);
+        break;
+
+      case "move_in_now":
+        addMessage("user", "Move In Now");
+        addMessage(
+          "ai",
+          "To move in, the next steps are: payment, lease review, and contract signing."
+        );
+        addMessage("ai", "Choose what you want to do next:", [
+          { label: "Payment", action: "payment_step" },
+          { label: "Review Contract", action: "contract_step" },
+          { label: "Restart", action: "restart_flow" },
+        ]);
+        break;
+
+      case "payment_step":
+        addMessage("user", "Payment");
+        addMessage(
+          "ai",
+          "Payment step will connect to your deposit and move-in payment page later."
+        );
+        addMessage("ai", "Choose the next step:", [
+          { label: "Review Contract", action: "contract_step" },
+          { label: "P8 Helpers", action: "p8_helpers" },
+          { label: "Restart", action: "restart_flow" },
+        ]);
+        break;
+
+      case "contract_step":
+        addMessage("user", "Review Contract");
+        addMessage(
+          "ai",
+          "Contract review step will connect to your lease agreement page later."
+        );
+        addMessage("ai", "Choose the next step:", [
+          { label: "Payment", action: "payment_step" },
+          { label: "P8 Helpers", action: "p8_helpers" },
+          { label: "Restart", action: "restart_flow" },
+        ]);
+        break;
+
+      case "p8_helpers":
+        addMessage("user", "P8 Helpers");
+        addMessage(
+          "ai",
+          "P8 Helpers can assist with move-in help, repairs, utility setup, and support services."
+        );
+        addMessage("ai", "Choose the next step:", [
+          { label: "Move In Now", action: "move_in_now" },
+          { label: "Schedule Showing", action: "schedule_showing" },
+          { label: "Restart", action: "restart_flow" },
+        ]);
+        break;
+
+      case "restart_flow":
+        startFlow();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const value = e.target.answer.value.trim();
+    if (!value) return;
+
+    addMessage("user", value);
+    e.target.reset();
+
+    if (flow === "prescreen_move_in") {
+      setForm((prev) => ({ ...prev, moveInDate: value }));
+      setFlow("prescreen_income");
+      addMessage("ai", "What is your monthly income?");
+      return;
+    }
+
+    if (flow === "prescreen_income") {
+      setForm((prev) => ({ ...prev, monthlyIncome: value }));
+      setFlow("prescreen_occupants");
+      addMessage("ai", "How many occupants will live in the property?");
+      return;
+    }
+
+    if (flow === "prescreen_occupants") {
+      setForm((prev) => ({ ...prev, occupants: value }));
+      setFlow("prescreen_pets");
+      addMessage("ai", "Do you have pets? Please answer yes or no.");
+      return;
+    }
+
+    if (flow === "prescreen_pets") {
+      setForm((prev) => ({ ...prev, pets: value }));
+      setFlow("prescreen_credit");
+      addMessage(
+        "ai",
+        "What is your estimated credit range? Example: 650-700. You may also type skip."
+      );
+      return;
+    }
+
+    if (flow === "prescreen_credit") {
+      const updatedForm = { ...form, creditRange: value };
+      setForm(updatedForm);
+      setFlow("prescreen_complete");
+
+      addMessage("ai", "Thank you. Here is your prescreen summary:");
+      addMessage(
+        "ai",
+        `Move-in date: ${updatedForm.moveInDate}
+Monthly income: ${updatedForm.monthlyIncome}
+Occupants: ${updatedForm.occupants}
+Pets: ${updatedForm.pets}
+Credit range: ${updatedForm.creditRange}`
+      );
+
+      addMessage(
+        "ai",
+        "The next step is background check and application review."
+      );
+      addMessage("ai", "Choose the next step:", [
+        { label: "Continue to Background Check", action: "submit_background" },
+        { label: "Restart", action: "restart_flow" },
       ]);
       return;
     }
 
-    if (type === "rental") {
-      setFlow("rental");
-      setStep("start");
-      addMessage("How would you like to start?");
-      addOptions([
-        { label: "Location" },
-        { label: "Budget" },
-        { label: "Move-in" },
-        { label: "Bedrooms" },
-        { label: "Back" },
-      ]);
-      return;
-    }
-
-    if (type === "showing") {
-      setFlow("showing");
-      setStep("day");
-      addMessage("Choose a day.");
-      addOptions([
-        { label: "Friday" },
-        { label: "Saturday" },
-        { label: "Sunday" },
-        { label: "Back" },
-      ]);
-      return;
-    }
-
-    if (type === "application") {
-      setFlow("application");
-      setStep("start");
-      addMessage("Start with?");
-      addOptions([
-        { label: "Move-in date" },
-        { label: "Income" },
-        { label: "Occupants" },
-        { label: "Pets" },
-        { label: "Back" },
-      ]);
-      return;
-    }
-
-    if (type === "payment") {
-      setFlow("payment");
-      setStep("method");
-      addMessage("Payment method?");
-      addOptions([
-        { label: "Credit card" },
-        { label: "Debit card" },
-        { label: "Bank transfer" },
-        { label: "Back" },
-      ]);
-      return;
-    }
-
-    if (type === "help") {
-      setFlow("help");
-      setStep("type");
-      addMessage("What do you need help with?");
-      addOptions([
-        { label: "Move-in" },
-        { label: "Move-out" },
-        { label: "Repairs" },
-        { label: "Back" },
-      ]);
-    }
-  };
-
-  const handleOption = (option) => {
-    if (option.action === "main") {
-      addMessage(option.label, "user");
-      resetToMain();
-      return;
-    }
-
-    if (option.flow) {
-      startAction(option.flow);
-      return;
-    }
-
-    if (option.label === "Back") {
-      addMessage("Back", "user");
-      resetToMain();
-      return;
-    }
-
-    addMessage(option.label, "user");
-
-    // LISTING FLOW
-    if (flow === "listing") {
-      if (step === "type") {
-        setStep("bedrooms");
-        addMessage("Bedrooms?");
-        addOptions([
-          { label: "Studio" },
-          { label: "1" },
-          { label: "2" },
-          { label: "3+" },
-          { label: "Back" },
-        ]);
-        return;
-      }
-
-      if (step === "bedrooms") {
-        setStep("rent");
-        addMessage("Rent range?");
-        addOptions([
-          { label: "$1k–$2k" },
-          { label: "$2k–$3k" },
-          { label: "$3k+" },
-          { label: "Back" },
-        ]);
-        return;
-      }
-
-      if (step === "rent") {
-        setFlow(null);
-        setStep(null);
-        addMessage("Listing ready.");
-        addOptions([
-          { label: "Add photos" },
-          { label: "Finish later" },
-        ]);
-        showNextSteps();
-        return;
-      }
-    }
-
-    // RENTAL FLOW
-    if (flow === "rental") {
-      if (step === "start") {
-        setStep("next");
-        addMessage("Here are your next options.");
-        addOptions([
-          { label: "View listings" },
-          { label: "Schedule showing", flow: "showing" },
-          { label: "Start application", flow: "application" },
-          { label: "Back" },
-        ]);
-        return;
-      }
-
-      if (step === "next") {
-        setFlow(null);
-        setStep(null);
-        addMessage("Rental step saved.");
-        showNextSteps();
-        return;
-      }
-    }
-
-    // SHOWING FLOW
-    if (flow === "showing") {
-      if (step === "day") {
-        setStep("time");
-        addMessage("Choose a time.");
-        addOptions([
-          { label: "10:00 AM" },
-          { label: "1:00 PM" },
-          { label: "4:00 PM" },
-          { label: "Back" },
-        ]);
-        return;
-      }
-
-      if (step === "time") {
-        setFlow(null);
-        setStep(null);
-        addMessage("Showing scheduled.");
-        addOptions([
-          { label: "Start application", flow: "application" },
-          { label: "Find rental", flow: "rental" },
-        ]);
-        showNextSteps();
-        return;
-      }
-    }
-
-    // APPLICATION FLOW
-    if (flow === "application") {
-      if (step === "start") {
-        setFlow(null);
-        setStep(null);
-        addMessage("Application step saved.");
-        addOptions([
-          { label: "Continue application" },
-          { label: "Schedule showing", flow: "showing" },
-        ]);
-        showNextSteps();
-        return;
-      }
-    }
-
-    // PAYMENT FLOW
-    if (flow === "payment") {
-      if (step === "method") {
-        setStep("invoice");
-        addMessage("Need receipt?");
-        addOptions([
-          { label: "Yes" },
-          { label: "No" },
-          { label: "Back" },
-        ]);
-        return;
-      }
-
-      if (step === "invoice") {
-        if (option.label === "Yes") {
-          setStep("delivery");
-          addMessage("Send via?");
-          addOptions([
-            { label: "Email" },
-            { label: "Text" },
-            { label: "Back" },
-          ]);
-        } else {
-          setFlow(null);
-          setStep(null);
-          addMessage("Payment step complete.");
-          showNextSteps();
-        }
-        return;
-      }
-
-      if (step === "delivery") {
-        setFlow(null);
-        setStep(null);
-        addMessage("Enter contact.");
-        showNextSteps();
-        return;
-      }
-    }
-
-    // HELP FLOW
-    if (flow === "help") {
-      if (step === "type") {
-        setFlow(null);
-        setStep(null);
-        addMessage("Support request started.");
-        addOptions([
-          { label: "Repairs / move-in" },
-          { label: "Main menu", action: "main" },
-        ]);
-        return;
-      }
-    }
-  };
-
-  const detectIntent = (text) => {
-    const t = text.toLowerCase();
-
-    if (t.includes("pay")) return "payment";
-    if (t.includes("rent") || t.includes("place") || t.includes("rental")) return "rental";
-    if (t.includes("list") || t.includes("property") || t.includes("owner")) return "list";
-    if (t.includes("show") || t.includes("showing")) return "showing";
-    if (t.includes("apply") || t.includes("application")) return "application";
-    if (t.includes("repair") || t.includes("move in") || t.includes("move-out") || t.includes("move out")) return "help";
-
-    return null;
-  };
-
-  const sendMessage = () => {
-    if (!inputValue.trim()) return;
-
-    const text = inputValue.trim();
-    addMessage(text, "user");
-    setInputValue("");
-
-    const detected = detectIntent(text);
-    if (detected) {
-      startAction(detected);
-      return;
-    }
-
-    addMessage("Choose an option below or type what you need.");
-    addOptions([
-      { label: "List property", flow: "list" },
-      { label: "Find rental", flow: "rental" },
-      { label: "Schedule showing", flow: "showing" },
-      { label: "Start application", flow: "application" },
-      { label: "Pay rent", flow: "payment" },
-      { label: "Repairs / move-in", flow: "help" },
-    ]);
-  };
+    addMessage(
+      "ai",
+      "Please use the available buttons so the system stays organized."
+    );
+  }
 
   return (
-    <div style={page}>
-      <div style={topSection}>
-        <h2 style={title}>What do you need?</h2>
-
-        <div style={roleCards}>
-          <div style={card} onClick={() => startAction("list")}>
-            <div style={emoji}>🏠</div>
-            <div style={cardTitle}>List property</div>
-            <div style={cardSub}>Owner</div>
+    <div style={styles.page}>
+      <div style={styles.shell}>
+        <div style={styles.header}>
+          <div>
+            <div style={styles.eyebrow}>RUNP8</div>
+            <h1 style={styles.title}>Rental Z-Flow</h1>
+            <p style={styles.subtitle}>
+              Guided approval, showing, move-in, and support flow.
+            </p>
           </div>
-
-          <div style={card} onClick={() => startAction("rental")}>
-            <div style={emoji}>🧳</div>
-            <div style={cardTitle}>Find rental</div>
-            <div style={cardSub}>Renter</div>
-          </div>
+          <button style={styles.restartBtn} onClick={() => handleOption("restart_flow")}>
+            Restart
+          </button>
         </div>
 
-        <div style={quickActions}>
-          <button style={smallBtn} onClick={() => startAction("showing")}>
-            Showing
-          </button>
-          <button style={smallBtn} onClick={() => startAction("application")}>
-            Apply
-          </button>
-          <button style={smallBtn} onClick={() => startAction("payment")}>
-            Pay
-          </button>
-          <button style={smallBtn} onClick={() => startAction("help")}>
-            Help
-          </button>
-        </div>
-      </div>
+        <div style={styles.chatCard}>
+          <div style={styles.messages}>
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                style={{
+                  ...styles.messageRow,
+                  justifyContent: msg.type === "user" ? "flex-end" : "flex-start",
+                }}
+              >
+                <div
+                  style={{
+                    ...styles.bubble,
+                    ...(msg.type === "user" ? styles.userBubble : styles.aiBubble),
+                  }}
+                >
+                  <div style={styles.messageText}>
+                    {msg.text.split("\n").map((line, i) => (
+                      <div key={i}>{line}</div>
+                    ))}
+                  </div>
 
-      <div style={messagesWrap}>
-        {messages.map((msg, i) => (
-          <div key={i} style={{ marginBottom: 8 }}>
-            {msg.type !== "options" && (
-              <div style={msg.type === "user" ? userMsg : aiMsg}>{msg.text}</div>
-            )}
-
-            {msg.type === "options" && (
-              <div style={choicesWrap}>
-                {msg.options.map((opt, idx) => (
-                  <button
-                    key={idx}
-                    style={choiceBtn}
-                    onClick={() => handleOption(opt)}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
+                  {msg.options && (
+                    <div style={styles.optionsWrap}>
+                      {msg.options.map((option, i) => (
+                        <button
+                          key={i}
+                          style={styles.optionBtn}
+                          onClick={() => handleOption(option.action)}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
+            ))}
+            <div ref={messagesEndRef} />
           </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
 
-      <div style={inputWrap}>
-        <input
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") sendMessage();
-          }}
-          placeholder="Type here..."
-          style={input}
-        />
+          <form onSubmit={handleSubmit} style={styles.inputBar}>
+            <input
+              name="answer"
+              placeholder="Type here when the system asks for an answer..."
+              style={styles.input}
+              autoComplete="off"
+            />
+            <button type="submit" style={styles.sendBtn}>
+              Send
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
 }
 
-const page = {
-  display: "flex",
-  flexDirection: "column",
-  height: "100vh",
-  background: "#f8fafc",
-};
-
-const topSection = {
-  padding: "14px 14px 10px",
-  background: "#ffffff",
-  borderBottom: "1px solid #e5e7eb",
-};
-
-const title = {
-  margin: "0 0 12px",
-  fontSize: 22,
-  color: "#0f172a",
-};
-
-const roleCards = {
-  display: "flex",
-  gap: 10,
-};
-
-const card = {
-  flex: 1,
-  padding: 16,
-  border: "1px solid #e5e7eb",
-  borderRadius: 16,
-  background: "#f8fafc",
-  textAlign: "center",
-  cursor: "pointer",
-};
-
-const emoji = {
-  fontSize: 28,
-  marginBottom: 6,
-};
-
-const cardTitle = {
-  fontSize: 15,
-  fontWeight: 700,
-  color: "#0f172a",
-};
-
-const cardSub = {
-  fontSize: 12,
-  color: "#64748b",
-  marginTop: 4,
-};
-
-const quickActions = {
-  display: "flex",
-  gap: 8,
-  marginTop: 10,
-};
-
-const smallBtn = {
-  flex: 1,
-  padding: "10px 8px",
-  borderRadius: 12,
-  border: "1px solid #e5e7eb",
-  background: "#f8fafc",
-  fontSize: 13,
-  cursor: "pointer",
-};
-
-const messagesWrap = {
-  flex: 1,
-  overflowY: "auto",
-  padding: 10,
-};
-
-const aiMsg = {
-  background: "#ffffff",
-  color: "#0f172a",
-  padding: 10,
-  borderRadius: 14,
-  border: "1px solid #e5e7eb",
-  maxWidth: "82%",
-  lineHeight: 1.4,
-};
-
-const userMsg = {
-  background: "#2563eb",
-  color: "#ffffff",
-  padding: 10,
-  borderRadius: 14,
-  maxWidth: "82%",
-  marginLeft: "auto",
-  lineHeight: 1.4,
-};
-
-const choicesWrap = {
-  display: "flex",
-  flexWrap: "wrap",
-  gap: 6,
-};
-
-const choiceBtn = {
-  padding: "8px 12px",
-  borderRadius: 999,
-  border: "1px solid #dbe4ee",
-  background: "#ffffff",
-  color: "#0f172a",
-  cursor: "pointer",
-  fontSize: 13,
-};
-
-const inputWrap = {
-  padding: 10,
-  borderTop: "1px solid #e5e7eb",
-  background: "#ffffff",
-};
-
-const input = {
-  width: "100%",
-  padding: 12,
-  borderRadius: 12,
-  border: "1px solid #d1d5db",
-  outline: "none",
-  fontSize: 14,
+const styles = {
+  page: {
+    minHeight: "100vh",
+    background: "#0b1120",
+    color: "#ffffff",
+    padding: "24px 16px",
+  },
+  shell: {
+    maxWidth: "900px",
+    margin: "0 auto",
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "16px",
+    alignItems: "flex-start",
+    marginBottom: "18px",
+    flexWrap: "wrap",
+  },
+  eyebrow: {
+    fontSize: "12px",
+    letterSpacing: "0.14em",
+    color: "#93c5fd",
+    marginBottom: "8px",
+    fontWeight: 700,
+  },
+  title: {
+    margin: 0,
+    fontSize: "34px",
+    lineHeight: 1.1,
+  },
+  subtitle: {
+    marginTop: "8px",
+    marginBottom: 0,
+    color: "#cbd5e1",
+    fontSize: "15px",
+  },
+  restartBtn: {
+    background: "#1e293b",
+    color: "#fff",
+    border: "1px solid #334155",
+    borderRadius: "12px",
+    padding: "12px 16px",
+    cursor: "pointer",
+    fontWeight: 600,
+  },
+  chatCard: {
+    background: "#111827",
+    border: "1px solid #1f2937",
+    borderRadius: "20px",
+    overflow: "hidden",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
+  },
+  messages: {
+    padding: "18px",
+    minHeight: "65vh",
+    maxHeight: "70vh",
+    overflowY: "auto",
+  },
+  messageRow: {
+    display: "flex",
+    marginBottom: "14px",
+  },
+  bubble: {
+    maxWidth: "80%",
+    padding: "14px 16px",
+    borderRadius: "18px",
+    lineHeight: 1.5,
+    fontSize: "15px",
+    whiteSpace: "pre-wrap",
+  },
+  aiBubble: {
+    background: "#1e293b",
+    color: "#f8fafc",
+    borderTopLeftRadius: "8px",
+  },
+  userBubble: {
+    background: "#2563eb",
+    color: "#ffffff",
+    borderTopRightRadius: "8px",
+  },
+  messageText: {
+    marginBottom: "4px",
+  },
+  optionsWrap: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "10px",
+    marginTop: "12px",
+  },
+  optionBtn: {
+    background: "#0f172a",
+    color: "#fff",
+    border: "1px solid #334155",
+    borderRadius: "12px",
+    padding: "10px 14px",
+    cursor: "pointer",
+    fontWeight: 600,
+  },
+  inputBar: {
+    borderTop: "1px solid #1f2937",
+    padding: "14px",
+    display: "flex",
+    gap: "10px",
+    background: "#0f172a",
+  },
+  input: {
+    flex: 1,
+    padding: "14px 16px",
+    borderRadius: "14px",
+    border: "1px solid #334155",
+    background: "#111827",
+    color: "#fff",
+    outline: "none",
+    fontSize: "15px",
+  },
+  sendBtn: {
+    padding: "14px 18px",
+    borderRadius: "14px",
+    border: "none",
+    background: "#2563eb",
+    color: "#fff",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
 };
