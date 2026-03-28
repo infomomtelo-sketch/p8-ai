@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>P8 AI | Rental Inquiry Flow</title>
+  <title>P8 AI | Inquiry</title>
   <meta
     name="description"
-    content="P8 AI rental inquiry flow for showing requests, pre-approval, scheduling, and application."
+    content="RunP8 inquiry flow for property showings, pre-approval, and rental next steps."
   />
   <style>
     * { box-sizing: border-box; }
@@ -14,193 +14,199 @@
     :root{
       --bg:#f5f7fb;
       --panel:#ffffff;
-      --panel-soft:#eef3ff;
+      --bubble:#eef3ff;
+      --bubble2:#f8fbff;
       --text:#0f172a;
       --muted:#667085;
       --line:#d9e2f2;
       --blue:#3563eb;
       --blue-dark:#274fd1;
       --shadow:0 18px 50px rgba(15,23,42,0.08);
-      --radius:22px;
+      --radius:24px;
     }
 
-    html,body{
-      margin:0;
-      padding:0;
-      background:var(--bg);
-      color:var(--text);
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
       font-family: Arial, sans-serif;
     }
 
-    .page{
-      max-width:780px;
-      margin:0 auto;
-      padding:24px 16px 40px;
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 22px 16px 40px;
     }
 
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom:18px;
-      flex-wrap:wrap;
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
     }
 
-    .brand-wrap{
-      display:flex;
-      align-items:center;
-      gap:14px;
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
-    .logo{
-      width:72px;
-      height:72px;
-      border-radius:22px;
-      background:#dfe9ff;
-      border:1px solid #cfdcff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:800;
-      font-size:22px;
-      color:var(--blue);
-      flex:0 0 auto;
+    .logo {
+      width: 74px;
+      height: 74px;
+      border-radius: 22px;
+      background: #dfe9ff;
+      border: 1px solid #cfdcff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 24px;
+      color: var(--blue);
+      flex: 0 0 auto;
     }
 
-    .brand-text h1{
-      margin:0;
-      font-size:22px;
-      line-height:1.1;
+    .brand-text h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
     }
 
-    .brand-text p{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.3;
+    .brand-text p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.35;
     }
 
-    .back-link{
-      color:var(--blue);
-      text-decoration:none;
-      font-weight:700;
-      font-size:15px;
+    .back-link {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
     }
 
-    .shell{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:30px;
-      padding:18px;
-      box-shadow:var(--shadow);
-      min-height:72vh;
+    .shell {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      min-height: 72vh;
     }
 
-    .msg{
-      background:#f8fbff;
-      border:1px solid #e4ecfb;
-      border-radius:20px;
-      padding:16px 18px;
-      margin-bottom:12px;
-      font-size:16px;
-      line-height:1.5;
+    .section-title {
+      background: var(--bubble);
+      color: #2046c8;
+      border-radius: 999px;
+      padding: 15px 18px;
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 16px;
+      font-size: 15px;
     }
 
-    .msg.soft{
-      background:var(--panel-soft);
-      border-color:transparent;
-      color:#2046c8;
-      font-weight:700;
-      text-align:center;
+    .property-summary {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.04);
     }
 
-    .msg.muted{
-      color:var(--muted);
+    .property-summary h2 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      line-height: 1.2;
     }
 
-    .property-card{
-      background:#ffffff;
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:18px;
-      margin-bottom:14px;
-      box-shadow:0 8px 24px rgba(15,23,42,0.04);
+    .property-meta {
+      color: var(--muted);
+      font-size: 17px;
+      margin-bottom: 12px;
     }
 
-    .property-title{
-      font-size:22px;
-      font-weight:800;
-      margin-bottom:6px;
+    .property-desc {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
     }
 
-    .property-meta{
-      color:var(--muted);
-      font-size:18px;
-      margin-bottom:12px;
+    .msg {
+      background: var(--bubble2);
+      border: 1px solid #e4ecfb;
+      border-radius: 20px;
+      padding: 15px 16px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+      font-size: 16px;
     }
 
-    .property-desc{
-      color:var(--muted);
-      font-size:16px;
-      line-height:1.5;
+    .msg.p8 {
+      background: #f8fbff;
     }
 
-    .btn{
-      width:100%;
-      border:0;
-      border-radius:18px;
-      padding:17px 18px;
-      margin:8px 0 12px;
-      background:var(--blue);
-      color:#fff;
-      font-size:17px;
-      font-weight:700;
-      cursor:pointer;
-      transition:background .15s ease, transform .05s ease;
+    .msg.user {
+      background: #ffffff;
+      border-color: var(--line);
     }
 
-    .btn:hover{
-      background:var(--blue-dark);
+    .msg.muted {
+      color: var(--muted);
     }
 
-    .btn:active{
-      transform:translateY(1px);
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      padding: 16px 18px;
+      margin: 8px 0 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s ease, transform .05s ease;
     }
 
-    .btn.secondary{
-      background:#ffffff;
-      color:var(--text);
-      border:1px solid var(--line);
+    .btn:hover {
+      background: var(--blue-dark);
     }
 
-    .btn.secondary:hover{
-      background:#f7f9fc;
+    .btn:active {
+      transform: translateY(1px);
     }
 
-    .mini-note{
-      color:var(--muted);
-      font-size:14px;
-      margin-top:8px;
+    .btn.secondary {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--line);
     }
 
-    @media (max-width:640px){
-      .logo{
-        width:64px;
-        height:64px;
-        border-radius:18px;
+    .footer-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    @media (max-width:640px) {
+      .logo {
+        width: 66px;
+        height: 66px;
+        border-radius: 18px;
+        font-size: 22px;
       }
 
-      .brand-text h1{
-        font-size:20px;
+      .brand-text h1 {
+        font-size: 20px;
       }
 
-      .msg, .btn, .property-desc, .property-meta{
-        font-size:16px;
-      }
-
-      .property-title{
-        font-size:20px;
+      .property-summary h2 {
+        font-size: 21px;
       }
     }
   </style>
@@ -211,10 +217,11 @@
       <div class="brand-wrap">
         <div class="logo">P8</div>
         <div class="brand-text">
-          <h1>RunP8</h1>
-          <p>Rentals and property management made clearer</p>
+          <h1>RunP8 Inquiry</h1>
+          <p>Clear next steps for renters and property inquiries</p>
         </div>
       </div>
+
       <a class="back-link" href="https://runp8-rental.pages.dev">← Back to listings</a>
     </div>
 
@@ -223,6 +230,7 @@
 
   <script>
     const API_BASE = "https://runp8-kv-api.infomomtelo.workers.dev";
+    const LISTINGS_URL = "https://runp8-rental.pages.dev";
 
     const chat = document.getElementById("chat");
 
@@ -230,21 +238,12 @@
     let applicantData = {};
     let currentStep = 0;
 
-    function addMsg(text, extraClass = "") {
+    function addMsg(text, type = "p8", extraClass = "") {
       const div = document.createElement("div");
-      div.className = "msg" + (extraClass ? " " + extraClass : "");
+      div.className = "msg " + type + (extraClass ? " " + extraClass : "");
       div.innerText = text;
       chat.appendChild(div);
-    }
-
-    function addHtml(html) {
-      const div = document.createElement("div");
-      div.innerHTML = html;
-      chat.appendChild(div);
-    }
-
-    function clearButtons() {
-      document.querySelectorAll(".btn").forEach(btn => btn.remove());
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     }
 
     function addButton(label, action, secondary = false) {
@@ -253,6 +252,10 @@
       btn.innerText = label;
       btn.onclick = action;
       chat.appendChild(btn);
+    }
+
+    function clearButtons() {
+      document.querySelectorAll(".btn").forEach(btn => btn.remove());
     }
 
     function escapeHtml(str) {
@@ -269,21 +272,41 @@
       return params.get("property");
     }
 
+    function renderHeader() {
+      const div = document.createElement("div");
+      div.className = "section-title";
+      div.innerText = "Rental inquiry";
+      chat.appendChild(div);
+    }
+
+    function renderPropertySummary(property) {
+      const wrap = document.createElement("div");
+      wrap.className = "property-summary";
+      wrap.innerHTML = `
+        <h2>${escapeHtml(property.title || "Untitled Property")}</h2>
+        <div class="property-meta">$${escapeHtml(property.price || "")} · ${escapeHtml(property.location || "")}</div>
+        <div class="property-desc">${escapeHtml(property.desc || "No description provided.")}</div>
+        <div class="footer-note">You are now in the inquiry flow for this property.</div>
+      `;
+      chat.appendChild(wrap);
+    }
+
     async function boot() {
       chat.innerHTML = "";
+      renderHeader();
 
       const propertyId = getPropertyIdFromUrl();
 
       if (!propertyId) {
         addMsg("No property was selected.");
-        addMsg("Please go back to the rental listings and choose a property first.", "muted");
+        addMsg("Please go back to the listing page and choose a property first.", "p8", "muted");
         addButton("Back to Listings", () => {
-          window.location.href = "https://runp8-rental.pages.dev";
+          window.location.href = LISTINGS_URL;
         }, true);
         return;
       }
 
-      addMsg("Loading your selected property...", "muted");
+      addMsg("Loading your selected property...", "p8", "muted");
 
       try {
         const res = await fetch(API_BASE + "/list");
@@ -296,47 +319,42 @@
         const property = properties.find(p => String(p.id) === String(propertyId));
 
         chat.innerHTML = "";
+        renderHeader();
 
         if (!property) {
           addMsg("We couldn't find that property.");
-          addMsg("It may have been removed or the link may be incomplete.", "muted");
+          addMsg("It may have been removed or the link may be incomplete.", "p8", "muted");
           addButton("Back to Listings", () => {
-            window.location.href = "https://runp8-rental.pages.dev";
+            window.location.href = LISTINGS_URL;
           }, true);
           return;
         }
 
         selectedProperty = property;
-        startPropertyFlow();
+        startInquiry();
 
       } catch (err) {
         chat.innerHTML = "";
+        renderHeader();
         addMsg("We couldn't load the property right now.");
-        addMsg("Error: " + err.message, "muted");
+        addMsg("Error: " + err.message, "p8", "muted");
         addButton("Try Again", boot);
         addButton("Back to Listings", () => {
-          window.location.href = "https://runp8-rental.pages.dev";
+          window.location.href = LISTINGS_URL;
         }, true);
       }
     }
 
-    function startPropertyFlow() {
-      addMsg("You selected this property:", "soft");
+    function startInquiry() {
+      renderPropertySummary(selectedProperty);
 
-      addHtml(`
-        <div class="property-card">
-          <div class="property-title">${escapeHtml(selectedProperty.title || "Untitled Property")}</div>
-          <div class="property-meta">$${escapeHtml(selectedProperty.price || "")} · ${escapeHtml(selectedProperty.location || "")}</div>
-          <div class="property-desc">${escapeHtml(selectedProperty.desc || "No description provided.")}</div>
-        </div>
-      `);
-
+      addMsg("You selected this property.");
       addMsg("I’ll help you move through the next steps clearly.");
-      addMsg("Let’s start with a quick pre-approval so you don’t lose time.");
+      addMsg("We’ll start with a quick pre-approval before scheduling the showing.");
 
-      addButton("Start", beginPreApproval);
+      addButton("Start Pre-Approval", beginPreApproval);
       addButton("Back to Listings", () => {
-        window.location.href = "https://runp8-rental.pages.dev";
+        window.location.href = LISTINGS_URL;
       }, true);
     }
 
@@ -385,6 +403,7 @@
     function saveAnswer(key, value) {
       clearButtons();
       applicantData[key] = value;
+      addMsg(value, "user");
       currentStep += 1;
       runPreApproval();
     }
@@ -412,6 +431,7 @@
 
     function confirmShowing(slot) {
       clearButtons();
+      addMsg(slot, "user");
       addMsg("Showing scheduled for " + slot + ".");
       addMsg("Ready to move forward?");
       addButton("Apply Now", applicationFlow);
@@ -422,9 +442,9 @@
     function notInterestedFlow() {
       clearButtons();
       addMsg("No problem.");
-      addMsg("You can go back anytime and explore other listings.");
+      addMsg("You can return to listings anytime.");
       addButton("Back to Listings", () => {
-        window.location.href = "https://runp8-rental.pages.dev";
+        window.location.href = LISTINGS_URL;
       }, true);
     }
 
@@ -436,7 +456,7 @@
       addMsg("• Background check consent");
       addButton("Submit Application", approvalFlow);
       addButton("Back to Listings", () => {
-        window.location.href = "https://runp8-rental.pages.dev";
+        window.location.href = LISTINGS_URL;
       }, true);
     }
 
@@ -454,7 +474,7 @@
       addMsg("Deposit paid.");
       addMsg("Welcome to your new home.");
       addButton("Back to Listings", () => {
-        window.location.href = "https://runp8-rental.pages.dev";
+        window.location.href = LISTINGS_URL;
       }, true);
     }
 
