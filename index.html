@@ -3,156 +3,462 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RunP8</title>
-  <meta name="description" content="RunP8 rental system" />
-
+  <title>P8 AI | Rental Inquiry Flow</title>
+  <meta
+    name="description"
+    content="P8 AI rental inquiry flow for showing requests, pre-approval, scheduling, and application."
+  />
   <style>
     * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --panel-soft:#eef3ff;
+      --text:#0f172a;
+      --muted:#667085;
+      --line:#d9e2f2;
+      --blue:#3563eb;
+      --blue-dark:#274fd1;
+      --shadow:0 18px 50px rgba(15,23,42,0.08);
+      --radius:22px;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      color:var(--text);
       font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #0f172a;
-      padding: 20px;
     }
 
-    .wrap {
-      max-width: 700px;
-      margin: 0 auto;
+    .page{
+      max-width:780px;
+      margin:0 auto;
+      padding:24px 16px 40px;
     }
 
-    .top {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 20px;
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+      flex-wrap:wrap;
     }
 
-    .logo {
-      width: 70px;
-      height: 70px;
-      border-radius: 18px;
-      background: #d9e6ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: #2f5bea;
-      font-size: 20px;
+    .brand-wrap{
+      display:flex;
+      align-items:center;
+      gap:14px;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 22px;
+    .logo{
+      width:72px;
+      height:72px;
+      border-radius:22px;
+      background:#dfe9ff;
+      border:1px solid #cfdcff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:22px;
+      color:var(--blue);
+      flex:0 0 auto;
     }
 
-    .subtitle {
-      margin: 4px 0 0;
-      color: #64748b;
-      font-size: 14px;
+    .brand-text h1{
+      margin:0;
+      font-size:22px;
+      line-height:1.1;
     }
 
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
+    .brand-text p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.3;
     }
 
-    .btn {
-      flex: 1;
-      padding: 14px;
-      border-radius: 12px;
-      text-align: center;
-      font-weight: bold;
-      text-decoration: none;
+    .back-link{
+      color:var(--blue);
+      text-decoration:none;
+      font-weight:700;
+      font-size:15px;
     }
 
-    .btn-primary {
-      background: #2f5bea;
-      color: white;
+    .shell{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:30px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      min-height:72vh;
     }
 
-    .btn-secondary {
-      background: white;
-      border: 1px solid #cbd5e1;
-      color: #0f172a;
+    .msg{
+      background:#f8fbff;
+      border:1px solid #e4ecfb;
+      border-radius:20px;
+      padding:16px 18px;
+      margin-bottom:12px;
+      font-size:16px;
+      line-height:1.5;
     }
 
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 14px;
-      border: 1px solid #e2e8f0;
+    .msg.soft{
+      background:var(--panel-soft);
+      border-color:transparent;
+      color:#2046c8;
+      font-weight:700;
+      text-align:center;
     }
 
-    .card h3 {
-      margin: 0 0 6px;
-      font-size: 18px;
+    .msg.muted{
+      color:var(--muted);
     }
 
-    .card p {
-      margin: 0;
-      color: #64748b;
-      font-size: 14px;
+    .property-card{
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      margin-bottom:14px;
+      box-shadow:0 8px 24px rgba(15,23,42,0.04);
     }
 
-    .big {
-      margin-top: 20px;
+    .property-title{
+      font-size:22px;
+      font-weight:800;
+      margin-bottom:6px;
     }
 
-    .big .btn {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 16px;
-      font-size: 16px;
-      border-radius: 16px;
+    .property-meta{
+      color:var(--muted);
+      font-size:18px;
+      margin-bottom:12px;
+    }
+
+    .property-desc{
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.5;
+    }
+
+    .btn{
+      width:100%;
+      border:0;
+      border-radius:18px;
+      padding:17px 18px;
+      margin:8px 0 12px;
+      background:var(--blue);
+      color:#fff;
+      font-size:17px;
+      font-weight:700;
+      cursor:pointer;
+      transition:background .15s ease, transform .05s ease;
+    }
+
+    .btn:hover{
+      background:var(--blue-dark);
+    }
+
+    .btn:active{
+      transform:translateY(1px);
+    }
+
+    .btn.secondary{
+      background:#ffffff;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .btn.secondary:hover{
+      background:#f7f9fc;
+    }
+
+    .mini-note{
+      color:var(--muted);
+      font-size:14px;
+      margin-top:8px;
+    }
+
+    @media (max-width:640px){
+      .logo{
+        width:64px;
+        height:64px;
+        border-radius:18px;
+      }
+
+      .brand-text h1{
+        font-size:20px;
+      }
+
+      .msg, .btn, .property-desc, .property-meta{
+        font-size:16px;
+      }
+
+      .property-title{
+        font-size:20px;
+      }
     }
   </style>
 </head>
-
 <body>
-  <div class="wrap">
-
-    <!-- HEADER -->
-    <div class="top">
-      <div class="logo">P8</div>
-      <div>
-        <h1>RunP8</h1>
-        <p class="subtitle">Rentals and property management made clearer</p>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand-wrap">
+        <div class="logo">P8</div>
+        <div class="brand-text">
+          <h1>RunP8</h1>
+          <p>Rentals and property management made clearer</p>
+        </div>
       </div>
+      <a class="back-link" href="https://runp8-rental.pages.dev">← Back to listings</a>
     </div>
 
-    <!-- MAIN ACTIONS -->
-    <div class="actions">
-      <a href="/apply.html" class="btn btn-secondary">Find a Rental</a>
-      <a href="/owner/add-property.html" class="btn btn-primary">List Your Property</a>
-    </div>
-
-    <!-- INFO CARDS -->
-    <div class="card">
-      <h3>For property owners</h3>
-      <p>Start listing your property and move toward real inquiries.</p>
-    </div>
-
-    <div class="card">
-      <h3>For renters</h3>
-      <p>Find a place, complete your application, and move forward clearly.</p>
-    </div>
-
-    <div class="card">
-      <h3>For support</h3>
-      <p>Payments, move-in questions, repairs, and rental help.</p>
-    </div>
-
-    <!-- PRIMARY PATH -->
-    <div class="big">
-      <a href="/apply.html" class="btn btn-primary">Start Rental Application</a>
-      <a href="/owner/add-property.html" class="btn btn-secondary">List Your Property</a>
-    </div>
-
+    <div class="shell" id="chat"></div>
   </div>
+
+  <script>
+    const API_BASE = "https://runp8-kv-api.infomomtelo.workers.dev";
+
+    const chat = document.getElementById("chat");
+
+    let selectedProperty = null;
+    let applicantData = {};
+    let currentStep = 0;
+
+    function addMsg(text, extraClass = "") {
+      const div = document.createElement("div");
+      div.className = "msg" + (extraClass ? " " + extraClass : "");
+      div.innerText = text;
+      chat.appendChild(div);
+    }
+
+    function addHtml(html) {
+      const div = document.createElement("div");
+      div.innerHTML = html;
+      chat.appendChild(div);
+    }
+
+    function clearButtons() {
+      document.querySelectorAll(".btn").forEach(btn => btn.remove());
+    }
+
+    function addButton(label, action, secondary = false) {
+      const btn = document.createElement("button");
+      btn.className = "btn" + (secondary ? " secondary" : "");
+      btn.innerText = label;
+      btn.onclick = action;
+      chat.appendChild(btn);
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function getPropertyIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("property");
+    }
+
+    async function boot() {
+      chat.innerHTML = "";
+
+      const propertyId = getPropertyIdFromUrl();
+
+      if (!propertyId) {
+        addMsg("No property was selected.");
+        addMsg("Please go back to the rental listings and choose a property first.", "muted");
+        addButton("Back to Listings", () => {
+          window.location.href = "https://runp8-rental.pages.dev";
+        }, true);
+        return;
+      }
+
+      addMsg("Loading your selected property...", "muted");
+
+      try {
+        const res = await fetch(API_BASE + "/list");
+        const properties = await res.json();
+
+        if (!Array.isArray(properties)) {
+          throw new Error("Invalid property response.");
+        }
+
+        const property = properties.find(p => String(p.id) === String(propertyId));
+
+        chat.innerHTML = "";
+
+        if (!property) {
+          addMsg("We couldn't find that property.");
+          addMsg("It may have been removed or the link may be incomplete.", "muted");
+          addButton("Back to Listings", () => {
+            window.location.href = "https://runp8-rental.pages.dev";
+          }, true);
+          return;
+        }
+
+        selectedProperty = property;
+        startPropertyFlow();
+
+      } catch (err) {
+        chat.innerHTML = "";
+        addMsg("We couldn't load the property right now.");
+        addMsg("Error: " + err.message, "muted");
+        addButton("Try Again", boot);
+        addButton("Back to Listings", () => {
+          window.location.href = "https://runp8-rental.pages.dev";
+        }, true);
+      }
+    }
+
+    function startPropertyFlow() {
+      addMsg("You selected this property:", "soft");
+
+      addHtml(`
+        <div class="property-card">
+          <div class="property-title">${escapeHtml(selectedProperty.title || "Untitled Property")}</div>
+          <div class="property-meta">$${escapeHtml(selectedProperty.price || "")} · ${escapeHtml(selectedProperty.location || "")}</div>
+          <div class="property-desc">${escapeHtml(selectedProperty.desc || "No description provided.")}</div>
+        </div>
+      `);
+
+      addMsg("I’ll help you move through the next steps clearly.");
+      addMsg("Let’s start with a quick pre-approval so you don’t lose time.");
+
+      addButton("Start", beginPreApproval);
+      addButton("Back to Listings", () => {
+        window.location.href = "https://runp8-rental.pages.dev";
+      }, true);
+    }
+
+    function beginPreApproval() {
+      clearButtons();
+      applicantData = {};
+      currentStep = 1;
+      runPreApproval();
+    }
+
+    function runPreApproval() {
+      if (currentStep === 1) {
+        addMsg("When do you plan to move in?");
+        addButton("ASAP", () => saveAnswer("moveIn", "ASAP"));
+        addButton("Within 30 days", () => saveAnswer("moveIn", "Within 30 days"));
+        addButton("Flexible", () => saveAnswer("moveIn", "Flexible"));
+        return;
+      }
+
+      if (currentStep === 2) {
+        addMsg("How many occupants?");
+        addButton("1", () => saveAnswer("occupants", "1"));
+        addButton("2", () => saveAnswer("occupants", "2"));
+        addButton("3+", () => saveAnswer("occupants", "3+"));
+        return;
+      }
+
+      if (currentStep === 3) {
+        addMsg("Any pets?");
+        addButton("No", () => saveAnswer("pets", "No"));
+        addButton("Yes", () => saveAnswer("pets", "Yes"));
+        return;
+      }
+
+      if (currentStep === 4) {
+        addMsg("Estimated monthly income?");
+        addButton("< $3k", () => saveAnswer("income", "< $3k"));
+        addButton("$3k - $6k", () => saveAnswer("income", "$3k - $6k"));
+        addButton("> $6k", () => saveAnswer("income", "> $6k"));
+        return;
+      }
+
+      evaluateApplicant();
+    }
+
+    function saveAnswer(key, value) {
+      clearButtons();
+      applicantData[key] = value;
+      currentStep += 1;
+      runPreApproval();
+    }
+
+    function evaluateApplicant() {
+      addMsg("Checking eligibility...");
+
+      if (applicantData.income === "> $6k") {
+        addMsg("You're pre-approved.");
+        showSchedule();
+      } else {
+        addMsg("We may need additional information.");
+        addButton("Upload documents", applicationFlow);
+        addButton("Continue anyway", showSchedule, true);
+      }
+    }
+
+    function showSchedule() {
+      clearButtons();
+      addMsg("Choose a showing time:");
+      addButton("Friday 4PM", () => confirmShowing("Friday 4PM"));
+      addButton("Saturday 10AM", () => confirmShowing("Saturday 10AM"));
+      addButton("Sunday 2PM", () => confirmShowing("Sunday 2PM"));
+    }
+
+    function confirmShowing(slot) {
+      clearButtons();
+      addMsg("Showing scheduled for " + slot + ".");
+      addMsg("Ready to move forward?");
+      addButton("Apply Now", applicationFlow);
+      addButton("Ask Questions", () => addMsg("Ask anything."), true);
+      addButton("Not Interested", notInterestedFlow, true);
+    }
+
+    function notInterestedFlow() {
+      clearButtons();
+      addMsg("No problem.");
+      addMsg("You can go back anytime and explore other listings.");
+      addButton("Back to Listings", () => {
+        window.location.href = "https://runp8-rental.pages.dev";
+      }, true);
+    }
+
+    function applicationFlow() {
+      clearButtons();
+      addMsg("To continue, please prepare:");
+      addMsg("• ID");
+      addMsg("• Proof of income");
+      addMsg("• Background check consent");
+      addButton("Submit Application", approvalFlow);
+      addButton("Back to Listings", () => {
+        window.location.href = "https://runp8-rental.pages.dev";
+      }, true);
+    }
+
+    function approvalFlow() {
+      clearButtons();
+      addMsg("You're approved.");
+      addMsg("To secure the property:");
+      addButton("Pay Deposit", paymentFlow);
+      addButton("View Lease", () => addMsg("Lease preview."), true);
+      addButton("Move-in Guide", () => addMsg("Move-in instructions."), true);
+    }
+
+    function paymentFlow() {
+      clearButtons();
+      addMsg("Deposit paid.");
+      addMsg("Welcome to your new home.");
+      addButton("Back to Listings", () => {
+        window.location.href = "https://runp8-rental.pages.dev";
+      }, true);
+    }
+
+    boot();
+  </script>
 </body>
 </html>
