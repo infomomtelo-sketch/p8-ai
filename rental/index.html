@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RunP8 Rentals</title>
+  <meta
+    name="description"
+    content="RunP8 rental marketplace with locally published owner listings."
+  />
+  <style>
+    * { box-sizing: border-box; }
+
+    :root{
+      --bg:#0b1120;
+      --panel:#111827;
+      --panel-soft:#1e293b;
+      --line:rgba(255,255,255,0.08);
+      --text:#ffffff;
+      --muted:#cbd5e1;
+      --muted2:#94a3b8;
+      --blue:#2563eb;
+      --blue2:#1d4ed8;
+      --radius:18px;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #08101f 0%, #0b1120 100%);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 24px;
+      background: rgba(11,17,32,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .top-actions{
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+    }
+
+    .btn-primary{
+      background: var(--blue);
+      color: white;
+    }
+
+    .btn-primary:hover{
+      background: var(--blue2);
+    }
+
+    .btn-secondary{
+      background: #182235;
+      color: white;
+      border-color: var(--line);
+    }
+
+    .page{
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 20px 44px;
+    }
+
+    .hero{
+      margin-bottom: 26px;
+    }
+
+    .hero h1{
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.05;
+    }
+
+    .hero p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+      max-width: 700px;
+    }
+
+    .toolbar{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .toolbar-title{
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .toolbar-sub{
+      color: var(--muted2);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card{
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    }
+
+    .card-image{
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      background:
+        linear-gradient(135deg, rgba(37,99,235,0.16), rgba(255,255,255,0.03)),
+        #1b2436;
+    }
+
+    .card-body{
+      padding: 16px;
+    }
+
+    .price{
+      font-size: 24px;
+      font-weight: 800;
+      margin: 0 0 10px;
+    }
+
+    .title{
+      font-size: 21px;
+      line-height: 1.2;
+      font-weight: 800;
+      margin: 0 0 8px;
+    }
+
+    .meta{
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+
+    .desc{
+      color: #e5e7eb;
+      font-size: 15px;
+      line-height: 1.55;
+      min-height: 72px;
+      margin-bottom: 16px;
+    }
+
+    .card-actions{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-actions .btn{
+      flex: 1 1 160px;
+    }
+
+    .empty{
+      padding: 28px;
+      border-radius: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .note{
+      margin-top: 18px;
+      color: var(--muted2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1024px){
+      .grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px){
+      .topbar{
+        padding: 16px;
+      }
+
+      .brand{
+        font-size: 18px;
+      }
+
+      .top-actions{
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .page{
+        padding: 20px 14px 34px;
+      }
+
+      .hero h1{
+        font-size: 28px;
+      }
+
+      .grid{
+        grid-template-columns: 1fr;
+      }
+
+      .card-image{
+        height: 210px;
+      }
+
+      .card-actions{
+        flex-direction: column;
+      }
+
+      .card-actions .btn{
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="/" class="brand">RunP8</a>
+
+    <div class="top-actions">
+      <a class="btn btn-secondary" href="/">Home</a>
+      <a class="btn btn-primary" href="/owner/add-property">Add Property</a>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="hero">
+      <h1>Available Rentals</h1>
+      <p>Published owner listings appear here automatically on this device. This is the current prototype marketplace view.</p>
+    </section>
+
+    <section class="toolbar">
+      <div>
+        <div class="toolbar-title">Marketplace Listings</div>
+        <div class="toolbar-sub" id="listingCount">Loading listings...</div>
+      </div>
+
+      <div class="top-actions" style="width:auto;">
+        <button class="btn btn-secondary" type="button" onclick="clearLocalListings()">Clear Local Listings</button>
+      </div>
+    </section>
+
+    <section id="listingGrid" class="grid"></section>
+
+    <div class="note">
+      Listings published from the owner page are stored in this browser for now. The next upgrade is backend storage so everyone can see the same listings.
+    </div>
+  </main>
+
+  <script>
+    const seedListings = [
+      {
+        id: "seed_1",
+        title: "Masters Bedroom",
+        address: "Fresno",
+        price: "$1200",
+        bedrooms: "1",
+        bathrooms: "1",
+        description: "Master’s bedroom, full bathroom, walking closet.",
+        photos: [],
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "seed_2",
+        title: "Private room",
+        address: "Fresno",
+        price: "$750",
+        bedrooms: "1",
+        bathrooms: "1",
+        description: "Private room",
+        photos: [],
+        createdAt: new Date().toISOString()
+      }
+    ];
+
+    function escapeHtml(text){
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function getStoredListings(){
+      try{
+        const raw = localStorage.getItem("runp8_listings");
+        const parsed = JSON.parse(raw || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      }catch(error){
+        console.error("Failed to read listings:", error);
+        return [];
+      }
+    }
+
+    function getListings(){
+      const stored = getStoredListings();
+      if (stored.length > 0) return stored;
+      return seedListings;
+    }
+
+    function formatMeta(listing){
+      const address = listing.address || "Location not set";
+      const beds = listing.bedrooms || "0";
+      const baths = listing.bathrooms || "0";
+      return `${address} • ${beds} bed • ${baths} bath`;
+    }
+
+    function getFirstPhoto(listing){
+      if (!listing || !Array.isArray(listing.photos) || listing.photos.length === 0) {
+        return "";
+      }
+      return listing.photos[0];
+    }
+
+    function renderListings(){
+      const grid = document.getElementById("listingGrid");
+      const count = document.getElementById("listingCount");
+      const listings = getListings();
+
+      count.textContent = `${listings.length} listing${listings.length === 1 ? "" : "s"} available`;
+
+      if (!listings.length){
+        grid.innerHTML = `
+          <div class="empty">
+            No listings yet. Add your first property from the owner page.
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = listings.map(listing => {
+        const firstPhoto = getFirstPhoto(listing);
+
+        return `
+          <article class="card">
+            ${
+              firstPhoto
+                ? `<img class="card-image" src="${firstPhoto}" alt="${escapeHtml(listing.title || "Listing photo")}">`
+                : `<div class="card-image"></div>`
+            }
+
+            <div class="card-body">
+              <div class="price">${escapeHtml(listing.price || "$0")}</div>
+              <div class="title">${escapeHtml(listing.title || "Untitled listing")}</div>
+              <div class="meta">${escapeHtml(formatMeta(listing))}</div>
+              <div class="desc">${escapeHtml(listing.description || "No description yet.")}</div>
+
+              <div class="card-actions">
+                <a class="btn btn-primary" href="/showing.html">Request Showing</a>
+                <a class="btn btn-secondary" href="/owner/add-property">List Similar Property</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function clearLocalListings(){
+      const confirmed = confirm("Clear all locally published listings on this device?");
+      if (!confirmed) return;
+
+      localStorage.removeItem("runp8_listings");
+      localStorage.removeItem("runp8_owner_draft");
+      renderListings();
+    }
+
+    renderListings();
+  </script>
+</body>
+</html>
